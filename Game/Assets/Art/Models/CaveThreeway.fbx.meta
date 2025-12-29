@@ -17,7 +17,17 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: FloorThreeway
+    second: {fileID: 2100000, guid: c809f120e405ca4a594f91403a4c1d34, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: WallT
+    second: {fileID: 2100000, guid: 726ffad23e5261cdfb70800d18319283, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WallThreeway
     second: {fileID: 2100000, guid: 726ffad23e5261cdfb70800d18319283, type: 2}
   materials:
     materialImportMode: 2
