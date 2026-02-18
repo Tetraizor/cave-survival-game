@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2d717189b85c65ca1e5faacf86780a, type: 3}
   m_Name: Closed
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Generation.CellBaseData
-  _openDirections: 2
+  _openDirections: 8
   _prefab: {fileID: 6057541689122002636, guid: ad3f7baca4dee2c9d9953b7faa26c4ea, type: 3}

@@ -1,4 +1,5 @@
 using System.Runtime.Serialization.Json;
+using CaveGame.CommonEnums;
 using UnityEngine;
 
 namespace CaveGame.Generation
@@ -32,7 +33,38 @@ namespace CaveGame.Generation
                             var prefab = cellRef.Data.Prefab;
                             Vector3 realPosition = new Vector3(cellRef.X * MapManager.CELL_SIZE, 0, cellRef.Y * MapManager.CELL_SIZE);
 
-                            Instantiate(prefab, realPosition, Quaternion.identity);
+                            var cell = Instantiate(prefab, realPosition, Quaternion.identity);
+                            cell.transform.RotateAround(realPosition + new Vector3(MapManager.CELL_SIZE / 2, 0, MapManager.CELL_SIZE / 2), Vector3.up, cellRef.Orientation * 90);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Update()
+        {
+            for (int y = 0; y < MapManager.MAP_HEIGHT; y++)
+            {
+                for (int x = 0; x < MapManager.MAP_WIDTH; x++)
+                {
+                    var cell = _manager.Map.Cells[y, x];
+
+                    if (cell.Data != null)
+                    {
+                        Vector2Int cellCenter = new Vector2Int(
+                            MapManager.CELL_SIZE * cell.X + MapManager.CELL_SIZE / 2,
+                            MapManager.CELL_SIZE * cell.Y + MapManager.CELL_SIZE / 2
+                        );
+
+                        foreach (var dir in DirectionHelpers.DirectionFlagToList(DirectionHelpers.RotateDirectionsClockwise(cell.Data.OpenDirections, cell.Orientation)))
+                        {
+                            var directionEnd = cellCenter + dir.ToVector() * MapManager.CELL_SIZE / 2;
+
+                            Debug.DrawLine(
+                                new Vector3(cellCenter.x, 1, cellCenter.y),
+                                new Vector3(directionEnd.x, 1, directionEnd.y),
+                                Color.red, 0
+                            );
                         }
                     }
                 }

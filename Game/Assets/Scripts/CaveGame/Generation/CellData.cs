@@ -6,7 +6,11 @@ namespace CaveGame.Generation
         public int Y;
 
         public CellBaseData Data;
-        public ushort Orientation;
+
+        /// <summary>
+        /// Takes values 0, 1, 2, 3 representing how many times the cell is rotated 90 degrees clockwise
+        /// </summary>
+        public int Orientation;
 
         public bool IsEmpty() => Data == null;
     }
