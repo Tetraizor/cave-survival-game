@@ -32,9 +32,9 @@ namespace CaveGame.Common
                     if (_instance == null)
                     {
                         // Search for existing instance
-                        _instance = (T)FindFirstObjectByType(typeof(T));
+                        _instance = (T)FindAnyObjectByType(typeof(T));
 
-                        if (FindObjectsByType(typeof(T), FindObjectsSortMode.InstanceID).Length > 1)
+                        if (FindObjectsByType(typeof(T), FindObjectsInactive.Exclude).Length > 1)
                         {
                             Debug.LogError($"[Singleton] Something went really wrong - there should never be more than 1 singleton! Reopening the scene might fix it.");
                             return _instance;
