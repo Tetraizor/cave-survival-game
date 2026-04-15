@@ -1,4 +1,5 @@
 using CaveGame.Common;
+using CaveGame.Services;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine.SceneManagement;
@@ -14,12 +15,19 @@ namespace CaveGame.Game
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
 
+            ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
             bool connectionState = NetworkManager.Singleton.StartHost();
-
-            NetworkManager.Singleton.SceneManager.LoadScene(
-                LOBBY_SCENE_NAME,
-                LoadSceneMode.Single
-            );
+            if (!connectionState)
+            {
+                ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
+            }
+            else
+            {
+                NetworkManager.Singleton.SceneManager.LoadScene(
+                    LOBBY_SCENE_NAME,
+                    LoadSceneMode.Single
+                );
+            }
         }
 
         public void Join(string address, ushort port)
@@ -27,7 +35,9 @@ namespace CaveGame.Game
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
 
+            ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
             bool connectionState = NetworkManager.Singleton.StartClient();
+            if (!connectionState) ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
         }
     }
 }
