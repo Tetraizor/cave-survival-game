@@ -1,6 +1,5 @@
 using System;
 using CaveGame.CommonEnums;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace CaveGame.Generation

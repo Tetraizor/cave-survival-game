@@ -766,7 +766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e463b57176405481fba63af741e6264a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Menu.UI.HostPanel
-  _usernameInput: {fileID: 2000046011}
   _addressInput: {fileID: 2139541610}
   _portInput: {fileID: 1905428637}
   _hostButton: {fileID: 825627553}
@@ -2498,7 +2497,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4682bb9cd71731355b1336694819b382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Menu.UI.JoinPanel
-  _usernameInput: {fileID: 1965037173}
   _addressInput: {fileID: 1427146401}
   _portInput: {fileID: 13310352}
   _joinButton: {fileID: 1477157522}
@@ -3154,50 +3152,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602728364}
   m_CullTransparentMesh: 1
---- !u!1 &614041084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 614041085}
-  - component: {fileID: 614041087}
-  m_Layer: 0
-  m_Name: MainMenuController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &614041085
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 614041084}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 135.76538, y: 430.30505, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &614041087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 614041084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f0f1fea164226a4d8a6acaddece0619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.MainMenuController
 --- !u!1 &622571128
 GameObject:
   m_ObjectHideFlags: 0
@@ -12364,6 +12318,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -15573,6 +15528,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 714410696}
   - {fileID: 691334232}
-  - {fileID: 614041085}
   - {fileID: 1579033334}
   - {fileID: 1416436273}

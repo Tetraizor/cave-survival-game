@@ -1,4 +1,4 @@
-using CaveGame.Game;
+using CaveGame.Services;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -41,7 +41,7 @@ namespace CaveGame.Menu.UI
         private void AttemptHost()
         {
             if (ValidateInput(out string address, out ushort port))
-                MainMenuController.Instance.Host(address, port);
+                ServiceLocator.Get<GameFlowService>().Host(address, port);
 
             // For making sure if a connection happened, button is disabled
             ValidateInput(out _, out _);

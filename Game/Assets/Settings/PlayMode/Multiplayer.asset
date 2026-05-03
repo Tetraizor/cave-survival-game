@@ -22,7 +22,8 @@ MonoBehaviour:
     - Main Editor|0_deploy
     m_Role: 3
     m_PlayerTag: 
-    m_InitialScene: {fileID: 102900000, guid: ccd97e1fbe92075ce9ba4098f5307e82, type: 3}
+    m_InitialScene: {fileID: 102900000, guid: cd55d5460ab2b3f01817ba3422c1cbf8, type: 3}
+    PlayerInstanceIndex: 0
   m_EditorInstances:
   - Name: Player 2
     <CorrespondingNodeId>k__BackingField: Player 2|1_run
@@ -32,6 +33,7 @@ MonoBehaviour:
     m_Role: 1
     m_PlayerTag: 
     m_InitialScene: {fileID: 0}
+    PlayerInstanceIndex: 1
     m_AdvancedConfiguration:
       StreamLogsToMainEditor: 0
       LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
