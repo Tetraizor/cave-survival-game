@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace CaveGame.CommonEnums
+namespace CaveGame.Common.Enums
 {
     [CustomPropertyDrawer(typeof(Direction))]
     public class DirectionDrawer : PropertyDrawer

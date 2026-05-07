@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using CaveGame.CommonEnums;
+using CaveGame.Common.Enums;
 using CaveGame.Utils;
 using UnityEngine;
 

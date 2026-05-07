@@ -1,5 +1,4 @@
-using System.Runtime.Serialization.Json;
-using CaveGame.CommonEnums;
+using CaveGame.Common.Enums;
 using UnityEngine;
 
 namespace CaveGame.Generation

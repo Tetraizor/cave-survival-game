@@ -1,32 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using CaveGame.Common;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace CaveGame.Services
 {
-    public struct Seat : INetworkSerializable, IEquatable<Seat>
-    {
-        public Seat(ulong clientId)
-        {
-            ClientID = clientId;
-        }
-
-        public ulong ClientID;
-
-        public bool IsTaken => ClientID != ulong.MaxValue;
-
-        public bool Equals(Seat other)
-        {
-            return ClientID == other.ClientID;
-        }
-
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref ClientID);
-        }
-    }
-
     public class SessionManagerService : NetworkBehaviour, IService
     {
         public const int MAX_PLAYERS = 4;
@@ -37,10 +17,13 @@ namespace CaveGame.Services
 
         public Seat[] Seats { get; private set; }
 
+        private readonly Dictionary<ulong, PlayerConnectionData> _pendingData = new();
+
         public int OccupiedSeatCount => Seats.Count(s => s.IsTaken);
         public int EmptySeatCount => Seats.Count(s => !s.IsTaken);
 
         public ulong LocalClientId => NetworkManager.LocalClientId;
+        public ulong ServerId => NetworkManager.ServerClientId;
 
         private void Awake()
         {
@@ -56,9 +39,7 @@ namespace CaveGame.Services
         {
             NetworkManager.OnClientConnectedCallback += OnClientConnected;
             NetworkManager.OnClientDisconnectCallback += OnClientDisconnected;
-
-            if (NetworkManager.IsServer)
-                NetworkManager.ConnectionApprovalCallback += OnApprovalCheck;
+            NetworkManager.ConnectionApprovalCallback += OnApprovalCheck;
         }
 
         public override void OnDestroy()
@@ -67,9 +48,7 @@ namespace CaveGame.Services
             {
                 NetworkManager.OnClientConnectedCallback -= OnClientConnected;
                 NetworkManager.OnClientDisconnectCallback -= OnClientDisconnected;
-
-                if (NetworkManager.IsServer)
-                    NetworkManager.ConnectionApprovalCallback -= OnApprovalCheck;
+                NetworkManager.ConnectionApprovalCallback -= OnApprovalCheck;
             }
 
             base.OnDestroy();
@@ -78,6 +57,11 @@ namespace CaveGame.Services
         public void SetSessionState(bool isOpen)
         {
             IsSessionOpen = isOpen;
+        }
+
+        public void StoreLocalPlayerData(PlayerConnectionData data)
+        {
+            _pendingData[NetworkManager.ServerClientId] = data;
         }
 
         public void ResetSession()
@@ -116,7 +100,10 @@ namespace CaveGame.Services
             {
                 if (!Seats[i].IsTaken)
                 {
-                    Seats[i] = new Seat(clientId);
+                    _pendingData.TryGetValue(clientId, out var connectionData);
+                    _pendingData.Remove(clientId);
+
+                    Seats[i] = new Seat(clientId) { ConnectionData = connectionData };
                     if (IsServer) SyncSeatsRpc(Seats, RpcTarget.ClientsAndHost);
                     break;
                 }
@@ -179,6 +166,12 @@ namespace CaveGame.Services
                 response.Approved = false;
                 response.Reason = "Lobby is full";
                 return;
+            }
+
+            if (request.Payload != null && request.Payload.Length > 0)
+            {
+                var json = System.Text.Encoding.UTF8.GetString(request.Payload);
+                _pendingData[request.ClientNetworkId] = JsonUtility.FromJson<PlayerConnectionData>(json);
             }
 
             response.Approved = true;

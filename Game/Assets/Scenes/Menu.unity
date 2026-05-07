@@ -766,6 +766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e463b57176405481fba63af741e6264a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Menu.UI.HostPanel
+  _usernameInput: {fileID: 2000046011}
   _addressInput: {fileID: 2139541610}
   _portInput: {fileID: 1905428637}
   _hostButton: {fileID: 825627553}
@@ -2497,6 +2498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4682bb9cd71731355b1336694819b382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Menu.UI.JoinPanel
+  _usernameInput: {fileID: 1965037173}
   _addressInput: {fileID: 1427146401}
   _portInput: {fileID: 13310352}
   _joinButton: {fileID: 1477157522}

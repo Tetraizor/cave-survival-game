@@ -1,3 +1,4 @@
+using CaveGame.Common;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -7,9 +8,6 @@ namespace CaveGame.Services
 {
     public class GameFlowService : MonoBehaviour, IService
     {
-        private const string LOBBY_SCENE_NAME = "Lobby";
-        private const string MENU_SCENE_NAME = "Menu";
-
         private void Awake()
         {
             if (ServiceLocator.Services.ContainsKey(typeof(GameFlowService)))
@@ -36,16 +34,18 @@ namespace CaveGame.Services
                 ServiceLocator.Unregister<GameFlowService>();
         }
 
-        public void Host(string address, ushort port)
+        public void Host(string address, ushort port, PlayerConnectionData data)
         {
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
+
+            ServiceLocator.Get<SessionManagerService>().StoreLocalPlayerData(data);
 
             ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
             bool connectionState = NetworkManager.Singleton.StartHost();
             if (connectionState)
             {
-                NetworkManager.Singleton.SceneManager.LoadScene(LOBBY_SCENE_NAME, LoadSceneMode.Single);
+                NetworkManager.Singleton.SceneManager.LoadScene(Constants.SceneNames.LOBBY_SCENE_NAME, LoadSceneMode.Single);
             }
             else
             {
@@ -53,8 +53,12 @@ namespace CaveGame.Services
             }
         }
 
-        public void Join(string address, ushort port)
+        public void Join(string address, ushort port, PlayerConnectionData data)
         {
+            var payload = JsonUtility.ToJson(data);
+            Debug.Log($"[Join] Payload JSON: '{payload}'");
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(payload);
+
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
 
@@ -67,7 +71,7 @@ namespace CaveGame.Services
         {
             NetworkManager.Singleton.Shutdown();
             ServiceLocator.Get<SessionManagerService>().ResetSession();
-            SceneManager.LoadScene(MENU_SCENE_NAME, LoadSceneMode.Single);
+            SceneManager.LoadScene(Constants.SceneNames.MENU_SCENE_NAME, LoadSceneMode.Single);
         }
 
         private void OnClientDisconnected(ulong clientId)
