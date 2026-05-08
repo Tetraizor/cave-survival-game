@@ -306,7 +306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5676633388078882856, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: DummyPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 56484163}
   - component: {fileID: 56484162}
   m_Layer: 0
-  m_Name: Cylinder (1)
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -477,7 +477,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5676633388078882856, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_Name
-      value: Player (1)
+      value: DummyPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 191654799}
   - component: {fileID: 191654798}
   m_Layer: 0
-  m_Name: Plane (1)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -843,7 +843,7 @@ GameObject:
   - component: {fileID: 540572754}
   - component: {fileID: 540572753}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1196,7 +1196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5676633388078882856, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_Name
-      value: Player (3)
+      value: DummyPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1216,7 +1216,7 @@ GameObject:
   - component: {fileID: 965468004}
   - component: {fileID: 965468003}
   m_Layer: 0
-  m_Name: Cylinder (3)
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1330,7 +1330,7 @@ GameObject:
   - component: {fileID: 1026841119}
   - component: {fileID: 1026841118}
   m_Layer: 0
-  m_Name: Plane (3)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1430,6 +1430,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: -90}
+--- !u!1 &1063780746
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1063780747}
+  m_Layer: 0
+  m_Name: ==== SCENE ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1063780747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063780746}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.22563, y: 0.27218, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1075955056
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,7 +1474,7 @@ GameObject:
   - component: {fileID: 1075955058}
   - component: {fileID: 1075955057}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1598,7 +1629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5676633388078882856, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_Name
-      value: Player (2)
+      value: DummyPlayer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1618,7 +1649,7 @@ GameObject:
   - component: {fileID: 1397463131}
   - component: {fileID: 1397463130}
   m_Layer: 0
-  m_Name: Plane (2)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1852,7 +1883,7 @@ GameObject:
   - component: {fileID: 1467781462}
   - component: {fileID: 1467781461}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: LobbyCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2064,7 +2095,7 @@ GameObject:
   - component: {fileID: 1585161214}
   - component: {fileID: 1585161213}
   m_Layer: 0
-  m_Name: Cylinder (2)
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2302,6 +2333,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1606278564}
   m_CullTransparentMesh: 1
+--- !u!1 &1672925297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1672925298}
+  m_Layer: 0
+  m_Name: ==== CONTROLLERS ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1672925298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672925297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 520.646, y: 415.12656, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1737129812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2636,7 +2698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2103245322
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2756,6 +2818,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103245321}
   m_CullTransparentMesh: 1
+--- !u!1 &2104504943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2104504944}
+  m_Layer: 0
+  m_Name: ==== UI ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2104504944
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104504943}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 836.5, y: 470.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2106353120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2106353121}
+  m_Layer: 0
+  m_Name: ==== SCENE ELEMENTS ====
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2106353121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2106353120}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 520.646, y: 415.12656, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6492520782010984309
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2857,10 +2981,16 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1776477}
-  - {fileID: 625136679}
-  - {fileID: 406432012}
+  - {fileID: 1672925298}
   - {fileID: 1791700670}
+  - {fileID: 2106353121}
+  - {fileID: 625136679}
+  - {fileID: 1776477}
+  - {fileID: 406432012}
+  - {fileID: 2104504944}
+  - {fileID: 1467781464}
+  - {fileID: 610244971}
+  - {fileID: 1063780747}
   - {fileID: 540572756}
   - {fileID: 191654801}
   - {fileID: 1397463133}
@@ -2873,5 +3003,3 @@ SceneRoots:
   - {fileID: 56484165}
   - {fileID: 1585161216}
   - {fileID: 965468006}
-  - {fileID: 1467781464}
-  - {fileID: 610244971}
