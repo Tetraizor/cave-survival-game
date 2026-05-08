@@ -8,6 +8,8 @@ namespace CaveGame.Services
 {
     public class GameFlowService : MonoBehaviour, IService
     {
+        public GameConfig? CurrentMatchPayload { get; private set; }
+
         #region Unity Methods
 
         private void Awake()
@@ -40,28 +42,21 @@ namespace CaveGame.Services
 
         #region Public API
 
-        public void Host(string address, ushort port, PlayerConnectionData data)
+        public void Host(string address, ushort port, UserConnectionData data)
         {
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
 
-            ServiceLocator.Get<SessionManagerService>().StoreLocalPlayerData(data);
+            ServiceLocator.Get<SessionManagerService>().StoreLocalUserData(data);
             ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
 
-            NetworkManager.Singleton.OnServerStarted += OnServerStarted_LoadLobby;
-
             bool connectionState = NetworkManager.Singleton.StartHost();
-            if (!connectionState)
-            {
-                NetworkManager.Singleton.OnServerStarted -= OnServerStarted_LoadLobby;
-                ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
-            }
+            if (!connectionState) ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
         }
 
-        public void Join(string address, ushort port, PlayerConnectionData data)
+        public void Join(string address, ushort port, UserConnectionData data)
         {
             var payload = JsonUtility.ToJson(data);
-            Debug.Log($"[Join] Payload JSON: '{payload}'");
             NetworkManager.Singleton.NetworkConfig.ConnectionData = System.Text.Encoding.UTF8.GetBytes(payload);
 
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
@@ -78,6 +73,25 @@ namespace CaveGame.Services
             NetworkManager.Singleton.Shutdown();
             ServiceLocator.Get<SessionManagerService>().ResetSession();
             SceneManager.LoadScene(Constants.SceneNames.MENU_SCENE_NAME);
+        }
+
+        #endregion
+
+        #region Bootstrapping
+
+        public void StartLobby()
+        {
+            ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.LOBBY_SCENE_NAME);
+        }
+
+        public void StartGame(GameConfig config)
+        {
+            if (!NetworkManager.Singleton.IsServer) return;
+
+            CurrentMatchPayload = config;
+
+            ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
+            ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.GAME_SCENE_NAME, LoadSceneMode.Single);
         }
 
         #endregion

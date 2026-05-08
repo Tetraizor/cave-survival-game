@@ -52,15 +52,22 @@ namespace CaveGame.Menu.UI
         {
             if (!ValidateInput(out string username, out string address, out ushort port)) return;
 
-            var playerData = new PlayerConnectionData
+            var playerData = new UserConnectionData
             {
                 Username = username
             };
 
+            NetworkManager.Singleton.OnServerStarted += OnServerStarted;
             ServiceLocator.Get<GameFlowService>().Host(address, port, playerData);
 
             // For making sure if a connection happened, button is disabled
             ValidateInput(out _, out _, out _);
+        }
+
+        private void OnServerStarted()
+        {
+            NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
+            ServiceLocator.Get<GameFlowService>().StartLobby();
         }
     }
 }

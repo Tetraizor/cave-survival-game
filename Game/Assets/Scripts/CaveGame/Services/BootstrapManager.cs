@@ -6,13 +6,10 @@ namespace CaveGame.Services
 {
     public class BootstrapManager : MonoBehaviour
     {
-        public const int INITIAL_SCENE_INDEX = 1;
-
         private IEnumerator Start()
         {
             yield return null;
-
-            SceneManager.LoadSceneAsync(INITIAL_SCENE_INDEX);
+            SceneManager.LoadSceneAsync(Constants.SceneNames.MENU_SCENE_NAME);
         }
     }
 }

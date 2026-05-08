@@ -17,7 +17,7 @@ namespace CaveGame.Services
 
         public Seat[] Seats { get; private set; }
 
-        private readonly Dictionary<ulong, PlayerConnectionData> _pendingData = new();
+        private readonly Dictionary<ulong, UserConnectionData> _pendingData = new();
 
         public int OccupiedSeatCount => Seats.Count(s => s.IsTaken);
         public int EmptySeatCount => Seats.Count(s => !s.IsTaken);
@@ -59,7 +59,7 @@ namespace CaveGame.Services
             IsSessionOpen = isOpen;
         }
 
-        public void StoreLocalPlayerData(PlayerConnectionData data)
+        public void StoreLocalUserData(UserConnectionData data)
         {
             _pendingData[NetworkManager.ServerClientId] = data;
         }
@@ -171,7 +171,7 @@ namespace CaveGame.Services
             if (request.Payload != null && request.Payload.Length > 0)
             {
                 var json = System.Text.Encoding.UTF8.GetString(request.Payload);
-                _pendingData[request.ClientNetworkId] = JsonUtility.FromJson<PlayerConnectionData>(json);
+                _pendingData[request.ClientNetworkId] = JsonUtility.FromJson<UserConnectionData>(json);
             }
 
             response.Approved = true;

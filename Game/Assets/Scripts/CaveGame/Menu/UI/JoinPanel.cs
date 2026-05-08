@@ -51,7 +51,7 @@ namespace CaveGame.Menu.UI
         {
             if (!ValidateInput(out string username, out string address, out ushort port)) return;
 
-            var connectionData = new PlayerConnectionData
+            var connectionData = new UserConnectionData
             {
                 Username = username
             };

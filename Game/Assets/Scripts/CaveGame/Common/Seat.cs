@@ -8,11 +8,11 @@ namespace CaveGame.Common
         public Seat(ulong clientId)
         {
             ClientID = clientId;
-            ConnectionData = new PlayerConnectionData();
+            ConnectionData = new UserConnectionData();
         }
 
         public ulong ClientID;
-        public PlayerConnectionData ConnectionData;
+        public UserConnectionData ConnectionData;
 
         public bool IsTaken => ClientID != ulong.MaxValue;
 

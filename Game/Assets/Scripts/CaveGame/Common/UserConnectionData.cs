@@ -5,7 +5,7 @@ using Unity.Netcode;
 namespace CaveGame.Common
 {
     [Serializable]
-    public struct PlayerConnectionData : INetworkSerializable
+    public struct UserConnectionData : INetworkSerializable
     {
         public string Username;
 

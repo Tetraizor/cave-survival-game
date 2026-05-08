@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Linq;
+using CaveGame.Common;
+using CaveGame.Common.Enums;
+using CaveGame.PlayerData;
 using CaveGame.Services;
 using TMPro;
 using Unity.Netcode;
@@ -110,7 +113,7 @@ namespace CaveGame.Lobby
             throw new Exception($"Seat with client id {clientId} not found!");
         }
 
-        #region Ready State
+        #region Ready State 
 
         public void SetReady(bool readiness)
         {
@@ -207,7 +210,34 @@ namespace CaveGame.Lobby
                 yield return new WaitForSeconds(1);
             }
 
-            if (IsServer) ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.GAME_SCENE_NAME);
+            if (IsServer)
+            {
+                // TODO: Get remaining data from the lobby UI instead of hardcoding here
+
+                var validSeats = _sessionManager.Seats.Where(ls => ls.IsTaken).ToList();
+                var players = new PlayerConfig[validSeats.Count];
+
+                for (int i = 0; i < validSeats.Count; i++)
+                {
+                    var seat = validSeats[i];
+
+                    players[i] = new PlayerConfig
+                    {
+                        OwnerClientId = seat.ClientID,
+                        Username = seat.ConnectionData.Username,
+                        Character = "Caver",
+                    };
+                }
+
+                var config = new GameConfig
+                {
+                    Difficulty = Difficulty.Normal,
+                    Seed = UnityEngine.Random.Range(100_000, 999_999).ToString(),
+                    Players = players
+                };
+
+                ServiceLocator.Get<GameFlowService>().StartGame(config);
+            }
         }
 
         #endregion
