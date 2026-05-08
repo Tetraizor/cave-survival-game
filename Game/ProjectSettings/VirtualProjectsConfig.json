@@ -1,4 +1,8 @@
 {
-  "PlayerTags": [],
+  "PlayerTags": [
+    "QuickHost",
+    "QuickJoin",
+    "QuickSinglePlayer"
+  ],
   "version": "6000.4.0f1"
 }
