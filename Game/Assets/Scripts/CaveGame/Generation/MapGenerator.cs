@@ -34,12 +34,8 @@ namespace CaveGame.Generation
 
             while (generationEnumerator.MoveNext())
             {
-                Debug.Log(generationEnumerator.Current.GetType().Name);
-
                 generationEnumerator.Current.Process(Map, random);
                 GenerationLayerFinished?.Invoke(generationEnumerator.Current);
-
-                generationEnumerator.MoveNext();
             }
         }
     }

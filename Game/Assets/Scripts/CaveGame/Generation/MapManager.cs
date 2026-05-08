@@ -14,14 +14,10 @@ namespace CaveGame.Generation
         public MapGenerator Generator { get; private set; }
         [SerializeField] private MapRenderManager _renderManager;
 
-        private void Start()
+        public void Initialize(string seed)
         {
-            Debug.Log("MapManager is initializing...");
-
-            Generator = new MapGenerator(Map);
-
+            Generator = new MapGenerator(Map, seed);
             _renderManager.Initialize(this);
-
             Generator.GenerateMap();
 
             Debug.Log("MapManager initialization complete!");

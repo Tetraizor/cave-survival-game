@@ -8,12 +8,16 @@ namespace CaveGame.Generation
         private MapManager _manager;
         private MapGenerator _generator;
 
+        private bool _isInitialized;
+
         public void Initialize(MapManager manager)
         {
             _manager = manager;
 
             _generator = manager.Generator;
             _generator.GenerationLayerFinished += OnGenerationLayerFinished;
+
+            _isInitialized = true;
         }
 
         private void OnGenerationLayerFinished(MapGenerationLayerBase layerBase)
@@ -42,6 +46,8 @@ namespace CaveGame.Generation
 
         private void Update()
         {
+            if (!_isInitialized) return;
+
             for (int y = 0; y < MapManager.MAP_HEIGHT; y++)
             {
                 for (int x = 0; x < MapManager.MAP_WIDTH; x++)

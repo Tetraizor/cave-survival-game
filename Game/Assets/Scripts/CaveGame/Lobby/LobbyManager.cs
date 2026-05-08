@@ -45,6 +45,7 @@ namespace CaveGame.Lobby
         [SerializeField] private TextMeshProUGUI _clientIdsLabel;
         [SerializeField] private TextMeshProUGUI _countdownLabel;
         [SerializeField] private Button _leaveGameButton;
+        [SerializeField] private Button _forceStartGameButton;
 
         private SessionManagerService _sessionManager;
 
@@ -70,6 +71,11 @@ namespace CaveGame.Lobby
             _sessionManager.RequestSyncSeatsServerRpc();
 
             _leaveGameButton.onClick.AddListener(OnLeaveGameButtonPressed);
+
+            if (NetworkManager.Singleton.IsServer)
+                _forceStartGameButton.onClick.AddListener(OnForceStartGameButtonPressed);
+            else
+                _forceStartGameButton.gameObject.SetActive(false);
         }
 
         public override void OnDestroy()
@@ -86,6 +92,12 @@ namespace CaveGame.Lobby
         {
             ServiceLocator.Get<GameFlowService>().Leave();
         }
+
+        private void OnForceStartGameButtonPressed()
+        {
+            if (IsServer) ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.GAME_SCENE_NAME);
+        }
+
 
         public ref LobbySeat GetLobbySeatRef(ulong clientId)
         {
@@ -195,7 +207,7 @@ namespace CaveGame.Lobby
                 yield return new WaitForSeconds(1);
             }
 
-            SceneManager.LoadScene(Constants.SceneNames.GAME_SCENE_NAME);
+            if (IsServer) ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.GAME_SCENE_NAME);
         }
 
         #endregion

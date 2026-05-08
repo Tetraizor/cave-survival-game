@@ -8,6 +8,8 @@ namespace CaveGame.Services
 {
     public class GameFlowService : MonoBehaviour, IService
     {
+        #region Unity Methods
+
         private void Awake()
         {
             if (ServiceLocator.Services.ContainsKey(typeof(GameFlowService)))
@@ -34,21 +36,24 @@ namespace CaveGame.Services
                 ServiceLocator.Unregister<GameFlowService>();
         }
 
+        #endregion
+
+        #region Public API
+
         public void Host(string address, ushort port, PlayerConnectionData data)
         {
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData(address, port, "0.0.0.0");
 
             ServiceLocator.Get<SessionManagerService>().StoreLocalPlayerData(data);
-
             ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
+
+            NetworkManager.Singleton.OnServerStarted += OnServerStarted_LoadLobby;
+
             bool connectionState = NetworkManager.Singleton.StartHost();
-            if (connectionState)
+            if (!connectionState)
             {
-                NetworkManager.Singleton.SceneManager.LoadScene(Constants.SceneNames.LOBBY_SCENE_NAME, LoadSceneMode.Single);
-            }
-            else
-            {
+                NetworkManager.Singleton.OnServerStarted -= OnServerStarted_LoadLobby;
                 ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
             }
         }
@@ -63,6 +68,7 @@ namespace CaveGame.Services
             transport.SetConnectionData(address, port, "0.0.0.0");
 
             ServiceLocator.Get<SessionManagerService>().SetSessionState(true);
+
             bool connectionState = NetworkManager.Singleton.StartClient();
             if (!connectionState) ServiceLocator.Get<SessionManagerService>().SetSessionState(false);
         }
@@ -71,13 +77,25 @@ namespace CaveGame.Services
         {
             NetworkManager.Singleton.Shutdown();
             ServiceLocator.Get<SessionManagerService>().ResetSession();
-            SceneManager.LoadScene(Constants.SceneNames.MENU_SCENE_NAME, LoadSceneMode.Single);
+            SceneManager.LoadScene(Constants.SceneNames.MENU_SCENE_NAME);
         }
+
+        #endregion
+
+        #region Callbacks
 
         private void OnClientDisconnected(ulong clientId)
         {
             if (NetworkManager.Singleton.IsServer) return;
             Leave();
         }
+
+        private void OnServerStarted_LoadLobby()
+        {
+            NetworkManager.Singleton.OnServerStarted -= OnServerStarted_LoadLobby;
+            ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.LOBBY_SCENE_NAME);
+        }
+
+        #endregion
     }
 }
