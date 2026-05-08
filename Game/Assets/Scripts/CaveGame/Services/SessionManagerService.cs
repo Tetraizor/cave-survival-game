@@ -191,6 +191,8 @@ namespace CaveGame.Services
             if (!IsServer) return;
             if (!IsSessionOpen) return;
 
+            if (NetworkManager.ShutdownInProgress) return;
+
             OnPlayerLeft(clientId);
             Debug.Log($"Player {clientId} disconnected");
         }
