@@ -238,7 +238,7 @@ namespace CaveGame.Input
                 {
                     ""name"": ""negative"",
                     ""id"": ""96ba4f67-df23-4a5f-9c4e-1a0e1b17baa3"",
-                    ""path"": ""<Mouse>/scroll/up"",
+                    ""path"": ""<Mouse>/scroll/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -249,7 +249,7 @@ namespace CaveGame.Input
                 {
                     ""name"": ""positive"",
                     ""id"": ""3f364f98-e7f6-4a31-b92a-2c7895c26fa2"",
-                    ""path"": ""<Mouse>/scroll/down"",
+                    ""path"": ""<Mouse>/scroll/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

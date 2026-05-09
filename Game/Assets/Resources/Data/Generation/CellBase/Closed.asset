@@ -14,3 +14,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Generation.CellBaseData
   _openDirections: 8
   _prefab: {fileID: 6057541689122002636, guid: ad3f7baca4dee2c9d9953b7faa26c4ea, type: 3}
+  _baseWeight: 0.4
+  _spawnChanceMultOverEdgeDistance:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.0054016113
+      inSlope: 0.09979129
+      outSlope: 0.09979129
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.26501998
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2.6726313
+      outSlope: 2.6726313
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17204285
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mapFullnessMultiplier:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.09698444
+      outSlope: 0.09698444
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.24102546
+    - serializedVersion: 3
+      time: 0.7634786
+      value: 0.07130146
+      inSlope: 0.17187019
+      outSlope: 0.17187019
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13994324
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.9264882
+      outSlope: 3.9264882
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

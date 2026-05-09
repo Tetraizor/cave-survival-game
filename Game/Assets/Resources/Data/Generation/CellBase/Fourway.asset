@@ -14,3 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Generation.CellBaseData
   _openDirections: 15
   _prefab: {fileID: 3250866876736739951, guid: 03a46469b431e044cb2105a557249236, type: 3}
+  _baseWeight: 0.2
+  _spawnChanceMultOverEdgeDistance:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _mapFullnessMultiplier:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

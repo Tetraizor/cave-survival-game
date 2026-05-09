@@ -18,9 +18,23 @@ namespace CaveGame.Generation
         private static string _baseCellScriptablePath = "Data/Generation/CellBase";
         private MapData _mapData;
 
+        // Generation parameters
+        private float _targetFilledCellsPercentage = .3f;
+        private float _minimumFillRatio = .6f;
+        private int _maxGenerationAttempts = 25;
+
+        private float _branchTerminationChance = .1f;
+        private float _adjacentWallTerminationBonus = .3f;
+        private float _highConnectivityPenalty = .7f;
+
         public override void Process(MapData mapData, System.Random random)
         {
             _mapData = mapData;
+
+            int targetFilledCells = (int)(mapData.Width * mapData.Height * _targetFilledCellsPercentage);
+            int minimumFilledCells = (int)(targetFilledCells * _minimumFillRatio);
+            int filledCellsSoFar = 0;
+            int attempts = 0;
 
             var cellBaseList = Resources.LoadAll<CellBaseData>(_baseCellScriptablePath).ToList();
 
@@ -60,97 +74,157 @@ namespace CaveGame.Generation
             Vector2Int startCellPosition = new Vector2Int(mapData.Width / 2, mapData.Height / 2);
             var startCellData = cellBaseList.Find(cell => cell.OpenDirections == (Direction.North | Direction.East | Direction.South | Direction.West));
 
-            _mapData[startCellPosition.y, startCellPosition.x] = new CellData
+            do
             {
-                X = startCellPosition.x,
-                Y = startCellPosition.y,
-                Orientation = 0,
-                Data = startCellData
-            };
+                Debug.Log($"Map generation try attempts: {attempts}");
 
-            Stack<Vector2Int> cellsToPopulate = new Stack<Vector2Int>();
-            cellsToPopulate.Push(startCellPosition);
+                for (int y = 0; y < mapData.Height; y++)
+                    for (int x = 0; x < mapData.Width; x++)
+                        mapData.Cells[y, x] = default;
 
-            Direction[] allDirections = { Direction.North, Direction.East, Direction.South, Direction.West };
+                filledCellsSoFar = 0;
+                attempts++;
 
-            while (cellsToPopulate.Count > 0)
-            {
-                Vector2Int cellPosition = cellsToPopulate.Pop();
-                ref var cell = ref _mapData.GetCellRef(cellPosition.x, cellPosition.y);
-
-                var openDirectionsList = DirectionHelpers.DirectionFlagToList(DirectionHelpers.RotateDirectionsClockwise(cell.Data.OpenDirections, cell.Orientation));
-                openDirectionsList.Shuffle(random);
-
-                foreach (var dir in openDirectionsList)
+                _mapData[startCellPosition.y, startCellPosition.x] = new CellData
                 {
-                    Vector2Int candidatePosition = DirectionHelpers.AddDirectionToPosition(cellPosition, dir);
+                    X = startCellPosition.x,
+                    Y = startCellPosition.y,
+                    Orientation = 0,
+                    Data = startCellData
+                };
 
-                    if (!IsCellFree(candidatePosition)) continue;
+                Stack<Vector2Int> cellsToPopulate = new Stack<Vector2Int>();
+                cellsToPopulate.Push(startCellPosition);
 
-                    int distanceToEdge = GetDistanceToEdge(candidatePosition);
-                    float terminationChance = 0;
+                Direction[] allDirections = { Direction.North, Direction.East, Direction.South, Direction.West };
 
-                    if (distanceToEdge <= 3)
-                        terminationChance += (3.0f - distanceToEdge) * .34f;
+                while (cellsToPopulate.Count > 0)
+                {
+                    Vector2Int cellPosition = cellsToPopulate.Pop();
+                    ref var cell = ref _mapData.GetCellRef(cellPosition.x, cellPosition.y);
 
-                    if (random.NextDouble() > distanceToEdge)
+                    var openDirectionsList = DirectionHelpers.DirectionFlagToList(DirectionHelpers.RotateDirectionsClockwise(cell.Data.OpenDirections, cell.Orientation));
+                    openDirectionsList.Shuffle(random);
+
+                    foreach (var dir in openDirectionsList)
                     {
-                        // Terminate
-                        var terminationEnd = terminationEnds[DirectionHelpers.GetOppositeDirection(dir)];
-                        mapData.Cells[candidatePosition.y, candidatePosition.x] = new CellData
-                        {
-                            X = candidatePosition.x,
-                            Y = candidatePosition.y,
-                            Data = terminationEnd.Data,
-                            Orientation = terminationEnd.RotationSteps
-                        };
-                    }
-                    else
-                    {
-                        // Branch
-                        Direction requiredOpenings = Direction.None;
-                        Direction forbiddenOpenings = Direction.None;
+                        Vector2Int candidatePosition = DirectionHelpers.AddDirectionToPosition(cellPosition, dir);
 
+                        if (!IsCellFree(candidatePosition)) continue;
+
+                        // Environmental parameters calculation
+                        int distanceToEdge = GetDistanceToEdge(candidatePosition);
+                        float distanceToEdgeNormalized = (float)distanceToEdge / mapData.Width;
+
+                        // Dont fill the map too much
+                        float currentFilledCelledByTargetPercentage = (float)filledCellsSoFar / targetFilledCells;
+
+                        // Pre-compute neighbor connections: required openings + adjacent wall count
+                        Direction precomputedRequired = Direction.None;
+                        int adjacentWallCount = 0;
                         foreach (var d in allDirections)
                         {
                             var neighborPos = DirectionHelpers.AddDirectionToPosition(candidatePosition, d);
+                            if (IsOutOfBounds(neighborPos) || IsCellFree(neighborPos)) continue;
 
-                            if (IsOutOfBounds(neighborPos)) forbiddenOpenings |= d;
+                            var neighborCell = mapData.GetCellRef(neighborPos);
+                            Direction neighborDoors = DirectionHelpers.RotateDirectionsClockwise(neighborCell.Data.OpenDirections, neighborCell.Orientation);
 
-                            if (!IsCellFree(neighborPos))
-                            {
-                                var neighborCell = mapData.GetCellRef(neighborPos);
-                                Direction neighborRotatedDoors = DirectionHelpers.RotateDirectionsClockwise(neighborCell.Data.OpenDirections, neighborCell.Orientation);
-
-                                if ((DirectionHelpers.GetOppositeDirection(d) & neighborRotatedDoors) > 0) requiredOpenings |= d;
-                                else forbiddenOpenings |= d;
-                            }
+                            if ((DirectionHelpers.GetOppositeDirection(d) & neighborDoors) > 0)
+                                precomputedRequired |= d;
+                            else
+                                adjacentWallCount++;
                         }
 
-                        allVariants.Shuffle(random);
-                        foreach (var variant in allVariants)
-                        {
-                            bool hasRequired = (variant.RotatedDirections & requiredOpenings) == requiredOpenings;
-                            bool hasNoForbidden = (variant.RotatedDirections & forbiddenOpenings) == 0;
+                        float terminationChance = _branchTerminationChance * distanceToEdgeNormalized;
+                        terminationChance += adjacentWallCount * _adjacentWallTerminationBonus;
 
-                            if (hasRequired & hasNoForbidden)
+                        if (distanceToEdge <= 3)
+                            terminationChance += (3.0f - distanceToEdge) * .34f;
+
+                        // Only terminate if no other placed neighbor requires a connection here
+                        bool canTerminate = precomputedRequired == DirectionHelpers.GetOppositeDirection(dir);
+                        if (canTerminate && random.NextDouble() < terminationChance)
+                        {
+                            // Terminate
+                            var terminationEnd = terminationEnds[DirectionHelpers.GetOppositeDirection(dir)];
+                            mapData.Cells[candidatePosition.y, candidatePosition.x] = new CellData
                             {
+                                X = candidatePosition.x,
+                                Y = candidatePosition.y,
+                                Data = terminationEnd.Data,
+                                Orientation = terminationEnd.RotationSteps
+                            };
+
+                            filledCellsSoFar++;
+                        }
+                        else
+                        {
+                            // Branch
+                            Direction requiredOpenings = Direction.None;
+                            Direction forbiddenOpenings = Direction.None;
+
+                            foreach (var d in allDirections)
+                            {
+                                var neighborPos = DirectionHelpers.AddDirectionToPosition(candidatePosition, d);
+
+                                if (IsOutOfBounds(neighborPos)) forbiddenOpenings |= d;
+
+                                if (!IsCellFree(neighborPos))
+                                {
+                                    var neighborCell = mapData.GetCellRef(neighborPos);
+                                    Direction neighborRotatedDoors = DirectionHelpers.RotateDirectionsClockwise(neighborCell.Data.OpenDirections, neighborCell.Orientation);
+
+                                    if ((DirectionHelpers.GetOppositeDirection(d) & neighborRotatedDoors) > 0) requiredOpenings |= d;
+                                    else forbiddenOpenings |= d;
+                                }
+                            }
+
+                            var validVariants = allVariants
+                                .Where(v => (v.RotatedDirections & requiredOpenings) == requiredOpenings
+                                         && (v.RotatedDirections & forbiddenOpenings) == 0)
+                                .ToList();
+
+                            if (validVariants.Count > 0)
+                            {
+                                int neighborConnectionCount = DirectionHelpers.DirectionFlagToList(precomputedRequired).Count;
+
+                                float VariantWeight(CellVariant v)
+                                {
+                                    float w = v.Data.GetCalculatedWeight(distanceToEdgeNormalized, currentFilledCelledByTargetPercentage);
+                                    if (DirectionHelpers.DirectionFlagToList(v.RotatedDirections).Count >= 3 && neighborConnectionCount >= 2)
+                                        w *= _highConnectivityPenalty;
+                                    return w;
+                                }
+
+                                float totalWeight = validVariants.Sum(VariantWeight);
+                                float pick = (float)(random.NextDouble() * totalWeight);
+                                float cumulative = 0f;
+
+                                CellVariant chosen = validVariants[0];
+                                foreach (var variant in validVariants)
+                                {
+                                    cumulative += VariantWeight(variant);
+                                    if (pick < cumulative) { chosen = variant; break; }
+                                }
+
                                 mapData.Cells[candidatePosition.y, candidatePosition.x] = new CellData
                                 {
                                     X = candidatePosition.x,
                                     Y = candidatePosition.y,
-                                    Data = variant.Data,
-                                    Orientation = variant.RotationSteps
+                                    Data = chosen.Data,
+                                    Orientation = chosen.RotationSteps
                                 };
 
-                                break;
+                                filledCellsSoFar++;
                             }
-                        }
 
-                        cellsToPopulate.Push(candidatePosition);
+                            cellsToPopulate.Push(candidatePosition);
+                        }
                     }
                 }
             }
+            while (filledCellsSoFar < minimumFilledCells && attempts < _maxGenerationAttempts);
         }
 
         // --- HELPER METHODS ---

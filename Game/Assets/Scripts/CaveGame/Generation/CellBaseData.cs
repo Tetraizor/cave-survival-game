@@ -1,4 +1,5 @@
 using CaveGame.Common.Enums;
+using CaveGame.Constants;
 using UnityEngine;
 
 namespace CaveGame.Generation
@@ -11,5 +12,24 @@ namespace CaveGame.Generation
 
         [SerializeField] private GameObject _prefab;
         public GameObject Prefab => _prefab;
+
+        [SerializeField][Min(0f)] private float _baseWeight = 1f;
+        public float BaseWeight => _baseWeight;
+
+        [SerializeField] private AnimationCurve _spawnChanceMultOverEdgeDistance;
+        [SerializeField] private AnimationCurve _mapFullnessMultiplier;
+
+        public float GetCalculatedWeight(float distanceToEdgeNormalized, float mapFillPercentage)
+        {
+            float distanceMultiplier = (_spawnChanceMultOverEdgeDistance == null || _spawnChanceMultOverEdgeDistance.length == 0)
+                ? 1f
+                : _spawnChanceMultOverEdgeDistance.Evaluate(distanceToEdgeNormalized);
+
+            float mapFillMultiplier = (_mapFullnessMultiplier == null || _mapFullnessMultiplier.length == 0)
+                ? 1.0f
+                : _mapFullnessMultiplier.Evaluate(mapFillPercentage);
+
+            return _baseWeight * distanceMultiplier;
+        }
     }
 }

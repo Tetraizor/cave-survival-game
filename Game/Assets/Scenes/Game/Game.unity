@@ -9151,11 +9151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a372b3409fd67bc9b8d3079b6b850d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.CameraManager
-  _moveSpeed: 15
+  _moveSpeed: 100
   _smoothTime: 0.15
-  _zoomSpeed: 5
-  _minZoom: 5
-  _maxZoom: 20
+  _zoomSpeed: 1.5
+  _minZoom: 3
+  _maxZoom: 15
 --- !u!1 &332579977
 GameObject:
   m_ObjectHideFlags: 0
@@ -56620,15 +56620,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4889707038101578721, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.801
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 4889707038101578721, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.06
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4889707038101578721, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 48.806
+      value: 12.5
       objectReference: {fileID: 0}
     - target: {fileID: 4889707038101578721, guid: 8f2b4ce133d154cf99aac595ee0f5096, type: 3}
       propertyPath: m_LocalRotation.w

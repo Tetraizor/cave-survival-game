@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Generation.CellBaseData
   _openDirections: 10
   _prefab: {fileID: 2133569383335500541, guid: ea448d2a01674e59eaf48799f378d022, type: 3}
+  _weight: 1.25

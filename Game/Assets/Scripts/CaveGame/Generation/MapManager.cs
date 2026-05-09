@@ -4,8 +4,8 @@ namespace CaveGame.Generation
 {
     public class MapManager : MonoBehaviour
     {
-        public const int MAP_WIDTH = 32;
-        public const int MAP_HEIGHT = 32;
+        public const int MAP_WIDTH = 24;
+        public const int MAP_HEIGHT = 24;
 
         public const int CELL_SIZE = 2;
 
