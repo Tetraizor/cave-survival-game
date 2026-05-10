@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using CaveTogether.Common;
-using CaveTogether.Game.Actions;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.UI;
 using CaveTogether.Generation;
@@ -32,15 +30,7 @@ namespace CaveTogether.Game.States
             if (!flowService.CurrentMatchPayload.HasValue)
                 Debug.LogError("[StartState] Cannot start a game session without a payload!");
 
-            SetupPlayersRpc(flowService.CurrentMatchPayload.Value);
             StartGenerationRpc(flowService.CurrentMatchPayload.Value);
-        }
-
-        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void SetupPlayersRpc(GameConfig config)
-        {
-            FindAnyObjectByType<GameUIManager>().Initialize(config);
-            FindAnyObjectByType<CharacterManager>().Initialize(config);
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
@@ -55,6 +45,9 @@ namespace CaveTogether.Game.States
             }
 
             mapManager.Initialize(config.Seed.ToString());
+
+            FindAnyObjectByType<GameUIManager>().Initialize(config);
+            FindAnyObjectByType<CharacterManager>().Initialize(config);
 
             if (IsServer)
                 FindAnyObjectByType<GameStateManager>().SwitchStateRpc(GameStateType.Game);

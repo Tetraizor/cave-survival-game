@@ -1,10 +1,9 @@
 using CaveTogether.Common.Enums;
-using CaveTogether.Constants;
 using UnityEngine;
 
 namespace CaveTogether.Generation
 {
-    [CreateAssetMenu(fileName = "CellBaseData", menuName = "Cave Game/Generation/CellBaseData", order = 1)]
+    [CreateAssetMenu(fileName = "CellBaseData", menuName = "Cave Together/Generation/CellBaseData", order = 1)]
     public class CellBaseData : ScriptableObject
     {
         [SerializeField] private Direction _openDirections;

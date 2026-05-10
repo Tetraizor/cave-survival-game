@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using UnityEngine;
+using CaveTogether.Generation.Layers;
 
 namespace CaveTogether.Generation
 {
@@ -18,6 +18,8 @@ namespace CaveTogether.Generation
         public MapGenerator(MapData map, string seed = "")
         {
             MapGenerationPipeline.Add(new BaseGenerationLayer());
+            MapGenerationPipeline.Add(new SpawnGenerationLayer());
+
             Seed = seed;
             Map = map;
         }
@@ -30,7 +32,7 @@ namespace CaveTogether.Generation
             var hashed = hasher.ComputeHash(Encoding.UTF8.GetBytes(Seed));
 
             int seedHashed = BitConverter.ToInt32(hashed, 0);
-            System.Random random = new System.Random(seedHashed);
+            Random random = new Random(seedHashed);
 
             while (generationEnumerator.MoveNext())
             {

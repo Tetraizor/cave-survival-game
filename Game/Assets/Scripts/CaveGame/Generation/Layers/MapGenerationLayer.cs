@@ -1,6 +1,4 @@
-using System.Diagnostics;
-
-namespace CaveTogether.Generation
+namespace CaveTogether.Generation.Layers
 {
     public abstract class MapGenerationLayerBase
     {

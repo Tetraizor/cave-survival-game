@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CaveTogether.Game.Entities
 {
-    [CreateAssetMenu(fileName = "Character", menuName = "Cave Game/Character", order = 1)]
+    [CreateAssetMenu(fileName = "Character", menuName = "Cave Together/Character", order = 1)]
     public class CharacterDataSO : ScriptableObject
     {
         public string TypeId;

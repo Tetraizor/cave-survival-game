@@ -2,7 +2,6 @@ using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.Movement;
 using CaveTogether.Generation;
-using UnityEngine;
 
 namespace CaveTogether.Game.Actions
 {
@@ -18,12 +17,12 @@ namespace CaveTogether.Game.Actions
             character.SetPosition(request.TargetCell);
         }
 
-        public override int GetEnergyCost(MapData map, Character character, Vector2Int targetCell) => MovementValidator.GetDistance(map, character.GridPosition, targetCell);
+        public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => MovementValidator.GetDistance(map, character.GridPosition, request.TargetCell);
 
-        public override bool IsValid(MapData map, Character character, Vector2Int targetCell)
+        public override bool IsValid(MapData map, Character character, ActionRequest request)
         {
-            if (targetCell.x == character.GridPosition.x && targetCell.y == character.GridPosition.y) return false;
-            if (!MovementValidator.CanMove(map, character.GridPosition, targetCell, out int distance)) return false;
+            if (request.TargetCell.x == character.GridPosition.x && request.TargetCell.y == character.GridPosition.y) return false;
+            if (!MovementValidator.CanMove(map, character.GridPosition, request.TargetCell, out int _)) return false;
 
             return true;
         }

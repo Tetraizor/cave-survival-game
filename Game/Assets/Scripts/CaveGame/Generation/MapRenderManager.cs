@@ -1,5 +1,5 @@
 using CaveTogether.Common.Enums;
-using UnityEditor;
+using CaveTogether.Generation.Layers;
 using UnityEngine;
 
 namespace CaveTogether.Generation

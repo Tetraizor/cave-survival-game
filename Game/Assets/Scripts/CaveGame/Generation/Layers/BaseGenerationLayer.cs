@@ -4,7 +4,7 @@ using CaveTogether.Common.Enums;
 using CaveTogether.Utils;
 using UnityEngine;
 
-namespace CaveTogether.Generation
+namespace CaveTogether.Generation.Layers
 {
     public struct CellVariant
     {
@@ -227,7 +227,6 @@ namespace CaveTogether.Generation
             while (filledCellsSoFar < minimumFilledCells && attempts < _maxGenerationAttempts);
         }
 
-        // --- HELPER METHODS ---
         private int GetDistanceToEdge(Vector2Int position)
         {
             int xDistance = Mathf.Min(position.x, _mapData.Width - position.x - 1);

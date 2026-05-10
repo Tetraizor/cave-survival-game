@@ -21,10 +21,12 @@ namespace CaveTogether.Game.Entities
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
 
-        private List<ActionType> _possibleActions;
+        private List<ActionType> _possibleActions = new();
 
         public void Initialize(CharacterDataSO data)
         {
+            transform.eulerAngles = new Vector3(45, 45, 0);
+
             _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
 
@@ -40,9 +42,15 @@ namespace CaveTogether.Game.Entities
         public void SetPosition(Vector2Int position)
         {
             GridPosition = position;
-            _mapRenderManager.GridToWorldPosition(position);
+            transform.position = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
         }
 
+        public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);
+        public void GainEnergy(int energy) => Energy += Mathf.Min(energy, MaxEnergy);
+        public void ResetEnergy() => Energy = MaxEnergy;
+
         public bool CanDoAction(ActionType type) => _possibleActions.Contains(type);
+
+        private Vector3 GetWorldPositionOffset() => new Vector3(1, 0, 1) * MapRenderManager.CELL_SIZE / 2;
     }
 }

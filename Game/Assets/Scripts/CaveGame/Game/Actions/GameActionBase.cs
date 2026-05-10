@@ -11,9 +11,9 @@ namespace CaveTogether.Game.Actions
         public abstract ActionUIType UIType { get; }
         public abstract string DisplayName { get; }
 
-        public abstract int GetEnergyCost(MapData map, Character character, Vector2Int targetCell);
+        public abstract int GetEnergyCost(MapData map, Character character, ActionRequest request);
 
-        public abstract bool IsValid(MapData map, Character character, Vector2Int targetCell);
+        public abstract bool IsValid(MapData map, Character character, ActionRequest request);
         public abstract void Execute(MapData map, Character character, ActionRequest request);
     }
 }
