@@ -1,5 +1,5 @@
+using CaveGame.Generation;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace CaveGame.Game.States
 {
@@ -9,9 +9,22 @@ namespace CaveGame.Game.States
 
         public void Enter()
         {
-            Debug.Log("Game begins");
+            var mapManager = FindAnyObjectByType<MapManager>();
+
+            var cursorManager = FindAnyObjectByType<CursorManager>();
+            var cameraManager = FindAnyObjectByType<CameraManager>();
+
+            cursorManager.Initialize(mapManager.Map);
+            cameraManager.Initialize();
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+            var cursorManager = FindAnyObjectByType<CursorManager>();
+            var cameraManager = FindAnyObjectByType<CameraManager>();
+
+            cursorManager.Deinitialize();
+            cameraManager.Deinitialize();
+        }
     }
 }

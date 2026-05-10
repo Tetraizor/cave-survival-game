@@ -12,6 +12,6 @@ namespace CaveGame.Generation
         /// </summary>
         public int Orientation;
 
-        public bool IsEmpty() => Data == null;
+        public bool IsEmpty => Data == null;
     }
 }

@@ -31,7 +31,7 @@ namespace CaveGame.Generation
                     {
                         ref var cellRef = ref _manager.Map.GetCellRef(new Vector2Int(x, y));
 
-                        if (!cellRef.IsEmpty())
+                        if (!cellRef.IsEmpty)
                         {
                             var prefab = cellRef.Data.Prefab;
                             Vector3 realPosition = new Vector3(cellRef.X * MapManager.CELL_SIZE, 0, cellRef.Y * MapManager.CELL_SIZE);

@@ -245,7 +245,7 @@ namespace CaveGame.Generation
         {
             if (IsOutOfBounds(position)) return false;
             ref CellData cellRef = ref _mapData.GetCellRef(position);
-            return cellRef.IsEmpty();
+            return cellRef.IsEmpty;
         }
     }
 }

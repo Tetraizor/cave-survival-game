@@ -21,10 +21,9 @@ namespace CaveGame.Game
 
         private Camera _camera;
 
-        private void Start()
+        public void Initialize()
         {
             _camera = GetComponent<Camera>();
-
             _targetZoom = _camera.orthographicSize;
 
             var inputService = ServiceLocator.Get<InputService>();
@@ -32,7 +31,7 @@ namespace CaveGame.Game
             inputService.CameraZoomInputChanged += OnCameraZoomInputChanged;
         }
 
-        private void OnDestroy()
+        public void Deinitialize()
         {
             var inputService = ServiceLocator.Get<InputService>();
             inputService.CameraMoveInputChanged -= OnCameraMoveInputChanged;
@@ -44,6 +43,8 @@ namespace CaveGame.Game
 
         private void LateUpdate()
         {
+            if (_camera == null) return;
+
             MoveCamera();
             ZoomCamera();
         }
