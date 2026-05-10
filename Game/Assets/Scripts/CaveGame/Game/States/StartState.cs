@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CaveGame.Common;
+using CaveGame.Game.UI;
 using CaveGame.Generation;
 using CaveGame.Services;
 using Unity.Netcode;
@@ -26,16 +27,17 @@ namespace CaveGame.Game.States
         private void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
             var flowService = ServiceLocator.Get<GameFlowService>();
-            if (flowService.CurrentMatchPayload.HasValue)
-            {
-                StartGenerationRpc(flowService.CurrentMatchPayload.Value);
-            }
-            else
-            {
+            if (!flowService.CurrentMatchPayload.HasValue)
                 Debug.LogError("[StartState] Cannot start a game session without a payload!");
-            }
 
-            string randomSeed = UnityEngine.Random.Range(1000000, 9999999).ToString();
+            SetupPlayersRpc(flowService.CurrentMatchPayload.Value);
+            StartGenerationRpc(flowService.CurrentMatchPayload.Value);
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void SetupPlayersRpc(GameConfig config)
+        {
+            FindAnyObjectByType<GameUIManager>().Initialize(config);
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
