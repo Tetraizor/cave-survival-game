@@ -11,8 +11,8 @@ namespace CaveGame.Game.Movement
         public static bool CanMove(MapData map, Vector2Int from, Vector2Int to, out int distance)
         {
             distance = -1;
-            if (map.GetCellRef(from).IsEmpty) return false;
-            if (map.GetCellRef(to).IsEmpty) return false;
+            if (!map.IsInsideBounds(from) || map.GetCellRef(from).IsEmpty) return false;
+            if (!map.IsInsideBounds(to) || map.GetCellRef(to).IsEmpty) return false;
 
             var path = MapPathFinder.GetPath(map, from, to);
             if (path == null || path.Length == 0) return false;
@@ -21,9 +21,22 @@ namespace CaveGame.Game.Movement
             return true;
         }
 
+        public static List<Vector2Int> GetAllWalkableCells(MapData map)
+        {
+            var cells = new List<Vector2Int>();
+
+            for (int y = 0; y < map.Height; y++)
+                for (int x = 0; x < map.Width; x++)
+                    if (!map.GetCellRef(x, y).IsEmpty)
+                        cells.Add(new Vector2Int(x, y));
+
+            return cells;
+        }
+
         public static List<Vector2Int> GetWalkableNeighbours(MapData map, Vector2Int pos)
         {
             var walkableNeighbours = new List<Vector2Int>();
+            if (!map.IsInsideBounds(pos) || map.GetCellRef(pos).IsEmpty) return walkableNeighbours;
             var centerCellRef = map.GetCellRef(pos);
 
             var possibleCellPositions = new (Vector2Int Position, Direction Direction)[] {
@@ -57,6 +70,14 @@ namespace CaveGame.Game.Movement
             }
 
             return walkableNeighbours;
+        }
+
+        public static int GetDistance(MapData map, Vector2Int from, Vector2Int to)
+        {
+            if (CanMove(map, from, to, out int distance))
+                return distance;
+            else
+                return -1;
         }
     }
 }

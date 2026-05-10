@@ -1,3 +1,4 @@
+using CaveGame.Game.Actions;
 using CaveGame.Generation;
 using Unity.Netcode;
 
@@ -16,6 +17,8 @@ namespace CaveGame.Game.States
 
             cursorManager.Initialize(mapManager.Map);
             cameraManager.Initialize();
+
+            FindAnyObjectByType<ActionManager>().Initialize();
         }
 
         public void Exit()
@@ -25,6 +28,8 @@ namespace CaveGame.Game.States
 
             cursorManager.Deinitialize();
             cameraManager.Deinitialize();
+
+            FindAnyObjectByType<ActionManager>().Deinitialize();
         }
     }
 }

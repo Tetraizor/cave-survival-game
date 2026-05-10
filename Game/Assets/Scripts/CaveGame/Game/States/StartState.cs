@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using CaveGame.Common;
+using CaveGame.Game.Actions;
+using CaveGame.Game.Entities;
 using CaveGame.Game.UI;
 using CaveGame.Generation;
 using CaveGame.Services;
@@ -38,6 +40,7 @@ namespace CaveGame.Game.States
         private void SetupPlayersRpc(GameConfig config)
         {
             FindAnyObjectByType<GameUIManager>().Initialize(config);
+            FindAnyObjectByType<CharacterManager>().Initialize(config);
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]

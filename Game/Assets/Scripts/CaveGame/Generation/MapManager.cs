@@ -7,8 +7,6 @@ namespace CaveGame.Generation
         public const int MAP_WIDTH = 24;
         public const int MAP_HEIGHT = 24;
 
-        public const int CELL_SIZE = 2;
-
         public MapData Map { get; private set; } = new MapData(MAP_WIDTH, MAP_HEIGHT);
 
         public MapGenerator Generator { get; private set; }

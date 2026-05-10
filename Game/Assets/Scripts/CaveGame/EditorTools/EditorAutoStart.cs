@@ -55,7 +55,7 @@ namespace CaveGame.EditorTools
                         {
                         new PlayerConfig
                         {
-                            Character = "Caver",
+                            CharacterId = "caver",
                             Username = "Host",
                             OwnerClientId = 0
                         }
@@ -112,7 +112,7 @@ namespace CaveGame.EditorTools
                 players[i] = new PlayerConfig
                 {
                     OwnerClientId = seats[i].ClientID,
-                    Character = "Caver",
+                    CharacterId = "caver",
                     Username = $"Player #{Random.Range(1_000, 10_000).ToString()}"
                 };
             }

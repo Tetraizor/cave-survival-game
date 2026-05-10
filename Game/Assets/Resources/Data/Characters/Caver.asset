@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ea15f5635f154e996a91e860c71a32, type: 3}
+  m_Name: Caver
+  m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.Entities.CharacterDataSO
+  TypeId: caver
+  Name: Caver
+  MaxHealth: 4
+  MaxEnergy: 4
+  HeadGraphic: {fileID: 620667784, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+  PossibleActions: 00010203

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CaveGame.Data
 {
-    [CreateAssetMenu(fileName = "Curve", menuName = "Data/Curve", order = 1)]
+    [CreateAssetMenu(fileName = "Curve", menuName = "Cave Game/Data/Curve", order = 1)]
     public class CurveDataSO : ScriptableObject
     {
         [SerializeField] private AnimationCurve _curve;

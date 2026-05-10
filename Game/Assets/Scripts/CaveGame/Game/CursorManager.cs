@@ -1,5 +1,4 @@
 using CaveGame.Generation;
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -51,8 +50,8 @@ namespace CaveGame.Game
 
             var worldPoint = ray.GetPoint(distance);
             var candidate = new Vector2Int(
-                Mathf.FloorToInt(worldPoint.x / MapManager.CELL_SIZE),
-                Mathf.FloorToInt(worldPoint.z / MapManager.CELL_SIZE)
+                Mathf.FloorToInt(worldPoint.x / MapRenderManager.CELL_SIZE),
+                Mathf.FloorToInt(worldPoint.z / MapRenderManager.CELL_SIZE)
             );
 
             IsOnMap = _map.IsInsideBounds(candidate);
@@ -65,9 +64,9 @@ namespace CaveGame.Game
             if (!IsOnVisibleCell) return;
 
             var targetPosition = new Vector3(
-                _cellPosition.x * MapManager.CELL_SIZE + MapManager.CELL_SIZE / 2f,
+                _cellPosition.x * MapRenderManager.CELL_SIZE + MapRenderManager.CELL_SIZE / 2f,
                 _cursorYOffset,
-                _cellPosition.y * MapManager.CELL_SIZE + MapManager.CELL_SIZE / 2f
+                _cellPosition.y * MapRenderManager.CELL_SIZE + MapRenderManager.CELL_SIZE / 2f
             );
 
             _cellHighlightRenderer.transform.position = targetPosition;

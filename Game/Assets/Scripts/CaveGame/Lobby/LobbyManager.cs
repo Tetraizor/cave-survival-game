@@ -225,7 +225,7 @@ namespace CaveGame.Lobby
                     {
                         OwnerClientId = seat.ClientID,
                         Username = seat.ConnectionData.Username,
-                        Character = "Caver",
+                        CharacterId = "caver",
                     };
                 }
 

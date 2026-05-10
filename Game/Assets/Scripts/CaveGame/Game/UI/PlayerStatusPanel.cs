@@ -59,7 +59,7 @@ namespace CaveGame.Game.UI
             _correspondingPlayerId = data.OwnerClientId;
 
             _nameLabel.SetText(data.Username.ToString());
-            _descriptionLabel.SetText(data.Character.ToString());
+            _descriptionLabel.SetText(data.CharacterId.ToString());
             _healthLabel.SetText("Health: 4");
             _energyLabel.SetText("Energy: 4");
 
