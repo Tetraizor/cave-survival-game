@@ -1,8 +1,8 @@
 using System;
-using CaveGame.Services;
+using CaveTogether.Services;
 using UnityEngine;
 
-namespace CaveGame.Game
+namespace CaveTogether.Game
 {
     public class CameraManager : MonoBehaviour
     {

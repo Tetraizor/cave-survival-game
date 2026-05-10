@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CaveGame.Common
+namespace CaveTogether.Common
 {
     /// <summary>
     /// A robust generic Singleton base class for Unity MonoBehaviour.

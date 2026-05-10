@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CaveGame.Menu.UI
+namespace CaveTogether.Menu.UI
 {
     public class MenuUIController : MonoBehaviour
     {

@@ -1,10 +1,10 @@
 using System;
-using CaveGame.Common.Enums;
-using CaveGame.PlayerData;
+using CaveTogether.Common.Enums;
+using CaveTogether.PlayerData;
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace CaveGame.Common
+namespace CaveTogether.Common
 {
     [Serializable]
     public struct GameConfig : INetworkSerializable

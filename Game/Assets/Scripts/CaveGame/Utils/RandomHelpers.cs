@@ -1,6 +1,6 @@
 using System;
 
-namespace CaveGame.Utils
+namespace CaveTogether.Utils
 {
     public static class RandomHelpers
     {

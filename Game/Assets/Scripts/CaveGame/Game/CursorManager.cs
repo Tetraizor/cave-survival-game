@@ -1,8 +1,8 @@
-using CaveGame.Generation;
+using CaveTogether.Generation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace CaveGame.Game
+namespace CaveTogether.Game
 {
     public class CursorManager : MonoBehaviour
     {

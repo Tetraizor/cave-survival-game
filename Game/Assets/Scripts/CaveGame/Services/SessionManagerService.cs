@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CaveGame.Common;
+using CaveTogether.Common;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public class SessionManagerService : NetworkBehaviour, IService
     {

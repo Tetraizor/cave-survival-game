@@ -1,11 +1,11 @@
-using CaveGame.Common;
-using CaveGame.Services;
+using CaveTogether.Common;
+using CaveTogether.Services;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CaveGame.Menu.UI
+namespace CaveTogether.Menu.UI
 {
     public class JoinPanel : MenuPanelBase
     {

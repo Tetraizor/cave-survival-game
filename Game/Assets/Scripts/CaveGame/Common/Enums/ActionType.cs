@@ -1,4 +1,4 @@
-namespace CaveGame.Common.Enums
+namespace CaveTogether.Common.Enums
 {
     public enum ActionType : byte
     {

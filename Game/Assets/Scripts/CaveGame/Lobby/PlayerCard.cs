@@ -1,11 +1,11 @@
 using System;
-using CaveGame.Services;
+using CaveTogether.Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static CaveGame.Lobby.LobbyManager;
+using static CaveTogether.Lobby.LobbyManager;
 
-namespace CaveGame.Lobby
+namespace CaveTogether.Lobby
 {
     public class PlayerCard : MonoBehaviour
     {

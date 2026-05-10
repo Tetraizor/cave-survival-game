@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public class SceneManagerService : NetworkBehaviour, IService
     {

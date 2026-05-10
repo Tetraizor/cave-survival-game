@@ -1,8 +1,8 @@
-using CaveGame.Common;
-using CaveGame.Services;
+using CaveTogether.Common;
+using CaveTogether.Services;
 using UnityEngine;
 
-namespace CaveGame.Game.UI
+namespace CaveTogether.Game.UI
 {
     public class GameUIManager : MonoBehaviour
     {

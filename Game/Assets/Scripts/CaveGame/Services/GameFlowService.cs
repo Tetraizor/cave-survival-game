@@ -1,10 +1,10 @@
-using CaveGame.Common;
+using CaveTogether.Common;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public class GameFlowService : MonoBehaviour, IService
     {

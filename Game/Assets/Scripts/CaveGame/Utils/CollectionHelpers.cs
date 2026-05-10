@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CaveGame.Utils
+namespace CaveTogether.Utils
 {
     public static class CollectionHelpers
     {

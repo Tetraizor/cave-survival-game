@@ -1,17 +1,17 @@
 using UnityEngine;
-using CaveGame.Services;
-using CaveGame.Common;
+using CaveTogether.Services;
+using CaveTogether.Common;
 using System.Linq;
 using Unity.Netcode;
-using CaveGame.Common.Enums;
-using CaveGame.PlayerData;
+using CaveTogether.Common.Enums;
+using CaveTogether.PlayerData;
 using System.Collections;
 
 #if UNITY_EDITOR
 using Unity.Multiplayer.PlayMode;
 #endif
 
-namespace CaveGame.EditorTools
+namespace CaveTogether.EditorTools
 {
     public class EditorAutoStart : MonoBehaviour
     {

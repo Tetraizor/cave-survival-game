@@ -1,7 +1,7 @@
-using CaveGame.Common.Enums;
+using CaveTogether.Common.Enums;
 using UnityEngine;
 
-namespace CaveGame.Data
+namespace CaveTogether.Data
 {
     [CreateAssetMenu(fileName = "Curve", menuName = "Cave Game/Data/Curve", order = 1)]
     public class CurveDataSO : ScriptableObject

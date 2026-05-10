@@ -1,8 +1,8 @@
-using CaveGame.Common.Enums;
+using CaveTogether.Common.Enums;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace CaveGame.Game.Actions
+namespace CaveTogether.Game.Actions
 {
     public class ActionRequest : INetworkSerializable
     {

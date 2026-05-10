@@ -1,8 +1,8 @@
 using System;
-using CaveGame.Input;
+using CaveTogether.Input;
 using UnityEngine;
 
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public class InputService : MonoBehaviour, IService
     {

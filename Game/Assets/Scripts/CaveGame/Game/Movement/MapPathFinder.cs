@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using CaveGame.Generation;
+using CaveTogether.Generation;
 using UnityEngine;
 
-namespace CaveGame.Game.Movement
+namespace CaveTogether.Game.Movement
 {
     public static class MapPathFinder
     {

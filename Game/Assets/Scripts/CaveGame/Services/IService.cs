@@ -1,4 +1,4 @@
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public interface IService { }
 }

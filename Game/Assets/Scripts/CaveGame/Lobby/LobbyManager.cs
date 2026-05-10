@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Linq;
-using CaveGame.Common;
-using CaveGame.Common.Enums;
-using CaveGame.PlayerData;
-using CaveGame.Services;
+using CaveTogether.Common;
+using CaveTogether.Common.Enums;
+using CaveTogether.PlayerData;
+using CaveTogether.Services;
 using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace CaveGame.Lobby
+namespace CaveTogether.Lobby
 {
     public class LobbyManager : NetworkBehaviour
     {

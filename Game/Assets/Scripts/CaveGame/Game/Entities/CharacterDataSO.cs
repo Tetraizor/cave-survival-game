@@ -1,7 +1,7 @@
-using CaveGame.Common.Enums;
+using CaveTogether.Common.Enums;
 using UnityEngine;
 
-namespace CaveGame.Game.Entities
+namespace CaveTogether.Game.Entities
 {
     [CreateAssetMenu(fileName = "Character", menuName = "Cave Game/Character", order = 1)]
     public class CharacterDataSO : ScriptableObject

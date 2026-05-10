@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using CaveGame.Common.Enums;
-using CaveGame.Data;
+using CaveTogether.Common.Enums;
+using CaveTogether.Data;
 using UnityEngine;
 
-namespace CaveGame.Constants
+namespace CaveTogether.Constants
 {
     public static class Curves
     {

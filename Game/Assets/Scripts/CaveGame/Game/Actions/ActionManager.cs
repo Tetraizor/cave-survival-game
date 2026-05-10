@@ -1,11 +1,11 @@
 using System;
-using CaveGame.Common.Enums;
-using CaveGame.Game.Entities;
-using CaveGame.Services;
+using CaveTogether.Common.Enums;
+using CaveTogether.Game.Entities;
+using CaveTogether.Services;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace CaveGame.Game.Actions
+namespace CaveTogether.Game.Actions
 {
     public class ActionManager : NetworkBehaviour
     {

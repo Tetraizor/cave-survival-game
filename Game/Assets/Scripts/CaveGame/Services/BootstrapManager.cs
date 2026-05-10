@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CaveGame.Services
+namespace CaveTogether.Services
 {
     public class BootstrapManager : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-namespace CaveGame.Game.Actions
+namespace CaveTogether.Game.Actions
 {
     public enum ActionUIType
     {

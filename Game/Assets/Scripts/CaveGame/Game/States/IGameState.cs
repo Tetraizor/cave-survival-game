@@ -1,4 +1,4 @@
-namespace CaveGame.Game.States
+namespace CaveTogether.Game.States
 {
     public interface IGameState
     {

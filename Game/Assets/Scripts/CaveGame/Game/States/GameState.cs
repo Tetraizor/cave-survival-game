@@ -1,8 +1,8 @@
-using CaveGame.Game.Actions;
-using CaveGame.Generation;
+using CaveTogether.Game.Actions;
+using CaveTogether.Generation;
 using Unity.Netcode;
 
-namespace CaveGame.Game.States
+namespace CaveTogether.Game.States
 {
     public class GameState : NetworkBehaviour, IGameState
     {

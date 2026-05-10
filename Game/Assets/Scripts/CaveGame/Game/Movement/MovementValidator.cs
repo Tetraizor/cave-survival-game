@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using CaveGame.Common.Enums;
-using CaveGame.Generation;
+using CaveTogether.Common.Enums;
+using CaveTogether.Generation;
 using UnityEngine;
 
-namespace CaveGame.Game.Movement
+namespace CaveTogether.Game.Movement
 {
     public static class MovementValidator
     {

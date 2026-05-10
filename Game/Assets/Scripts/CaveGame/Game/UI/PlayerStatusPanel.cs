@@ -1,9 +1,9 @@
-using CaveGame.PlayerData;
+using CaveTogether.PlayerData;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace CaveGame.Game.UI
+namespace CaveTogether.Game.UI
 {
     public enum PlayerStatusPanelState
     {

@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public abstract class MapGenerationLayerBase
     {

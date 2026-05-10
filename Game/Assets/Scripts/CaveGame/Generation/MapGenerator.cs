@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public class MapGenerator
     {

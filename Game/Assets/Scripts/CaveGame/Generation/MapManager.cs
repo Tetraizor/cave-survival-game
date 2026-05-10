@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public class MapManager : MonoBehaviour
     {

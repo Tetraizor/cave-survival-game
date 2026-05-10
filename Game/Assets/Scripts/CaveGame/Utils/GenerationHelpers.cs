@@ -1,7 +1,7 @@
-using CaveGame.Common.Enums;
+using CaveTogether.Common.Enums;
 using UnityEngine;
 
-namespace CaveGame.Utils
+namespace CaveTogether.Utils
 {
     public static class GenerationHelpers
     {

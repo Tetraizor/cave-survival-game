@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using CaveGame.Common;
-using CaveGame.Game.Actions;
-using CaveGame.Game.Entities;
-using CaveGame.Game.UI;
-using CaveGame.Generation;
-using CaveGame.Services;
+using CaveTogether.Common;
+using CaveTogether.Game.Actions;
+using CaveTogether.Game.Entities;
+using CaveTogether.Game.UI;
+using CaveTogether.Generation;
+using CaveTogether.Services;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace CaveGame.Game.States
+namespace CaveTogether.Game.States
 {
     public class StartState : NetworkBehaviour, IGameState
     {

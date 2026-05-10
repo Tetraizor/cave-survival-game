@@ -1,10 +1,10 @@
-using CaveGame.Common.Enums;
-using CaveGame.Game.Entities;
-using CaveGame.Game.Movement;
-using CaveGame.Generation;
+using CaveTogether.Common.Enums;
+using CaveTogether.Game.Entities;
+using CaveTogether.Game.Movement;
+using CaveTogether.Generation;
 using UnityEngine;
 
-namespace CaveGame.Game.Actions
+namespace CaveTogether.Game.Actions
 {
     public class WalkAction : GameActionBase
     {

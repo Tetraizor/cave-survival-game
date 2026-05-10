@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace CaveGame.Input
+namespace CaveTogether.Input
 {
     /// <summary>
     /// Provides programmatic access to <see cref="InputActionAsset" />, <see cref="InputActionMap" />, <see cref="InputAction" /> and <see cref="InputControlScheme" /> instances defined in asset "Assets/Input/PlayerControls.inputactions".
@@ -74,7 +74,7 @@ namespace CaveGame.Input
     /// }
     /// </code>
     /// </example>
-    public partial class @PlayerControlsInput: IInputActionCollection2, IDisposable
+    public partial class @PlayerControlsInput : IInputActionCollection2, IDisposable
     {
         /// <summary>
         /// Provides access to the underlying asset instance.

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using CaveGame.Common.Enums;
-using CaveGame.Generation;
+using CaveTogether.Common.Enums;
+using CaveTogether.Generation;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace CaveGame.Game.Entities
+namespace CaveTogether.Game.Entities
 {
     public class Character : MonoBehaviour
     {

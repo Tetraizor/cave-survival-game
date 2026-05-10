@@ -1,8 +1,8 @@
-using CaveGame.Common.Enums;
-using CaveGame.Constants;
+using CaveTogether.Common.Enums;
+using CaveTogether.Constants;
 using UnityEngine;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     [CreateAssetMenu(fileName = "CellBaseData", menuName = "Cave Game/Generation/CellBaseData", order = 1)]
     public class CellBaseData : ScriptableObject

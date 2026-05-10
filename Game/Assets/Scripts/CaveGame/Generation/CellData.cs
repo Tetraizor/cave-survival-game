@@ -1,4 +1,4 @@
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public struct CellData
     {

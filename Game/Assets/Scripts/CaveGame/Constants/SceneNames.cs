@@ -1,4 +1,4 @@
-namespace CaveGame.Constants
+namespace CaveTogether.Constants
 {
     public static class SceneNames
     {

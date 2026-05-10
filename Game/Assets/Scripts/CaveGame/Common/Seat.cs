@@ -1,7 +1,7 @@
 using System;
 using Unity.Netcode;
 
-namespace CaveGame.Common
+namespace CaveTogether.Common
 {
     public struct Seat : INetworkSerializable, IEquatable<Seat>
     {

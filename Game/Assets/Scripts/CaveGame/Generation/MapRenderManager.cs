@@ -1,8 +1,8 @@
-using CaveGame.Common.Enums;
+using CaveTogether.Common.Enums;
 using UnityEditor;
 using UnityEngine;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public class MapRenderManager : MonoBehaviour
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using CaveGame.Game.States;
+using CaveTogether.Game.States;
 using UnityEngine;
 using Unity.Netcode;
 using System;
 using Unity.Services.Matchmaker.Models;
 
-namespace CaveGame.Game
+namespace CaveTogether.Game
 {
     public class GameStateManager : NetworkBehaviour
     {

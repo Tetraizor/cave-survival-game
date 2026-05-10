@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using CaveGame.Common.Enums;
-using CaveGame.Utils;
+using CaveTogether.Common.Enums;
+using CaveTogether.Utils;
 using UnityEngine;
 
-namespace CaveGame.Generation
+namespace CaveTogether.Generation
 {
     public struct CellVariant
     {

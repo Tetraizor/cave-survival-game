@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CaveGame.Menu.UI
+namespace CaveTogether.Menu.UI
 {
     public abstract class MenuPanelBase : MonoBehaviour
     {

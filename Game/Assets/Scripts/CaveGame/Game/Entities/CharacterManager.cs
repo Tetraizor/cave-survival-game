@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using CaveGame.Common;
+using CaveTogether.Common;
 using UnityEngine;
 
-namespace CaveGame.Game.Entities
+namespace CaveTogether.Game.Entities
 {
     public class CharacterManager : MonoBehaviour
     {
