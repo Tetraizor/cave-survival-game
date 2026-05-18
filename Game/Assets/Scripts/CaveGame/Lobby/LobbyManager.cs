@@ -3,13 +3,10 @@ using System.Collections;
 using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Common.Enums;
-using CaveTogether.PlayerData;
 using CaveTogether.Services;
 using TMPro;
 using Unity.Netcode;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace CaveTogether.Lobby

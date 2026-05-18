@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using CaveTogether.Common;
 using CaveTogether.Common.Enums;
 using CaveTogether.Generation;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CaveTogether.Game.Entities
@@ -23,20 +23,24 @@ namespace CaveTogether.Game.Entities
 
         private List<ActionType> _possibleActions = new();
 
-        public void Initialize(CharacterDataSO data)
+        public void Initialize(CharacterDataSO characterData, PlayerConfig playerConfig)
         {
             transform.eulerAngles = new Vector3(45, 45, 0);
 
             _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
 
-            Health = data.MaxHealth;
-            MaxHealth = data.MaxHealth;
+            // Character data assignments
+            Health = characterData.MaxHealth;
+            MaxHealth = characterData.MaxHealth;
 
-            Energy = data.MaxEnergy;
-            MaxEnergy = data.MaxEnergy;
+            Energy = characterData.MaxEnergy;
+            MaxEnergy = characterData.MaxEnergy;
 
-            _possibleActions.AddRange(data.PossibleActions);
+            _possibleActions.AddRange(characterData.PossibleActions);
+
+            // Player config assignments
+            OwnerClientId = playerConfig.OwnerClientId;
         }
 
         public void SetPosition(Vector2Int position)

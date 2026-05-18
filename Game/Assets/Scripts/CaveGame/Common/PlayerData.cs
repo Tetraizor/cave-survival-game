@@ -2,7 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.Netcode;
 
-namespace CaveTogether.PlayerData
+namespace CaveTogether.Common
 {
     [Serializable]
     public struct PlayerConfig : INetworkSerializable

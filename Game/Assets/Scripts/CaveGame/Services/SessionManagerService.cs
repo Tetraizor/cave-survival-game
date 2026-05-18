@@ -141,7 +141,6 @@ namespace CaveTogether.Services
         private void SyncSeatsRpc(Seat[] updatedSeats, RpcParams rpcParams = default)
         {
             Seats = updatedSeats;
-            Debug.Log($"Seats synced. Occupied: {OccupiedSeatCount}");
             SeatsSynchronized?.Invoke();
         }
 

@@ -1,6 +1,5 @@
 using System;
 using CaveTogether.Common.Enums;
-using CaveTogether.PlayerData;
 using Unity.Collections;
 using Unity.Netcode;
 

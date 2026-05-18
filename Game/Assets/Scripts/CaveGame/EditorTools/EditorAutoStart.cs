@@ -1,10 +1,9 @@
 using UnityEngine;
 using CaveTogether.Services;
 using CaveTogether.Common;
+using CaveTogether.Common.Enums;
 using System.Linq;
 using Unity.Netcode;
-using CaveTogether.Common.Enums;
-using CaveTogether.PlayerData;
 using System.Collections;
 
 #if UNITY_EDITOR

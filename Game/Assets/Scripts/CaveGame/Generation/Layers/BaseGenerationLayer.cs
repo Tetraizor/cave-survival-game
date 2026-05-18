@@ -38,7 +38,6 @@ namespace CaveTogether.Generation.Layers
 
             var cellBaseList = Resources.LoadAll<CellBaseData>(_baseCellScriptablePath).ToList();
 
-            Debug.Log($"Loaded {cellBaseList.Count} cell base scriptables.");
             List<CellVariant> allVariants = new List<CellVariant>();
             Dictionary<Direction, CellVariant> terminationEnds = new Dictionary<Direction, CellVariant>();
 
@@ -68,16 +67,11 @@ namespace CaveTogether.Generation.Layers
                 else if (variant.RotatedDirections == Direction.West) terminationEnds.Add(Direction.West, variant);
             });
 
-            Debug.Log($"Expanded {cellBaseList.Count} base cells into {allVariants.Count} unique rotated variants.");
-            Debug.Log($"Found {terminationEnds.Count} termination ends.");
-
             Vector2Int startCellPosition = new Vector2Int(mapData.Width / 2, mapData.Height / 2);
             var startCellData = cellBaseList.Find(cell => cell.OpenDirections == (Direction.North | Direction.East | Direction.South | Direction.West));
 
             do
             {
-                Debug.Log($"Map generation try attempts: {attempts}");
-
                 for (int y = 0; y < mapData.Height; y++)
                     for (int x = 0; x < mapData.Width; x++)
                         mapData.Cells[y, x] = default;
@@ -225,6 +219,8 @@ namespace CaveTogether.Generation.Layers
                 }
             }
             while (filledCellsSoFar < minimumFilledCells && attempts < _maxGenerationAttempts);
+
+            Debug.Log($"[BaseGenerationLayer] Map generated in {attempts} attempts.");
         }
 
         private int GetDistanceToEdge(Vector2Int position)

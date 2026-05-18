@@ -39,7 +39,7 @@ namespace CaveTogether.Game.Entities
                 var character = characterGameObject.GetComponent<Character>();
                 var characterData = _characterData.Find(cd => cd.TypeId.Equals(player.CharacterId.ToString()));
 
-                character.Initialize(characterData);
+                character.Initialize(characterData, player);
 
                 Characters.Add(character);
                 ClientIdCharacterLookup.Add(player.OwnerClientId, character);

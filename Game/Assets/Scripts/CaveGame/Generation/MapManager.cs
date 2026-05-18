@@ -17,8 +17,6 @@ namespace CaveTogether.Generation
             Generator = new MapGenerator(Map, seed);
             _renderManager.Initialize(this);
             Generator.GenerateMap();
-
-            Debug.Log("MapManager initialization complete!");
         }
     }
 }

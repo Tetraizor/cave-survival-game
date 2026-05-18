@@ -34,7 +34,6 @@ namespace CaveTogether.Game
             if (State != null) State.Exit();
 
             State = _states[type];
-            Debug.Log($"New state is {Enum.GetName(typeof(GameStateType), type)}");
 
             State.Enter();
         }

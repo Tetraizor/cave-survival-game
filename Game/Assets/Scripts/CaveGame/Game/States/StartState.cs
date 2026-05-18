@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using CaveTogether.Common;
+using CaveTogether.Game.Actions;
 using CaveTogether.Game.Entities;
+using CaveTogether.Game.Turn;
 using CaveTogether.Game.UI;
 using CaveTogether.Generation;
+using CaveTogether.Minigames;
 using CaveTogether.Services;
 using Unity.Netcode;
 using UnityEngine;
@@ -46,8 +49,11 @@ namespace CaveTogether.Game.States
 
             mapManager.Initialize(config.Seed.ToString());
 
-            FindAnyObjectByType<GameUIManager>().Initialize(config);
             FindAnyObjectByType<CharacterManager>().Initialize(config);
+            FindAnyObjectByType<ActionUIManager>().Initialize();
+            FindAnyObjectByType<GameUIManager>().Initialize(config);
+            FindAnyObjectByType<TurnManager>().Initialize(config);
+            FindAnyObjectByType<MinigameManager>().Initialize(config);
 
             if (IsServer)
                 FindAnyObjectByType<GameStateManager>().SwitchStateRpc(GameStateType.Game);
