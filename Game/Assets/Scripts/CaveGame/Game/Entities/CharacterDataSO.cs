@@ -14,7 +14,7 @@ namespace CaveTogether.Game.Entities
 
         public Sprite HeadGraphic;
 
-        public ActionType[] PossibleActions = new ActionType[] {
+        public ActionType[] PossibleActionTypes = new ActionType[] {
             ActionType.Wait,
             ActionType.Walk,
             ActionType.EndTurn,

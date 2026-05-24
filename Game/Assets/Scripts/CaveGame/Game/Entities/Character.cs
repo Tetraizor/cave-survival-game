@@ -21,7 +21,7 @@ namespace CaveTogether.Game.Entities
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
 
-        private List<ActionType> _possibleActions = new();
+        public List<ActionType> PossibleActionTypes { get; private set; } = new();
 
         public void Initialize(CharacterDataSO characterData, PlayerConfig playerConfig)
         {
@@ -37,7 +37,7 @@ namespace CaveTogether.Game.Entities
             Energy = characterData.MaxEnergy;
             MaxEnergy = characterData.MaxEnergy;
 
-            _possibleActions.AddRange(characterData.PossibleActions);
+            PossibleActionTypes.AddRange(characterData.PossibleActionTypes);
 
             // Player config assignments
             OwnerClientId = playerConfig.OwnerClientId;
@@ -53,7 +53,7 @@ namespace CaveTogether.Game.Entities
         public void GainEnergy(int energy) => Energy += Mathf.Min(energy, MaxEnergy);
         public void ResetEnergy() => Energy = MaxEnergy;
 
-        public bool CanDoAction(ActionType type) => _possibleActions.Contains(type);
+        public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);
 
         private Vector3 GetWorldPositionOffset() => new Vector3(1, 0, 1) * MapRenderManager.CELL_SIZE / 2;
     }

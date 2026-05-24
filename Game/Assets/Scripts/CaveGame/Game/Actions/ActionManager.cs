@@ -70,12 +70,14 @@ namespace CaveTogether.Game.Actions
             actionToExecute.Execute(_mapManager.Map, character, request);
         }
 
-        private GameActionBase GetActionLogic(ActionType type)
+        public GameActionBase GetActionLogic(ActionType type)
         {
             return type switch
             {
+                ActionType.Wait => new WaitAction(),
                 ActionType.Walk => new WalkAction(),
                 ActionType.EndTurn => new EndTurnAction(),
+                ActionType.Inspect => new InspectAction(),
                 _ => null
             };
         }

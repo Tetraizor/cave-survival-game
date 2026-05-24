@@ -15,6 +15,6 @@ MonoBehaviour:
   TypeId: caver
   Name: Caver
   MaxHealth: 4
-  MaxEnergy: 4
+  MaxEnergy: 3
   HeadGraphic: {fileID: 620667784, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
-  PossibleActions: 00010203
+  PossibleActionTypes: 00010203

@@ -3,6 +3,7 @@ using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Generation;
 using CaveTogether.Generation.Features;
+using CaveTogether.Services;
 using UnityEngine;
 
 namespace CaveTogether.Game.Entities
@@ -54,6 +55,12 @@ namespace CaveTogether.Game.Entities
                 return character;
             else
                 return null;
+        }
+
+        public Character GetClientCharacter()
+        {
+            ulong clientId = ServiceLocator.Get<SessionManagerService>().LocalClientId;
+            return GetCharacter(clientId);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace CaveTogether.Game.Turn
         public void Initialize(GameConfig config)
         {
             TurnOrder = config.Players.Select(p => p.OwnerClientId).ToList();
-            if (IsServer) StartRoundRpc();
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
