@@ -140,7 +140,7 @@ Material:
     - _CheckerColor: {r: 0.39482737, g: 0.6415094, b: 0.17248124, a: 0.5803922}
     - _Color: {r: 0.48279816, g: 0.972549, b: 0.40652543, a: 0.36078432}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RetroColor: {r: 0.23780185, g: 0.8584906, b: 0.3143251, a: 0.03529412}
+    - _RetroColor: {r: 0.23780185, g: 0.8584906, b: 0.3143251, a: 0.1764706}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

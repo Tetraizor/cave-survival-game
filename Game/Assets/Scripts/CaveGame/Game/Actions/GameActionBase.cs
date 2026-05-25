@@ -1,7 +1,6 @@
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
 using CaveTogether.Generation;
-using UnityEngine;
 
 namespace CaveTogether.Game.Actions
 {

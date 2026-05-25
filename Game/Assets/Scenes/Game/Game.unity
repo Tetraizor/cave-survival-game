@@ -587,7 +587,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35355338, y: 0.35355338, z: -0.1464466, w: 0.8535535}
-  m_LocalPosition: {x: 9.91, y: 7.9, z: 39.113}
+  m_LocalPosition: {x: 26.69, y: 7.9, z: 19.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1525,6 +1525,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.Actions.ActionManager
   ShowTopMostFoldoutHeaderGroup: 1
+  _actionIconLookup:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: -1641880747, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
+    - Key: 1
+      Value: {fileID: 545170550, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
+    - Key: 2
+      Value: {fileID: -1641880747, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
+    - Key: 3
+      Value: {fileID: 141801089, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
 --- !u!1 &935315231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1692,6 +1702,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Game.Actions.MapActionManager
   _actionSelectorPrefab: {fileID: 7864145003656981370, guid: bb189bc58ac6047149e2cd5ef5e21dcb, type: 3}
+  _mapActionSelectorListPrefab: {fileID: 697941100392751104, guid: 250db05ec09507b548b2f11d0c79b908, type: 3}
 --- !u!4 &936598878
 Transform:
   m_ObjectHideFlags: 0

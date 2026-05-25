@@ -1,3 +1,4 @@
+using System;
 using CaveTogether.Generation;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +7,11 @@ namespace CaveTogether.Game
 {
     public class CursorManager : MonoBehaviour
     {
+        public Action<Vector2Int> CellClicked;
+
+        public Action<Vector2Int> CellHoverEnter;
+        public Action<Vector2Int> CellHoverExit;
+
         [SerializeField] private GameObject _cellHighlightRenderer;
 
         private MapData _map;
@@ -35,7 +41,18 @@ namespace CaveTogether.Game
             if (_map == null) return;
 
             UpdateCellPosition();
+            CheckForClicks();
+
             UpdateHighlight();
+        }
+
+        private void CheckForClicks()
+        {
+            if (!IsOnVisibleCell) return;
+            if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+
+            CellClicked?.Invoke(_cellPosition);
         }
 
         private void UpdateCellPosition()
@@ -54,8 +71,16 @@ namespace CaveTogether.Game
                 Mathf.FloorToInt(worldPoint.z / MapRenderManager.CELL_SIZE)
             );
 
+            var oldCellPosition = _cellPosition;
+
             IsOnMap = _map.IsInsideBounds(candidate);
             if (IsOnMap) _cellPosition = candidate;
+
+            if (oldCellPosition != _cellPosition)
+            {
+                CellHoverEnter?.Invoke(_cellPosition);
+                CellHoverExit?.Invoke(oldCellPosition);
+            }
         }
 
         private void UpdateHighlight()

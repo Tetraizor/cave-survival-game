@@ -1,4 +1,5 @@
 using System;
+using AYellowpaper.SerializedCollections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.Turn;
@@ -11,9 +12,13 @@ namespace CaveTogether.Game.Actions
 {
     public class ActionManager : NetworkBehaviour
     {
+        public Action<ulong> ActionExecuted;
+
         private CharacterManager _characterManager;
         private TurnManager _turnManager;
         private MapManager _mapManager;
+
+        [SerializeField] private SerializedDictionary<ActionType, Sprite> _actionIconLookup = new();
 
         public void Initialize()
         {
@@ -68,6 +73,14 @@ namespace CaveTogether.Game.Actions
 
             character.UseEnergy(energyCost);
             actionToExecute.Execute(_mapManager.Map, character, request);
+
+            if (character.Energy == 0 && request.Type != ActionType.EndTurn)
+            {
+                character.ResetEnergy();
+                if (IsServer) _turnManager.AdvanceTurnRpc();
+            }
+
+            ActionExecuted?.Invoke(characterId);
         }
 
         public GameActionBase GetActionLogic(ActionType type)
@@ -81,5 +94,7 @@ namespace CaveTogether.Game.Actions
                 _ => null
             };
         }
+
+        public Sprite GetActionIcon(ActionType type) => _actionIconLookup[type];
     }
 }

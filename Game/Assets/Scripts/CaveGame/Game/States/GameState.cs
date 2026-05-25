@@ -15,8 +15,8 @@ namespace CaveTogether.Game.States
 
             var cursorManager = FindAnyObjectByType<CursorManager>();
             var cameraManager = FindAnyObjectByType<CameraManager>();
-            var actionManager = FindAnyObjectByType<ActionManager>();
             var mapActionManager = FindAnyObjectByType<MapActionManager>();
+            var actionManager = FindAnyObjectByType<ActionManager>();
 
             cursorManager.Initialize(mapManager.Map);
             cameraManager.Initialize();
@@ -28,15 +28,15 @@ namespace CaveTogether.Game.States
 
         public void Exit()
         {
-            var cursorManager = FindAnyObjectByType<CursorManager>();
-            var cameraManager = FindAnyObjectByType<CameraManager>();
-            var mapActionManager = FindAnyObjectByType<MapActionManager>();
             var actionManager = FindAnyObjectByType<ActionManager>();
+            var mapActionManager = FindAnyObjectByType<MapActionManager>();
+            var cameraManager = FindAnyObjectByType<CameraManager>();
+            var cursorManager = FindAnyObjectByType<CursorManager>();
 
-            cursorManager.Deinitialize();
-            cameraManager.Deinitialize();
             mapActionManager.Deinitialize();
             actionManager.Deinitialize();
+            cameraManager.Deinitialize();
+            cursorManager.Deinitialize();
         }
     }
 }
