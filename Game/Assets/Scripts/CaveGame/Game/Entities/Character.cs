@@ -12,6 +12,8 @@ namespace CaveTogether.Game.Entities
     {
         public Vector2Int GridPosition { get; private set; }
 
+        public bool IsDown => Health == 0;
+
         public int Health { get; private set; }
         public int MaxHealth { get; private set; }
 
@@ -87,6 +89,9 @@ namespace CaveTogether.Game.Entities
                 transform.localScale = scale;
             }
         }
+
+        public void TakeDamage(int amount) => Health = Mathf.Max(Health - amount, 0);
+        public void Heal(int amount) => Health = Mathf.Min(Health + amount, MaxHealth);
 
         public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);
         public void GainEnergy(int energy) => Energy += Mathf.Min(energy, MaxEnergy);

@@ -27,9 +27,14 @@ namespace CaveTogether.Game.Actions
             _characterManager = FindAnyObjectByType<CharacterManager>();
             _turnManager = FindAnyObjectByType<TurnManager>();
             _mapManager = FindAnyObjectByType<MapManager>();
+
+            _turnManager.TurnStarted += OnTurnStartedAutoSkip;
         }
 
-        public void Deinitialize() { }
+        public void Deinitialize()
+        {
+            _turnManager.TurnStarted -= OnTurnStartedAutoSkip;
+        }
 
         public void RequestAction(Character character, ActionRequest request)
         {
@@ -83,7 +88,7 @@ namespace CaveTogether.Game.Actions
 
             yield return StartCoroutine(action.Execute(_mapManager.Map, character, request));
 
-            if (character.Energy == 0)
+            if (character.Energy == 0 || character.IsDown)
             {
                 character.ResetEnergy();
                 if (IsServer) _turnManager.AdvanceTurnRpc();
@@ -100,10 +105,31 @@ namespace CaveTogether.Game.Actions
                 ActionType.Walk => new WalkAction(),
                 ActionType.EndTurn => new EndTurnAction(),
                 ActionType.Inspect => new InspectAction(),
+                ActionType.Revive => new ReviveAction(),
+                ActionType.DebugDown => new DebugDownAction(),
                 _ => null
             };
         }
 
-        public Sprite GetActionIcon(ActionType type) => _actionIconLookup[type];
+        private void OnTurnStartedAutoSkip(ulong turnOwnerId)
+        {
+            if (!IsServer) return;
+            var character = _characterManager.GetCharacter(turnOwnerId);
+            if (character == null || !character.IsDown) return;
+            StartCoroutine(AutoSkipDownedPlayer(character, turnOwnerId));
+        }
+
+        private IEnumerator AutoSkipDownedPlayer(Character character, ulong characterId)
+        {
+            yield return new WaitForSeconds(1f);
+            if (!character.IsDown) yield break;
+            ExecuteActionRpc(new ActionRequest { Type = ActionType.EndTurn }, character.Energy, characterId);
+        }
+
+        public Sprite GetActionIcon(ActionType type)
+        {
+            if (_actionIconLookup.TryGetValue(type, out var sprite)) return sprite;
+            else return null;
+        }
     }
 }

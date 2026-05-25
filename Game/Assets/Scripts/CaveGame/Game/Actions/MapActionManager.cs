@@ -260,7 +260,7 @@ namespace CaveTogether.Game.Actions
         {
             bool isOwnAction = turnOwnerId == _clientCharacter.OwnerClientId;
 
-            ToggleActionHints(isOwnAction);
+            ToggleActionHints(isOwnAction && !_clientCharacter.IsDown);
             if (!isOwnAction) CloseActionSelector();
         }
 

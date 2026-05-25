@@ -6,5 +6,7 @@ namespace CaveTogether.Common.Enums
         Walk,
         EndTurn,
         Inspect,
+        Revive,
+        DebugDown,
     }
 }

@@ -29,7 +29,8 @@ namespace CaveTogether.Game.Entities
 
         public Vector3 GetCellOffset(Character character)
         {
-            var cellmates = Characters.Where(c => c.GridPosition == character.GridPosition).ToList();
+            if (character.IsDown) return Vector3.zero;
+            var cellmates = Characters.Where(c => c.GridPosition == character.GridPosition && !c.IsDown).ToList();
             int count = Mathf.Min(cellmates.Count, CellOffsets.Length);
             int index = cellmates.IndexOf(character);
             if (index < 0 || count <= 0) return Vector3.zero;
@@ -38,7 +39,7 @@ namespace CaveTogether.Game.Entities
 
         public void RefreshCellPositions(Vector2Int cell, Character exclude = null)
         {
-            foreach (var c in Characters.Where(c => c.GridPosition == cell && c != exclude))
+            foreach (var c in Characters.Where(c => c.GridPosition == cell && c != exclude && !c.IsDown))
                 c.RefreshPosition();
         }
 
