@@ -12,13 +12,8 @@ namespace CaveTogether.Game
         public Action<Vector2Int> CellHoverEnter;
         public Action<Vector2Int> CellHoverExit;
 
-        [SerializeField] private GameObject _cellHighlightRenderer;
-
         private MapData _map;
         private readonly Plane _selectionPlane = new(Vector3.up, 0f);
-
-        private float _cursorYOffset = .03f;
-
         private Vector2Int _cellPosition;
 
         public Vector2Int? CellPosition => IsOnMap ? _cellPosition : null;
@@ -28,13 +23,9 @@ namespace CaveTogether.Game
         public void Initialize(MapData map)
         {
             _map = map;
-            _cellHighlightRenderer.SetActive(false);
         }
 
-        public void Deinitialize()
-        {
-            _cellHighlightRenderer.SetActive(false);
-        }
+        public void Deinitialize() { }
 
         private void Update()
         {
@@ -42,8 +33,6 @@ namespace CaveTogether.Game
 
             UpdateCellPosition();
             CheckForClicks();
-
-            UpdateHighlight();
         }
 
         private void CheckForClicks()
@@ -83,18 +72,6 @@ namespace CaveTogether.Game
             }
         }
 
-        private void UpdateHighlight()
-        {
-            _cellHighlightRenderer.SetActive(IsOnVisibleCell);
-            if (!IsOnVisibleCell) return;
 
-            var targetPosition = new Vector3(
-                _cellPosition.x * MapRenderManager.CELL_SIZE + MapRenderManager.CELL_SIZE / 2f,
-                _cursorYOffset,
-                _cellPosition.y * MapRenderManager.CELL_SIZE + MapRenderManager.CELL_SIZE / 2f
-            );
-
-            _cellHighlightRenderer.transform.position = targetPosition;
-        }
     }
 }
