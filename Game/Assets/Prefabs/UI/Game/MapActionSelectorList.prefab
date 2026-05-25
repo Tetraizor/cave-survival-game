@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2e086eb2b5abd133a309fe6a28d23e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Game.Actions.MapActionSelectorList
+  _closeButton: {fileID: 7487622586608070857}
   _mapActionSelectorRowPrefab: {fileID: 4122060912854683552, guid: 2954dc8476f54da009b3cb4adbf31f2c, type: 3}
   _rowContainer: {fileID: 1663425818598481718}
   _lineRenderer: {fileID: 6758953833664607465}

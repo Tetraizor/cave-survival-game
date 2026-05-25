@@ -46,6 +46,16 @@ namespace CaveTogether.Game
 
         private void UpdateCellPosition()
         {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                if (IsOnMap)
+                {
+                    IsOnMap = false;
+                    CellHoverExit?.Invoke(_cellPosition);
+                }
+                return;
+            }
+
             var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
             if (!_selectionPlane.Raycast(ray, out float distance))

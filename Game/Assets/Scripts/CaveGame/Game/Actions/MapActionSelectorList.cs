@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CaveTogether.Generation;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CaveTogether.Game.Actions
 {
@@ -10,6 +11,7 @@ namespace CaveTogether.Game.Actions
     {
         public Action<ActionRequest> RequestSelected;
 
+        [SerializeField] private Button _closeButton;
         [SerializeField] private GameObject _mapActionSelectorRowPrefab;
         [SerializeField] private Transform _rowContainer;
         [SerializeField] private LineRenderer _lineRenderer;
@@ -29,6 +31,8 @@ namespace CaveTogether.Game.Actions
             _anchorWorldPos = anchorWorldPos;
             _camera = Camera.main;
             transform.rotation = _camera.transform.rotation;
+
+            _closeButton.onClick.AddListener(() => FindAnyObjectByType<MapActionManager>().CloseActionSelector());
 
             _lineRenderer.positionCount = 2;
             _lineRenderer.useWorldSpace = true;
