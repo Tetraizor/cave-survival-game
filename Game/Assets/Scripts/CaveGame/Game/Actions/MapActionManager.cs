@@ -168,10 +168,11 @@ namespace CaveTogether.Game.Actions
             CloseActionSelector();
 
             var cellActionEntries = GetValidActionEntriesOnCell(x, y);
+            var cellWorldPos = _mapRenderManager.GridToWorldPosition(new Vector2Int(x, y));
 
             var mapActionSelectorListGO = Instantiate(_mapActionSelectorListPrefab);
             _mapActionSelectorList = mapActionSelectorListGO.GetComponent<MapActionSelectorList>();
-            _mapActionSelectorList.Initialize(cellActionEntries);
+            _mapActionSelectorList.Initialize(cellActionEntries, cellWorldPos);
             _mapActionSelectorList.RequestSelected += OnRequestSelected;
         }
 
