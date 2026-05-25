@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CaveTogether.Common.Enums;
 using CaveTogether.Generation;
@@ -7,14 +8,14 @@ namespace CaveTogether.Game.Movement
 {
     public static class MovementValidator
     {
-        public static bool CanMove(MapData map, Vector2Int from, Vector2Int to) => CanMove(map, from, to, out _);
-        public static bool CanMove(MapData map, Vector2Int from, Vector2Int to, out int distance)
+        public static bool CanMove(MapData map, Vector2Int from, Vector2Int to, Func<Vector2Int, bool> isPassable = null) => CanMove(map, from, to, out _, isPassable);
+        public static bool CanMove(MapData map, Vector2Int from, Vector2Int to, out int distance, Func<Vector2Int, bool> isPassable = null)
         {
             distance = -1;
             if (!map.IsInsideBounds(from) || map.GetCellRef(from).IsEmpty) return false;
             if (!map.IsInsideBounds(to) || map.GetCellRef(to).IsEmpty) return false;
 
-            var path = MapPathFinder.GetPath(map, from, to);
+            var path = MapPathFinder.GetPath(map, from, to, isPassable);
             if (path == null || path.Length == 0) return false;
             else distance = path.Length - 1;
 
@@ -72,9 +73,9 @@ namespace CaveTogether.Game.Movement
             return walkableNeighbours;
         }
 
-        public static int GetDistance(MapData map, Vector2Int from, Vector2Int to)
+        public static int GetDistance(MapData map, Vector2Int from, Vector2Int to, Func<Vector2Int, bool> isPassable = null)
         {
-            if (CanMove(map, from, to, out int distance))
+            if (CanMove(map, from, to, out int distance, isPassable))
                 return distance;
             else
                 return -1;

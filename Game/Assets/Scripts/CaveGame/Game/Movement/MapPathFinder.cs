@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CaveTogether.Generation;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace CaveTogether.Game.Movement
         /// <param name="to"></param>
         /// <returns></returns>
         // Returns [from] if from == to.
-        public static Vector2Int[] GetPath(MapData map, Vector2Int from, Vector2Int to)
+        public static Vector2Int[] GetPath(MapData map, Vector2Int from, Vector2Int to, Func<Vector2Int, bool> isPassable = null)
         {
             if (from == to) return new[] { from };
 
@@ -38,6 +39,9 @@ namespace CaveTogether.Game.Movement
                 foreach (var neighbour in MovementValidator.GetWalkableNeighbours(map, current))
                 {
                     if (closed.Contains(neighbour))
+                        continue;
+
+                    if (neighbour != to && isPassable != null && !isPassable(neighbour))
                         continue;
 
                     float tentativeG = gScore[current] + 1f;

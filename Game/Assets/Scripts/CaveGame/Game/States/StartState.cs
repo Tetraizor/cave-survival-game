@@ -49,6 +49,8 @@ namespace CaveTogether.Game.States
 
             mapManager.Initialize(config.Seed.ToString());
 
+            FindAnyObjectByType<ExplorationManager>().Initialize(mapManager.Map);
+
             FindAnyObjectByType<CharacterManager>().Initialize(config);
             FindAnyObjectByType<ActionUIManager>().Initialize();
             FindAnyObjectByType<GameUIManager>().Initialize(config);

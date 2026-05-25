@@ -47,6 +47,8 @@ namespace CaveTogether.Game.Entities
 
                 character.SetPosition(gridSpawnPosition);
             }
+
+            FindAnyObjectByType<ExplorationManager>().RevealFromPosition(gridSpawnPosition);
         }
 
         public Character GetCharacter(ulong ownerClientId)

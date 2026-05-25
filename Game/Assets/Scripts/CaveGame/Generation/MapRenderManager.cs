@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using CaveTogether.Common.Enums;
 using CaveTogether.Generation.Layers;
+using DG.Tweening;
 using UnityEngine;
 
 namespace CaveTogether.Generation
@@ -9,9 +12,13 @@ namespace CaveTogether.Generation
         public const int CELL_SIZE = 2;
 
         [SerializeField] private Transform _caveCellContainer;
+        [SerializeField] private GameObject _fogPrefab;
 
         private MapManager _manager;
         private MapGenerator _generator;
+
+        private readonly HashSet<Vector2Int> _spawnedCells = new();
+        private readonly Dictionary<Vector2Int, GameObject> _fogInstances = new();
 
         private bool _isInitialized;
 
@@ -25,28 +32,66 @@ namespace CaveTogether.Generation
             _isInitialized = true;
         }
 
-        private void OnGenerationLayerFinished(MapGenerationLayerBase layerBase)
+        private void OnGenerationLayerFinished(MapGenerationLayerBase layerBase) { }
+
+        public void SpawnCell(Vector2Int pos)
         {
-            // TODO: Hacky solution, do real OOP
-            if (layerBase.GetType() == typeof(BaseGenerationLayer))
+            ref var cellRef = ref _manager.Map.GetCellRef(pos);
+            if (cellRef.IsEmpty) return;
+
+            Vector3 realPosition = new Vector3(cellRef.X * CELL_SIZE, 0, cellRef.Y * CELL_SIZE);
+            var cell = Instantiate(cellRef.Data.Prefab, realPosition, Quaternion.identity, _caveCellContainer);
+            cell.transform.RotateAround(realPosition + new Vector3(CELL_SIZE / 2, 0, CELL_SIZE / 2), Vector3.up, cellRef.Orientation * 90);
+            Vector3 finalPos = cell.transform.position;
+            cell.transform.position = finalPos + Vector3.down * 2f;
+            cell.transform.localScale = Vector3.zero;
+            DOTween.Sequence()
+                .Join(cell.transform.DOMove(finalPos, 0.3f).SetEase(Ease.OutCubic))
+                .Join(cell.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
+            _spawnedCells.Add(pos);
+        }
+
+        public void OnCellRevealed(Vector2Int pos)
+        {
+            if (_fogInstances.TryGetValue(pos, out var existing))
             {
-                for (int y = 0; y < _manager.Map.Height; y++)
+                _fogInstances.Remove(pos);
+                var ps = existing.GetComponent<ParticleSystem>();
+                if (ps != null)
                 {
-                    for (int x = 0; x < _manager.Map.Width; x++)
-                    {
-                        ref var cellRef = ref _manager.Map.GetCellRef(new Vector2Int(x, y));
-
-                        if (!cellRef.IsEmpty)
-                        {
-                            var prefab = cellRef.Data.Prefab;
-                            Vector3 realPosition = new Vector3(cellRef.X * CELL_SIZE, 0, cellRef.Y * CELL_SIZE);
-
-                            var cell = Instantiate(prefab, realPosition, Quaternion.identity, _caveCellContainer);
-                            cell.transform.RotateAround(realPosition + new Vector3(CELL_SIZE / 2, 0, CELL_SIZE / 2), Vector3.up, cellRef.Orientation * 90);
-                        }
-                    }
+                    ps.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+                    StartCoroutine(DestroyWhenFinished(ps, existing));
+                }
+                else
+                {
+                    Destroy(existing);
                 }
             }
+
+            if (_fogPrefab == null) return;
+
+            ref var cell = ref _manager.Map.GetCellRef(pos);
+            if (cell.IsEmpty) return;
+
+            var openDirs = DirectionHelpers.DirectionFlagToList(
+                DirectionHelpers.RotateDirectionsClockwise(cell.Data.OpenDirections, cell.Orientation));
+
+            foreach (var dir in openDirs)
+            {
+                var neighborPos = DirectionHelpers.AddDirectionToPosition(pos, dir);
+                if (!_manager.Map.IsInsideBounds(neighborPos)) continue;
+                if (_manager.Map.GetCellRef(neighborPos).IsEmpty) continue;
+                if (_spawnedCells.Contains(neighborPos) || _fogInstances.ContainsKey(neighborPos)) continue;
+
+                _fogInstances[neighborPos] = Instantiate(_fogPrefab, GridToWorldPosition(neighborPos) + Vector3.one, Quaternion.identity, _caveCellContainer);
+            }
+        }
+
+        private IEnumerator DestroyWhenFinished(ParticleSystem ps, GameObject go)
+        {
+            while (ps.IsAlive(true))
+                yield return null;
+            Destroy(go);
         }
 
         private void OnDrawGizmos()

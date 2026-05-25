@@ -15,14 +15,21 @@ namespace CaveTogether.Game
         private MapData _map;
         private readonly Plane _selectionPlane = new(Vector3.up, 0f);
         private Vector2Int _cellPosition;
+        private ExplorationManager _explorationManager;
 
         public Vector2Int? CellPosition => IsOnMap ? _cellPosition : null;
         public bool IsOnMap { get; private set; }
-        public bool IsOnVisibleCell => CellPosition.HasValue && !_map.GetCellRef(CellPosition.Value).IsEmpty; // TODO: fog of war
+        public bool IsOnVisibleCell =>
+            CellPosition.HasValue &&
+            !_map.GetCellRef(CellPosition.Value).IsEmpty &&
+            (_explorationManager == null ||
+             _explorationManager.IsExplored(CellPosition.Value) ||
+             _explorationManager.IsFrontier(CellPosition.Value));
 
         public void Initialize(MapData map)
         {
             _map = map;
+            _explorationManager = FindAnyObjectByType<ExplorationManager>();
         }
 
         public void Deinitialize() { }

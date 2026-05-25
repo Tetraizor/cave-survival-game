@@ -15,6 +15,7 @@ namespace CaveTogether.Game.Actions
 
         public override IEnumerator Execute(MapData map, Character character, ActionRequest request)
         {
+            UnityEngine.Object.FindAnyObjectByType<ExplorationManager>().RevealFromPosition(request.TargetCell);
             yield break;
         }
 

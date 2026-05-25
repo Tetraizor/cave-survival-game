@@ -53,9 +53,19 @@ namespace CaveTogether.Game.Entities
 
         public IEnumerator MoveToCell(Vector2Int position)
         {
-            GridPosition = position;
             Vector3 target = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
-            yield return transform.DOMove(target, 0.15f).WaitForCompletion();
+
+            Vector3 delta = target - transform.position;
+            float side = delta.x - delta.z;
+            if (Mathf.Abs(side) > 0.01f)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = side > 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
+                transform.localScale = scale;
+            }
+
+            GridPosition = position;
+            yield return transform.DOMove(target, 0.5f).WaitForCompletion();
         }
 
         public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);

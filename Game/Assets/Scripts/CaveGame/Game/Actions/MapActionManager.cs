@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
+using CaveTogether.Game;
 using CaveTogether.Game.Turn;
 using CaveTogether.Generation;
 using Unity.VisualScripting;
@@ -30,6 +31,7 @@ namespace CaveTogether.Game.Actions
         private ActionManager _actionManager;
         private MapRenderManager _mapRenderManager;
 
+        private ExplorationManager _explorationManager;
         private bool _actionHintsEnabled;
 
         private Vector2Int? _openSelectorCell;
@@ -49,6 +51,7 @@ namespace CaveTogether.Game.Actions
             _actionManager.ActionExecuted += OnActionExecuted;
             _actionManager.ActionStarted += OnActionStarted;
 
+            _explorationManager = FindAnyObjectByType<ExplorationManager>();
             _clientCharacter = FindAnyObjectByType<CharacterManager>().GetClientCharacter();
 
             var cursorManager = FindAnyObjectByType<CursorManager>();
@@ -126,6 +129,13 @@ namespace CaveTogether.Game.Actions
 
         public List<CellActionEntry> GetValidActionEntriesOnCell(int x, int y)
         {
+            if (_explorationManager != null)
+            {
+                var pos = new Vector2Int(x, y);
+                if (!_explorationManager.IsExplored(pos) && !_explorationManager.IsFrontier(pos))
+                    return new List<CellActionEntry>();
+            }
+
             var possibleActionTypes = _clientCharacter.PossibleActionTypes;
             var possibleActions = possibleActionTypes
                 .Select(at => _actionManager.GetActionLogic(at))
