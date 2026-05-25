@@ -1,3 +1,4 @@
+using System.Collections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.Movement;
@@ -8,15 +9,12 @@ namespace CaveTogether.Game.Actions
 {
     public class WaitAction : GameActionBase
     {
-        public override ActionType Type => ActionType.Walk;
+        public override ActionType Type => ActionType.Wait;
         public override ActionUIType UIType => ActionUIType.ContextualCell;
 
         public override string DisplayName => "Wait";
 
-        public override void Execute(MapData map, Character character, ActionRequest request)
-        {
-            character.SetPosition(request.TargetCell);
-        }
+        public override IEnumerator Execute(MapData map, Character character, ActionRequest request) { yield break; }
 
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => Mathf.Max(character.Energy, 1);
 

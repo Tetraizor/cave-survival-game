@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using AYellowpaper.SerializedCollections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
@@ -12,6 +13,7 @@ namespace CaveTogether.Game.Actions
 {
     public class ActionManager : NetworkBehaviour
     {
+        public Action<ulong> ActionStarted;
         public Action<ulong> ActionExecuted;
 
         private CharacterManager _characterManager;
@@ -72,9 +74,16 @@ namespace CaveTogether.Game.Actions
             GameActionBase actionToExecute = GetActionLogic(request.Type);
 
             character.UseEnergy(energyCost);
-            actionToExecute.Execute(_mapManager.Map, character, request);
+            StartCoroutine(RunAction(actionToExecute, request, character, characterId));
+        }
 
-            if (character.Energy == 0 && request.Type != ActionType.EndTurn)
+        private IEnumerator RunAction(GameActionBase action, ActionRequest request, Character character, ulong characterId)
+        {
+            ActionStarted?.Invoke(characterId);
+
+            yield return StartCoroutine(action.Execute(_mapManager.Map, character, request));
+
+            if (character.Energy == 0)
             {
                 character.ResetEnergy();
                 if (IsServer) _turnManager.AdvanceTurnRpc();

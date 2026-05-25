@@ -47,6 +47,7 @@ namespace CaveTogether.Game.Actions
             _turnManager.TurnStarted += OnTurnStarted;
             _turnManager.RoundEnded += OnRoundEnded;
             _actionManager.ActionExecuted += OnActionExecuted;
+            _actionManager.ActionStarted += OnActionStarted;
 
             _clientCharacter = FindAnyObjectByType<CharacterManager>().GetClientCharacter();
 
@@ -64,6 +65,7 @@ namespace CaveTogether.Game.Actions
             _turnManager.TurnStarted -= OnTurnStarted;
             _turnManager.RoundEnded -= OnRoundEnded;
             _actionManager.ActionExecuted -= OnActionExecuted;
+            _actionManager.ActionStarted -= OnActionStarted;
 
             var cursorManager = FindAnyObjectByType<CursorManager>();
             cursorManager.CellClicked -= OnCellClicked;
@@ -220,6 +222,16 @@ namespace CaveTogether.Game.Actions
         {
             if (!_actionHintsEnabled) return;
             RefreshSelectors();
+        }
+
+        private void OnActionStarted(ulong characterId)
+        {
+            if (!_actionHintsEnabled) return;
+
+            CloseActionSelector();
+            foreach (var selector in _instantiatedSelectors)
+                Destroy(selector.Value.gameObject);
+            _instantiatedSelectors = new();
         }
 
         private void OnRequestSelected(ActionRequest request)

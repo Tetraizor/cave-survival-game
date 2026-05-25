@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using CaveTogether.Common;
 using CaveTogether.Common.Enums;
 using CaveTogether.Generation;
+using DG.Tweening;
 using UnityEngine;
 
 namespace CaveTogether.Game.Entities
@@ -47,6 +49,13 @@ namespace CaveTogether.Game.Entities
         {
             GridPosition = position;
             transform.position = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
+        }
+
+        public IEnumerator MoveToCell(Vector2Int position)
+        {
+            GridPosition = position;
+            Vector3 target = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
+            yield return transform.DOMove(target, 0.15f).WaitForCompletion();
         }
 
         public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);

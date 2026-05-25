@@ -1,3 +1,4 @@
+using System.Collections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.Movement;
@@ -12,9 +13,13 @@ namespace CaveTogether.Game.Actions
 
         public override string DisplayName => "Walk here";
 
-        public override void Execute(MapData map, Character character, ActionRequest request)
+        public override IEnumerator Execute(MapData map, Character character, ActionRequest request)
         {
-            character.SetPosition(request.TargetCell);
+            var path = MapPathFinder.GetPath(map, character.GridPosition, request.TargetCell);
+            if (path == null) { character.SetPosition(request.TargetCell); yield break; }
+
+            for (int i = 1; i < path.Length; i++)
+                yield return character.StartCoroutine(character.MoveToCell(path[i]));
         }
 
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => MovementValidator.GetDistance(map, character.GridPosition, request.TargetCell);
