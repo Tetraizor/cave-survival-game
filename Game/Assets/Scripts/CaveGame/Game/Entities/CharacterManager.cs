@@ -19,6 +19,29 @@ namespace CaveTogether.Game.Entities
 
         private List<CharacterDataSO> _characterData = new();
 
+        private static readonly Vector3[][] CellOffsets =
+        {
+            new[] { Vector3.zero },
+            new[] { new Vector3(-0.4f, 0, 0),  new Vector3( 0.4f, 0, 0) },
+            new[] { new Vector3(-0.4f, 0, -0.3f), new Vector3(0.4f, 0, -0.3f), new Vector3(0, 0, 0.3f) },
+            new[] { new Vector3(-0.4f, 0, 0.3f), new Vector3(0.4f, 0, 0.3f), new Vector3(-0.4f, 0, -0.3f), new Vector3(0.4f, 0, -0.3f) },
+        };
+
+        public Vector3 GetCellOffset(Character character)
+        {
+            var cellmates = Characters.Where(c => c.GridPosition == character.GridPosition).ToList();
+            int count = Mathf.Min(cellmates.Count, CellOffsets.Length);
+            int index = cellmates.IndexOf(character);
+            if (index < 0 || count <= 0) return Vector3.zero;
+            return CellOffsets[count - 1][index];
+        }
+
+        public void RefreshCellPositions(Vector2Int cell, Character exclude = null)
+        {
+            foreach (var c in Characters.Where(c => c.GridPosition == cell && c != exclude))
+                c.RefreshPosition();
+        }
+
         public void Initialize(GameConfig config)
         {
             _characterData = Resources.LoadAll<CharacterDataSO>(CHARACTER_DATA_PATH).ToList();

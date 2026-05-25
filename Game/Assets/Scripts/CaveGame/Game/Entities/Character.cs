@@ -22,6 +22,7 @@ namespace CaveTogether.Game.Entities
 
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
+        private CharacterManager _characterManager;
 
         public List<ActionType> PossibleActionTypes { get; private set; } = new();
 
@@ -31,6 +32,7 @@ namespace CaveTogether.Game.Entities
 
             _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
+            _characterManager = FindAnyObjectByType<CharacterManager>();
 
             // Character data assignments
             Health = characterData.MaxHealth;
@@ -47,14 +49,35 @@ namespace CaveTogether.Game.Entities
 
         public void SetPosition(Vector2Int position)
         {
+            var previousPosition = GridPosition;
             GridPosition = position;
-            transform.position = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
+            transform.position = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+            _characterManager.RefreshCellPositions(position, exclude: this);
+            _characterManager.RefreshCellPositions(previousPosition);
         }
 
         public IEnumerator MoveToCell(Vector2Int position)
         {
-            Vector3 target = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset();
+            var previousPosition = GridPosition;
+            GridPosition = position;
 
+            Vector3 target = _mapRenderManager.GridToWorldPosition(position) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+
+            ApplyDirectionFlip(target);
+            _characterManager.RefreshCellPositions(position, exclude: this);
+            yield return transform.DOMove(target, 0.5f).WaitForCompletion();
+            _characterManager.RefreshCellPositions(previousPosition);
+        }
+
+        public void RefreshPosition()
+        {
+            Vector3 target = _mapRenderManager.GridToWorldPosition(GridPosition) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+            ApplyDirectionFlip(target);
+            transform.DOMove(target, 0.2f).SetEase(Ease.OutCubic);
+        }
+
+        private void ApplyDirectionFlip(Vector3 target)
+        {
             Vector3 delta = target - transform.position;
             float side = delta.x - delta.z;
             if (Mathf.Abs(side) > 0.01f)
@@ -63,9 +86,6 @@ namespace CaveTogether.Game.Entities
                 scale.x = side > 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
                 transform.localScale = scale;
             }
-
-            GridPosition = position;
-            yield return transform.DOMove(target, 0.5f).WaitForCompletion();
         }
 
         public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);
