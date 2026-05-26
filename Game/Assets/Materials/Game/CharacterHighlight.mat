@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CharacterSelectionOutline
+  m_Name: CharacterHighlight
   m_Shader: {fileID: 4800000, guid: 279ea51745fb6b723990fec2ca3adab0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -65,7 +65,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 58b2a08a5649ea84195c15b4d366ce80, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0c8829c47b66d57cd9f1a54decb4fd0e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -139,7 +139,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 0.3436108, g: 1, b: 0.24056602, a: 0.24705882}
-    - _Color: {r: 0.3436107, g: 1, b: 0.24056596, a: 0.7882353}
+    - _Color: {r: 0.34361067, g: 1, b: 0.24056593, a: 0.31764707}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RetroColor: {r: 0.1, g: 0.9, b: 0.2, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

@@ -1,4 +1,5 @@
 using CaveTogether.Services;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -26,10 +27,13 @@ namespace CaveTogether.Game
         private float _targetZoom;
 
         private Camera _camera;
+        private float _defaultZoom;
+        private bool _isFocusing;
 
         public void Initialize()
         {
             _camera = GetComponent<Camera>();
+            _defaultZoom = _camera.orthographicSize;
             _targetZoom = _camera.orthographicSize;
 
             var inputService = ServiceLocator.Get<InputService>();
@@ -55,8 +59,24 @@ namespace CaveTogether.Game
             ZoomCamera();
         }
 
+        public void FocusOn(Vector3 target)
+        {
+            float t = (target.y - transform.position.y) / transform.forward.y;
+            Vector3 screenCenter = transform.position + transform.forward * t;
+            Vector3 destination = transform.position + new Vector3(target.x - screenCenter.x, 0, target.z - screenCenter.z);
+
+            _isFocusing = true;
+            _targetZoom = _defaultZoom;
+            _currentVelocity = Vector3.zero;
+            transform.DOMove(destination, 0.5f)
+                .SetEase(Ease.OutCubic)
+                .OnComplete(() => _isFocusing = false);
+        }
+
         private void MoveCamera()
         {
+            if (_isFocusing) return;
+
             if (Mouse.current.middleButton.isPressed)
             {
                 float worldUnitsPerPixel = (2f * _camera.orthographicSize) / Screen.height;
@@ -80,6 +100,7 @@ namespace CaveTogether.Game
         private Vector2 GetEdgePanInput()
         {
             if (!Application.isFocused) return Vector2.zero;
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return Vector2.zero;
 
             Vector2 mouse = Mouse.current.position.ReadValue();
             if (mouse.x < 0 || mouse.x > Screen.width || mouse.y < 0 || mouse.y > Screen.height)

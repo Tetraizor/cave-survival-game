@@ -16,6 +16,7 @@ namespace CaveTogether.Game.Entities
         public Action<int> EnergyChanged;
 
         [SerializeField] private GameObject _selectionOutline;
+        [SerializeField] private GameObject _highlight;
         [SerializeField] private GameObject _renderer;
 
         public Vector2Int GridPosition { get; private set; }
@@ -40,6 +41,7 @@ namespace CaveTogether.Game.Entities
         {
             _renderer.transform.eulerAngles = new Vector3(45, 45, 0);
             _selectionOutline.transform.DOScale(_selectionOutline.transform.localScale * 1.1f, 1f).SetLoops(-1, LoopType.Yoyo);
+            _highlight.gameObject.SetActive(false);
 
             _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
@@ -112,6 +114,11 @@ namespace CaveTogether.Game.Entities
         public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);
 
         private Vector3 GetWorldPositionOffset() => new Vector3(1, 0, 1) * MapRenderManager.CELL_SIZE / 2;
+
+        public void SetHighlight(bool state)
+        {
+            _highlight.SetActive(state);
+        }
 
         private void OnRoundEnded(int roundNumber)
         {

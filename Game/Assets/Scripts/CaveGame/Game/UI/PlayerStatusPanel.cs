@@ -3,6 +3,7 @@ using CaveTogether.Game.Entities;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace CaveTogether.Game.UI
@@ -14,7 +15,7 @@ namespace CaveTogether.Game.UI
         Raised
     }
 
-    public class PlayerStatusPanel : MonoBehaviour
+    public class PlayerStatusPanel : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [Header("UI References")]
         [SerializeField] private TextMeshProUGUI _nameLabel;
@@ -105,6 +106,27 @@ namespace CaveTogether.Game.UI
                     .SetEase(active ? Ease.OutBack : Ease.InBack)
                     .SetDelay(i * 0.05f);
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            FindAnyObjectByType<CameraManager>().FocusOn(_character.transform.position);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            transform.DOKill();
+            transform.DOScale(Vector3.one, .1f);
+
+            _character.SetHighlight(false);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            transform.DOKill();
+            transform.DOScale(Vector3.one * 1.1f, .1f);
+
+            _character.SetHighlight(true);
         }
     }
 }
