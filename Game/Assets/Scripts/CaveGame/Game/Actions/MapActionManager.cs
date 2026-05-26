@@ -85,8 +85,6 @@ namespace CaveTogether.Game.Actions
             CloseActionSelector();
         }
 
-        private void OnDestroy() => Deinitialize();
-
         private void ToggleActionHints(bool state)
         {
             if (_actionHintsEnabled == state) return;

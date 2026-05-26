@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using CaveTogether.Common;
@@ -10,6 +11,9 @@ namespace CaveTogether.Game.Entities
 {
     public class Character : MonoBehaviour
     {
+        public Action<int> HealthChanged;
+        public Action<int> EnergyChanged;
+
         public Vector2Int GridPosition { get; private set; }
 
         public bool IsDown => Health == 0;
@@ -90,12 +94,12 @@ namespace CaveTogether.Game.Entities
             }
         }
 
-        public void TakeDamage(int amount) => Health = Mathf.Max(Health - amount, 0);
-        public void Heal(int amount) => Health = Mathf.Min(Health + amount, MaxHealth);
+        public void TakeDamage(int amount) { Health = Mathf.Max(Health - amount, 0); HealthChanged?.Invoke(Health); }
+        public void Heal(int amount) { Health = Mathf.Min(Health + amount, MaxHealth); HealthChanged?.Invoke(Health); }
 
-        public void UseEnergy(int energy) => Energy = Mathf.Max(Energy - energy, 0);
-        public void GainEnergy(int energy) => Energy += Mathf.Min(energy, MaxEnergy);
-        public void ResetEnergy() => Energy = MaxEnergy;
+        public void UseEnergy(int energy) { Energy = Mathf.Max(Energy - energy, 0); EnergyChanged?.Invoke(Energy); }
+        public void GainEnergy(int energy) { Energy = Mathf.Min(Energy + energy, MaxEnergy); EnergyChanged?.Invoke(Energy); }
+        public void ResetEnergy() { Energy = MaxEnergy; EnergyChanged?.Invoke(Energy); }
 
         public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);
 

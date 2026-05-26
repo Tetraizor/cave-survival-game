@@ -1,7 +1,9 @@
 using CaveTogether.Common;
+using CaveTogether.Game.Entities;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CaveTogether.Game.UI
 {
@@ -17,10 +19,12 @@ namespace CaveTogether.Game.UI
         [Header("UI References")]
         [SerializeField] private TextMeshProUGUI _nameLabel;
         [SerializeField] private TextMeshProUGUI _descriptionLabel;
-        [SerializeField] private TextMeshProUGUI _healthLabel;
-        [SerializeField] private TextMeshProUGUI _energyLabel;
+
+        [SerializeField] private Image[] _heartSprites;
+        [SerializeField] private Image[] _energySprites;
 
         private ulong _correspondingPlayerId;
+        private Character _character;
 
         private PlayerStatusPanelState _state = PlayerStatusPanelState.Shown;
 
@@ -57,14 +61,50 @@ namespace CaveTogether.Game.UI
         public void Initialize(PlayerConfig data)
         {
             _correspondingPlayerId = data.OwnerClientId;
+            _character = FindAnyObjectByType<CharacterManager>().GetCharacter(_correspondingPlayerId);
+            _character.HealthChanged += OnHealthChanged;
+            _character.EnergyChanged += OnEnergyChanged;
 
             _nameLabel.SetText(data.Username.ToString());
             _descriptionLabel.SetText(data.CharacterId.ToString());
-            _healthLabel.SetText("Health: 4");
-            _energyLabel.SetText("Energy: 4");
 
             _state = PlayerStatusPanelState.Hidden;
             SetShowState(PlayerStatusPanelState.Shown);
+
+            for (int i = 0; i < _energySprites.Length; i++)
+                _energySprites[i].transform.parent.gameObject.SetActive(i < _character.MaxEnergy);
+
+            for (int i = 0; i < _heartSprites.Length; i++)
+                _heartSprites[i].transform.parent.gameObject.SetActive(i < _character.MaxHealth);
+
+            OnEnergyChanged(_character.Energy);
+            OnHealthChanged(_character.Health);
+        }
+
+        private void OnEnergyChanged(int newEnergy)
+        {
+            for (int i = 0; i < _energySprites.Length; i++)
+            {
+                bool active = i < newEnergy;
+                _energySprites[i].transform.DOKill();
+                _energySprites[i].transform
+                    .DOScale(active ? Vector3.one : Vector3.zero, 0.2f)
+                    .SetEase(active ? Ease.OutBack : Ease.InBack)
+                    .SetDelay(i * 0.05f);
+            }
+        }
+
+        private void OnHealthChanged(int newHealth)
+        {
+            for (int i = 0; i < _heartSprites.Length; i++)
+            {
+                bool active = i < newHealth;
+                _heartSprites[i].transform.DOKill();
+                _heartSprites[i].transform
+                    .DOScale(active ? Vector3.one : Vector3.zero, 0.2f)
+                    .SetEase(active ? Ease.OutBack : Ease.InBack)
+                    .SetDelay(i * 0.05f);
+            }
         }
     }
 }

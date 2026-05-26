@@ -90,7 +90,6 @@ namespace CaveTogether.Game.Actions
 
             if (character.Energy == 0 || character.IsDown)
             {
-                character.ResetEnergy();
                 if (IsServer) _turnManager.AdvanceTurnRpc();
             }
 
@@ -113,6 +112,12 @@ namespace CaveTogether.Game.Actions
 
         private void OnTurnStartedAutoSkip(ulong turnOwnerId)
         {
+            if (_turnManager.CurrentTurn == 0)
+            {
+                foreach (var c in _characterManager.Characters)
+                    c.ResetEnergy();
+            }
+
             if (!IsServer) return;
             var character = _characterManager.GetCharacter(turnOwnerId);
             if (character == null || !character.IsDown) return;
