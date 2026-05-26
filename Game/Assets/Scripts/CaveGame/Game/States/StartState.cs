@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CaveTogether.Common;
+using CaveTogether.DebugUtils;
 using CaveTogether.Game.Actions;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.Turn;
@@ -52,7 +53,7 @@ namespace CaveTogether.Game.States
             FindAnyObjectByType<ExplorationManager>().Initialize(mapManager.Map);
 
             FindAnyObjectByType<CharacterManager>().Initialize(config);
-            FindAnyObjectByType<ActionUIManager>().Initialize();
+            FindAnyObjectByType<GameDebugManager>().Initialize(config);
             FindAnyObjectByType<GameUIManager>().Initialize(config);
             FindAnyObjectByType<TurnManager>().Initialize(config);
             FindAnyObjectByType<MinigameManager>().Initialize(config);

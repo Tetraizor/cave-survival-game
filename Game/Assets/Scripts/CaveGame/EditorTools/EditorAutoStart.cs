@@ -50,6 +50,7 @@ namespace CaveTogether.EditorTools
                     {
                         Difficulty = Difficulty.Normal,
                         Seed = Random.Range(100_000, 999_999).ToString(),
+                        IsCheatsEnabled = true,
                         Players = new PlayerConfig[]
                         {
                         new PlayerConfig
@@ -120,6 +121,7 @@ namespace CaveTogether.EditorTools
             {
                 Difficulty = Difficulty.Normal,
                 Seed = Random.Range(100_000, 999_999).ToString(),
+                IsCheatsEnabled = true,
                 Players = players,
             };
 

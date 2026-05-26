@@ -12,10 +12,13 @@ namespace CaveTogether.Common
         public Difficulty Difficulty;
         public PlayerConfig[] Players;
 
+        public bool IsCheatsEnabled;
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref Seed);
             serializer.SerializeValue(ref Difficulty);
+            serializer.SerializeValue(ref IsCheatsEnabled);
 
             int length = 0;
             if (serializer.IsWriter)
