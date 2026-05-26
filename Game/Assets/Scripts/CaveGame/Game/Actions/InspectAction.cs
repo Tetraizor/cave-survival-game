@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
@@ -23,7 +24,8 @@ namespace CaveTogether.Game.Actions
 
         public override bool IsValid(MapData map, Character character, ActionRequest request)
         {
-            return MovementValidator.CanMove(map, character.GridPosition, request.TargetCell, out int distance) && distance == 1;
+            bool isExplored = UnityEngine.Object.FindAnyObjectByType<ExplorationManager>().IsExplored(request.TargetCell);
+            return !isExplored && MovementValidator.CanMove(map, character.GridPosition, request.TargetCell, out int distance) && distance == 1;
         }
     }
 }

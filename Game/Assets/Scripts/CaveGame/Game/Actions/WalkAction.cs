@@ -43,7 +43,9 @@ namespace CaveTogether.Game.Actions
         {
             if (request.TargetCell == character.GridPosition) return false;
             var explorationManager = UnityEngine.Object.FindAnyObjectByType<ExplorationManager>();
+
             Func<UnityEngine.Vector2Int, bool> isPassable = explorationManager != null ? explorationManager.IsExplored : null;
+
             return MovementValidator.CanMove(map, character.GridPosition, request.TargetCell, out int _, isPassable);
         }
     }
