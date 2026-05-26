@@ -1,7 +1,7 @@
 using System;
 using CaveTogether.Generation;
+using CaveTogether.Services;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace CaveTogether.Game
 {
@@ -15,7 +15,9 @@ namespace CaveTogether.Game
         private MapData _map;
         private readonly Plane _selectionPlane = new(Vector3.up, 0f);
         private Vector2Int _cellPosition;
+
         private ExplorationManager _explorationManager;
+        private InputService _inputService;
 
         public Vector2Int? CellPosition => IsOnMap ? _cellPosition : null;
         public bool IsOnMap { get; private set; }
@@ -30,6 +32,7 @@ namespace CaveTogether.Game
         {
             _map = map;
             _explorationManager = FindAnyObjectByType<ExplorationManager>();
+            _inputService = ServiceLocator.Get<InputService>();
         }
 
         public void Deinitialize() { }
@@ -45,7 +48,7 @@ namespace CaveTogether.Game
         private void CheckForClicks()
         {
             if (!IsOnVisibleCell) return;
-            if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+            if (!_inputService.IsCellSelectedThisFrame) return;
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
 
             CellClicked?.Invoke(_cellPosition);
@@ -63,7 +66,7 @@ namespace CaveTogether.Game
                 return;
             }
 
-            var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            var ray = Camera.main.ScreenPointToRay(_inputService.PointerScreenPosition);
 
             if (!_selectionPlane.Raycast(ray, out float distance))
             {

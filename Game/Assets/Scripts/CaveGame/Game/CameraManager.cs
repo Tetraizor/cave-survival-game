@@ -30,22 +30,23 @@ namespace CaveTogether.Game
         private float _defaultZoom;
         private bool _isFocusing;
 
+        private InputService _inputService;
+
         public void Initialize()
         {
             _camera = GetComponent<Camera>();
             _defaultZoom = _camera.orthographicSize;
             _targetZoom = _camera.orthographicSize;
 
-            var inputService = ServiceLocator.Get<InputService>();
-            inputService.CameraMoveInputChanged += OnCameraMoveInputChanged;
-            inputService.CameraZoomInputChanged += OnCameraZoomInputChanged;
+            _inputService = ServiceLocator.Get<InputService>();
+            _inputService.CameraMoveInputChanged += OnCameraMoveInputChanged;
+            _inputService.CameraZoomInputChanged += OnCameraZoomInputChanged;
         }
 
         public void Deinitialize()
         {
-            var inputService = ServiceLocator.Get<InputService>();
-            inputService.CameraMoveInputChanged -= OnCameraMoveInputChanged;
-            inputService.CameraZoomInputChanged -= OnCameraZoomInputChanged;
+            _inputService.CameraMoveInputChanged -= OnCameraMoveInputChanged;
+            _inputService.CameraZoomInputChanged -= OnCameraZoomInputChanged;
         }
 
         private void OnCameraZoomInputChanged(float input) => _zoomInput = input;
@@ -77,10 +78,10 @@ namespace CaveTogether.Game
         {
             if (_isFocusing) return;
 
-            if (Mouse.current.middleButton.isPressed)
+            if (_inputService.IsGrabbingCamera)
             {
                 float worldUnitsPerPixel = (2f * _camera.orthographicSize) / Screen.height;
-                Vector2 delta = Mouse.current.delta.ReadValue();
+                Vector2 delta = _inputService.PointerDelta;
                 Vector3 upXZ = new Vector3(transform.up.x, 0, transform.up.z);
                 Vector3 drag = (transform.right * -delta.x + upXZ * (-delta.y / upXZ.sqrMagnitude))
                                * worldUnitsPerPixel * _middleMousePanSpeed;
@@ -102,7 +103,7 @@ namespace CaveTogether.Game
             if (!Application.isFocused) return Vector2.zero;
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return Vector2.zero;
 
-            Vector2 mouse = Mouse.current.position.ReadValue();
+            Vector2 mouse = _inputService.PointerScreenPosition;
             if (mouse.x < 0 || mouse.x > Screen.width || mouse.y < 0 || mouse.y > Screen.height)
                 return Vector2.zero;
             Vector2 pan = Vector2.zero;

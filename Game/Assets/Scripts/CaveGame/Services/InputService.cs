@@ -11,6 +11,13 @@ namespace CaveTogether.Services
         public event Action<Vector2> CameraMoveInputChanged;
         public event Action<float> CameraZoomInputChanged;
 
+        public event Action DebugPanelToggled;
+
+        public bool IsCellSelectedThisFrame => _controls.Gameplay.SelectCell.WasPressedThisFrame();
+        public bool IsGrabbingCamera => _controls.Gameplay.GrabCamera.IsPressed();
+        public Vector2 PointerDelta => _controls.Gameplay.PointerDelta.ReadValue<Vector2>();
+        public Vector2 PointerScreenPosition => _controls.Gameplay.PointerPosition.ReadValue<Vector2>();
+
         private void Awake()
         {
             ServiceLocator.Register<InputService>(this);
@@ -21,6 +28,7 @@ namespace CaveTogether.Services
             //  _controls.Gameplay.MoveCamera.performed += ctx => CameraMoveInputChanged?.Invoke(ctx.ReadValue<Vector2>());
             _controls.Gameplay.MoveCamera.performed += ctx => CameraMoveInputChanged?.Invoke(ctx.ReadValue<Vector2>());
             _controls.Gameplay.MoveCamera.canceled += ctx => CameraMoveInputChanged?.Invoke(Vector2.zero);
+            _controls.Gameplay.ToggleDebugPanel.performed += _ => DebugPanelToggled?.Invoke();
 
             _controls.Gameplay.ZoomCamera.performed += ctx =>
             {

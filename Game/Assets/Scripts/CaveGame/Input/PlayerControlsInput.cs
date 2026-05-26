@@ -111,6 +111,51 @@ namespace CaveTogether.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleDebugPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""118606a3-70bd-4515-944d-3b6edb118a7b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectCell"",
+                    ""type"": ""Button"",
+                    ""id"": ""8f859b21-b12a-4997-bbf3-474a5fc86d3e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""a87b9ede-5ac5-4b57-b97a-381431b0943e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""407693dc-0372-4d9e-b294-9fe92b80dbc0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""GrabCamera"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8375888-8b5b-4fec-8afe-89870314223d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -256,6 +301,61 @@ namespace CaveTogether.Input
                     ""action"": ""ZoomCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2763538b-18d4-4a0a-a12b-2a453927e51c"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleDebugPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""735403b1-913c-45b3-bfd6-612338e1592e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectCell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d8e6c05-d6be-47fb-80aa-0dc9c16ff7f0"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0ab7f91-d762-4df5-9d81-b51398cc5416"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9491c36b-7284-430d-83c6-5a12b440c62d"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GrabCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -266,6 +366,11 @@ namespace CaveTogether.Input
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
             m_Gameplay_MoveCamera = m_Gameplay.FindAction("MoveCamera", throwIfNotFound: true);
             m_Gameplay_ZoomCamera = m_Gameplay.FindAction("ZoomCamera", throwIfNotFound: true);
+            m_Gameplay_ToggleDebugPanel = m_Gameplay.FindAction("ToggleDebugPanel", throwIfNotFound: true);
+            m_Gameplay_SelectCell = m_Gameplay.FindAction("SelectCell", throwIfNotFound: true);
+            m_Gameplay_PointerPosition = m_Gameplay.FindAction("PointerPosition", throwIfNotFound: true);
+            m_Gameplay_PointerDelta = m_Gameplay.FindAction("PointerDelta", throwIfNotFound: true);
+            m_Gameplay_GrabCamera = m_Gameplay.FindAction("GrabCamera", throwIfNotFound: true);
         }
 
         ~@PlayerControlsInput()
@@ -348,6 +453,11 @@ namespace CaveTogether.Input
         private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
         private readonly InputAction m_Gameplay_MoveCamera;
         private readonly InputAction m_Gameplay_ZoomCamera;
+        private readonly InputAction m_Gameplay_ToggleDebugPanel;
+        private readonly InputAction m_Gameplay_SelectCell;
+        private readonly InputAction m_Gameplay_PointerPosition;
+        private readonly InputAction m_Gameplay_PointerDelta;
+        private readonly InputAction m_Gameplay_GrabCamera;
         /// <summary>
         /// Provides access to input actions defined in input action map "Gameplay".
         /// </summary>
@@ -367,6 +477,26 @@ namespace CaveTogether.Input
             /// Provides access to the underlying input action "Gameplay/ZoomCamera".
             /// </summary>
             public InputAction @ZoomCamera => m_Wrapper.m_Gameplay_ZoomCamera;
+            /// <summary>
+            /// Provides access to the underlying input action "Gameplay/ToggleDebugPanel".
+            /// </summary>
+            public InputAction @ToggleDebugPanel => m_Wrapper.m_Gameplay_ToggleDebugPanel;
+            /// <summary>
+            /// Provides access to the underlying input action "Gameplay/SelectCell".
+            /// </summary>
+            public InputAction @SelectCell => m_Wrapper.m_Gameplay_SelectCell;
+            /// <summary>
+            /// Provides access to the underlying input action "Gameplay/PointerPosition".
+            /// </summary>
+            public InputAction @PointerPosition => m_Wrapper.m_Gameplay_PointerPosition;
+            /// <summary>
+            /// Provides access to the underlying input action "Gameplay/PointerDelta".
+            /// </summary>
+            public InputAction @PointerDelta => m_Wrapper.m_Gameplay_PointerDelta;
+            /// <summary>
+            /// Provides access to the underlying input action "Gameplay/GrabCamera".
+            /// </summary>
+            public InputAction @GrabCamera => m_Wrapper.m_Gameplay_GrabCamera;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -399,6 +529,21 @@ namespace CaveTogether.Input
                 @ZoomCamera.started += instance.OnZoomCamera;
                 @ZoomCamera.performed += instance.OnZoomCamera;
                 @ZoomCamera.canceled += instance.OnZoomCamera;
+                @ToggleDebugPanel.started += instance.OnToggleDebugPanel;
+                @ToggleDebugPanel.performed += instance.OnToggleDebugPanel;
+                @ToggleDebugPanel.canceled += instance.OnToggleDebugPanel;
+                @SelectCell.started += instance.OnSelectCell;
+                @SelectCell.performed += instance.OnSelectCell;
+                @SelectCell.canceled += instance.OnSelectCell;
+                @PointerPosition.started += instance.OnPointerPosition;
+                @PointerPosition.performed += instance.OnPointerPosition;
+                @PointerPosition.canceled += instance.OnPointerPosition;
+                @PointerDelta.started += instance.OnPointerDelta;
+                @PointerDelta.performed += instance.OnPointerDelta;
+                @PointerDelta.canceled += instance.OnPointerDelta;
+                @GrabCamera.started += instance.OnGrabCamera;
+                @GrabCamera.performed += instance.OnGrabCamera;
+                @GrabCamera.canceled += instance.OnGrabCamera;
             }
 
             /// <summary>
@@ -416,6 +561,21 @@ namespace CaveTogether.Input
                 @ZoomCamera.started -= instance.OnZoomCamera;
                 @ZoomCamera.performed -= instance.OnZoomCamera;
                 @ZoomCamera.canceled -= instance.OnZoomCamera;
+                @ToggleDebugPanel.started -= instance.OnToggleDebugPanel;
+                @ToggleDebugPanel.performed -= instance.OnToggleDebugPanel;
+                @ToggleDebugPanel.canceled -= instance.OnToggleDebugPanel;
+                @SelectCell.started -= instance.OnSelectCell;
+                @SelectCell.performed -= instance.OnSelectCell;
+                @SelectCell.canceled -= instance.OnSelectCell;
+                @PointerPosition.started -= instance.OnPointerPosition;
+                @PointerPosition.performed -= instance.OnPointerPosition;
+                @PointerPosition.canceled -= instance.OnPointerPosition;
+                @PointerDelta.started -= instance.OnPointerDelta;
+                @PointerDelta.performed -= instance.OnPointerDelta;
+                @PointerDelta.canceled -= instance.OnPointerDelta;
+                @GrabCamera.started -= instance.OnGrabCamera;
+                @GrabCamera.performed -= instance.OnGrabCamera;
+                @GrabCamera.canceled -= instance.OnGrabCamera;
             }
 
             /// <summary>
@@ -470,6 +630,41 @@ namespace CaveTogether.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnZoomCamera(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "ToggleDebugPanel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnToggleDebugPanel(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "SelectCell" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnSelectCell(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PointerPosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPointerPosition(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "PointerDelta" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPointerDelta(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "GrabCamera" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnGrabCamera(InputAction.CallbackContext context);
         }
     }
 }

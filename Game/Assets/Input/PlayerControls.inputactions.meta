@@ -11,4 +11,4 @@ ScriptedImporter:
   generateWrapperCode: 1
   wrapperCodePath: Assets/Scripts/CaveGame/Input/PlayerControlsInput.cs
   wrapperClassName: PlayerControlsInput
-  wrapperCodeNamespace: CaveGame.Input
+  wrapperCodeNamespace: CaveTogether.Input
