@@ -22,6 +22,7 @@ namespace CaveTogether.Game.Entities
         public Vector2Int GridPosition { get; private set; }
 
         public bool IsDown => Health == 0;
+        public bool IsEscaped { get; private set; }
 
         public int Health { get; private set; }
         public int MaxHealth { get; private set; }
@@ -58,6 +59,7 @@ namespace CaveTogether.Game.Entities
             MaxEnergy = characterData.MaxEnergy;
 
             PossibleActionTypes.AddRange(characterData.PossibleActionTypes);
+            PossibleActionTypes.Add(ActionType.Escape);
 
             // Player config assignments
             OwnerClientId = playerConfig.OwnerClientId;
@@ -102,6 +104,13 @@ namespace CaveTogether.Game.Entities
                 scale.x = side > 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
                 _renderer.transform.localScale = scale;
             }
+        }
+
+        public void Escape()
+        {
+            IsEscaped = true;
+            _renderer.SetActive(false);
+            _selectionOutline.SetActive(false);
         }
 
         public void TakeDamage(int amount) { Health = Mathf.Max(Health - amount, 0); HealthChanged?.Invoke(Health); }

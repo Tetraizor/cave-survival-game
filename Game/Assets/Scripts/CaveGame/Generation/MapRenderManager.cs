@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CaveTogether.Common.Enums;
+using CaveTogether.Generation.Decorations;
 using CaveTogether.Generation.Layers;
 using DG.Tweening;
 using UnityEngine;
@@ -20,6 +22,8 @@ namespace CaveTogether.Generation
         private readonly HashSet<Vector2Int> _spawnedCells = new();
         private readonly Dictionary<Vector2Int, GameObject> _fogInstances = new();
 
+        private List<ICellDecorator> _cellDecorators;
+
         private bool _isInitialized;
 
         public void Initialize(MapManager manager)
@@ -30,6 +34,8 @@ namespace CaveTogether.Generation
             _generator.GenerationLayerFinished += OnGenerationLayerFinished;
 
             _isInitialized = true;
+
+            _cellDecorators = FindObjectsByType<MonoBehaviour>().OfType<ICellDecorator>().ToList();
         }
 
         private void OnGenerationLayerFinished(MapGenerationLayerBase layerBase) { }
@@ -40,11 +46,14 @@ namespace CaveTogether.Generation
             if (cellRef.IsEmpty) return;
 
             Vector3 realPosition = new Vector3(cellRef.X * CELL_SIZE, 0, cellRef.Y * CELL_SIZE);
+
             var cell = Instantiate(cellRef.Data.Prefab, realPosition, Quaternion.identity, _caveCellContainer);
             cell.transform.RotateAround(realPosition + new Vector3(CELL_SIZE / 2, 0, CELL_SIZE / 2), Vector3.up, cellRef.Orientation * 90);
+
             Vector3 finalPos = cell.transform.position;
             cell.transform.position = finalPos + Vector3.down * 2f;
             cell.transform.localScale = Vector3.zero;
+
             DOTween.Sequence()
                 .Join(cell.transform.DOMove(finalPos, 0.3f).SetEase(Ease.OutCubic))
                 .Join(cell.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack));
@@ -85,6 +94,9 @@ namespace CaveTogether.Generation
 
                 _fogInstances[neighborPos] = Instantiate(_fogPrefab, GridToWorldPosition(neighborPos) + Vector3.one, Quaternion.identity, _caveCellContainer);
             }
+
+            foreach (var decorator in _cellDecorators)
+                decorator.DecorateCell(pos, _manager.Map, _caveCellContainer);
         }
 
         private IEnumerator DestroyWhenFinished(ParticleSystem ps, GameObject go)

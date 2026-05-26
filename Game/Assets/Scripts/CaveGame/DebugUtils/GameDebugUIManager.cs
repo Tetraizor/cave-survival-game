@@ -33,8 +33,8 @@ namespace CaveTogether.DebugUtils
             _downPlayerButton.onClick.AddListener(() => _debugManager.DebugDownServerRpc());
             _healPlayerButton.onClick.AddListener(() => _debugManager.DebugHealServerRpc());
             _refreshEnergyButton.onClick.AddListener(() => _debugManager.DebugRefreshEnergyServerRpc());
-            _revealExitButton.onClick.AddListener(() => _debugManager.RevealExit());
-            _revealWholeMapButton.onClick.AddListener(() => _debugManager.RevealWholeMap());
+            _revealExitButton.onClick.AddListener(() => _debugManager.RevealExitServerRpc());
+            _revealWholeMapButton.onClick.AddListener(() => _debugManager.RevealWholeMapServerRpc());
         }
 
         private void OnDestroy()

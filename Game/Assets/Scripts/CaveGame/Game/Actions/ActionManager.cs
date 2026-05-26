@@ -3,6 +3,7 @@ using System.Collections;
 using AYellowpaper.SerializedCollections;
 using CaveTogether.Common.Enums;
 using CaveTogether.Game.Entities;
+using CaveTogether.Game.States;
 using CaveTogether.Game.Turn;
 using CaveTogether.Generation;
 using CaveTogether.Services;
@@ -19,6 +20,7 @@ namespace CaveTogether.Game.Actions
         private CharacterManager _characterManager;
         private TurnManager _turnManager;
         private MapManager _mapManager;
+        private GameStateManager _gameStateManager;
 
         [SerializeField] private SerializedDictionary<ActionType, Sprite> _actionIconLookup = new();
 
@@ -27,6 +29,7 @@ namespace CaveTogether.Game.Actions
             _characterManager = FindAnyObjectByType<CharacterManager>();
             _turnManager = FindAnyObjectByType<TurnManager>();
             _mapManager = FindAnyObjectByType<MapManager>();
+            _gameStateManager = FindAnyObjectByType<GameStateManager>();
 
             _turnManager.TurnStarted += OnTurnStartedAutoSkip;
         }
@@ -88,12 +91,24 @@ namespace CaveTogether.Game.Actions
 
             yield return StartCoroutine(action.Execute(_mapManager.Map, character, request));
 
-            if (character.Energy == 0 || character.IsDown)
-            {
-                if (IsServer) _turnManager.AdvanceTurnRpc();
-            }
-
             ActionExecuted?.Invoke(characterId);
+
+            if (character.Energy == 0 || character.IsDown || character.IsEscaped)
+            {
+                if (IsServer)
+                {
+                    bool allDone = _characterManager.Characters.TrueForAll(c => c.IsDown || c.IsEscaped);
+                    if (allDone)
+                    {
+                        _gameStateManager.LastGameWasVictory = _characterManager.Characters.Exists(c => c.IsEscaped);
+                        _gameStateManager.SwitchStateRpc(GameStateType.End);
+                    }
+                    else
+                    {
+                        _turnManager.AdvanceTurnRpc();
+                    }
+                }
+            }
         }
 
         public GameActionBase GetActionLogic(ActionType type)
@@ -106,6 +121,7 @@ namespace CaveTogether.Game.Actions
                 ActionType.Inspect => new InspectAction(),
                 ActionType.Revive => new ReviveAction(),
                 ActionType.DebugDown => new DebugDownAction(),
+                ActionType.Escape => new EscapeAction(),
                 _ => null
             };
         }
@@ -120,8 +136,16 @@ namespace CaveTogether.Game.Actions
 
             if (!IsServer) return;
             var character = _characterManager.GetCharacter(turnOwnerId);
-            if (character == null || !character.IsDown) return;
-            StartCoroutine(AutoSkipDownedPlayer(character, turnOwnerId));
+            if (character == null) return;
+
+            if (character.IsEscaped)
+            {
+                ExecuteActionRpc(new ActionRequest { Type = ActionType.EndTurn }, character.Energy, turnOwnerId);
+                return;
+            }
+
+            if (character.IsDown)
+                StartCoroutine(AutoSkipDownedPlayer(character, turnOwnerId));
         }
 
         private IEnumerator AutoSkipDownedPlayer(Character character, ulong characterId)

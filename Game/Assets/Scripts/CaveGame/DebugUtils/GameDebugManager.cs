@@ -67,18 +67,32 @@ namespace CaveTogether.DebugUtils
             if (c != null) c.ResetEnergy();
         }
 
-        // ── Map cheats (local only — fog is per-client) ───────────────
+        // ── Map cheats ────────────────────────────────────────────────
 
-        public void RevealExit()
+        [Rpc(SendTo.Server)]
+        public void RevealExitServerRpc()
         {
             if (!_isCheatsEnabled) return;
+            ApplyRevealExitRpc();
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void ApplyRevealExitRpc()
+        {
             var exit = _mapManager.Map.GetFeature<ExitFeature>();
             if (exit != null) _explorationManager.RevealFromPosition(exit.ExitPosition);
         }
 
-        public void RevealWholeMap()
+        [Rpc(SendTo.Server)]
+        public void RevealWholeMapServerRpc()
         {
             if (!_isCheatsEnabled) return;
+            ApplyRevealWholeMapRpc();
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void ApplyRevealWholeMapRpc()
+        {
             for (int y = 0; y < _mapManager.Map.Height; y++)
                 for (int x = 0; x < _mapManager.Map.Width; x++)
                     if (!_mapManager.Map.GetCellRef(x, y).IsEmpty)

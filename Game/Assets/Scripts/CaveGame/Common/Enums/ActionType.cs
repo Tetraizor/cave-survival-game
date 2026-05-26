@@ -8,5 +8,6 @@ namespace CaveTogether.Common.Enums
         Inspect,
         Revive,
         DebugDown,
+        Escape,
     }
 }

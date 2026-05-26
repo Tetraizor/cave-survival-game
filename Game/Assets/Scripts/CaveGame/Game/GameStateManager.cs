@@ -11,6 +11,7 @@ namespace CaveTogether.Game
     {
         private Dictionary<GameStateType, IGameState> _states = new();
         public IGameState State { get; private set; }
+        public bool LastGameWasVictory { get; set; }
 
         private void Awake()
         {

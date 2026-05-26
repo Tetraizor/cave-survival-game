@@ -4,11 +4,8 @@ namespace CaveTogether.Generation.Features
 {
     public class ExitFeature : IMapFeature
     {
-        public Vector2Int ExitPosition { get; }
+        public Vector2Int ExitPosition { get; private set; }
 
-        public ExitFeature(Vector2Int exitPosition)
-        {
-            ExitPosition = exitPosition;
-        }
+        public ExitFeature(Vector2Int exitPosition) => ExitPosition = exitPosition;
     }
 }
