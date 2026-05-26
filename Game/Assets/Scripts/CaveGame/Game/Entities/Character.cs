@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CaveTogether.Common;
 using CaveTogether.Common.Enums;
+using CaveTogether.Game.Turn;
 using CaveTogether.Generation;
 using DG.Tweening;
 using UnityEngine;
@@ -13,6 +14,9 @@ namespace CaveTogether.Game.Entities
     {
         public Action<int> HealthChanged;
         public Action<int> EnergyChanged;
+
+        [SerializeField] private GameObject _selectionOutline;
+        [SerializeField] private GameObject _renderer;
 
         public Vector2Int GridPosition { get; private set; }
 
@@ -34,11 +38,15 @@ namespace CaveTogether.Game.Entities
 
         public void Initialize(CharacterDataSO characterData, PlayerConfig playerConfig)
         {
-            transform.eulerAngles = new Vector3(45, 45, 0);
+            _renderer.transform.eulerAngles = new Vector3(45, 45, 0);
+            _selectionOutline.transform.DOScale(_selectionOutline.transform.localScale * 1.1f, 1f).SetLoops(-1, LoopType.Yoyo);
 
             _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
             _characterManager = FindAnyObjectByType<CharacterManager>();
+
+            FindAnyObjectByType<TurnManager>().TurnStarted += OnTurnStarted;
+            FindAnyObjectByType<TurnManager>().RoundEnded += OnRoundEnded;
 
             // Character data assignments
             Health = characterData.MaxHealth;
@@ -88,9 +96,9 @@ namespace CaveTogether.Game.Entities
             float side = delta.x - delta.z;
             if (Mathf.Abs(side) > 0.01f)
             {
-                Vector3 scale = transform.localScale;
+                Vector3 scale = _renderer.transform.localScale;
                 scale.x = side > 0 ? Mathf.Abs(scale.x) : -Mathf.Abs(scale.x);
-                transform.localScale = scale;
+                _renderer.transform.localScale = scale;
             }
         }
 
@@ -104,5 +112,15 @@ namespace CaveTogether.Game.Entities
         public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);
 
         private Vector3 GetWorldPositionOffset() => new Vector3(1, 0, 1) * MapRenderManager.CELL_SIZE / 2;
+
+        private void OnRoundEnded(int roundNumber)
+        {
+            _selectionOutline.SetActive(false);
+        }
+
+        private void OnTurnStarted(ulong clientId)
+        {
+            _selectionOutline.SetActive(clientId == OwnerClientId);
+        }
     }
 }
