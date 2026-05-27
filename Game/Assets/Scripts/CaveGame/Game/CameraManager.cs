@@ -30,10 +30,14 @@ namespace CaveTogether.Game
         private float _defaultZoom;
         private bool _isFocusing;
 
+        private bool _enableMovement;
+
         private InputService _inputService;
 
         public void Initialize()
         {
+            _enableMovement = true;
+
             _camera = GetComponent<Camera>();
             _defaultZoom = _camera.orthographicSize;
             _targetZoom = _camera.orthographicSize;
@@ -45,6 +49,8 @@ namespace CaveTogether.Game
 
         public void Deinitialize()
         {
+            _enableMovement = false;
+
             _inputService.CameraMoveInputChanged -= OnCameraMoveInputChanged;
             _inputService.CameraZoomInputChanged -= OnCameraZoomInputChanged;
         }
@@ -54,7 +60,7 @@ namespace CaveTogether.Game
 
         private void LateUpdate()
         {
-            if (_camera == null) return;
+            if (!_enableMovement || _camera == null) return;
 
             MoveCamera();
             ZoomCamera();
