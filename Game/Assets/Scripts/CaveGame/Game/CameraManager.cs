@@ -1,3 +1,4 @@
+using CaveTogether.Minigames;
 using CaveTogether.Services;
 using DG.Tweening;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.InputSystem;
 
 namespace CaveTogether.Game
 {
+    [RequireComponent(typeof(Camera))]
+    [RequireComponent(typeof(AudioListener))]
     public class CameraManager : MonoBehaviour
     {
         [Header("Movement")]
@@ -27,6 +30,7 @@ namespace CaveTogether.Game
         private float _targetZoom;
 
         private Camera _camera;
+        private AudioListener _audioListener;
         private float _defaultZoom;
         private bool _isFocusing;
 
@@ -39,12 +43,31 @@ namespace CaveTogether.Game
             _enableMovement = true;
 
             _camera = GetComponent<Camera>();
+            _audioListener = GetComponent<AudioListener>();
             _defaultZoom = _camera.orthographicSize;
             _targetZoom = _camera.orthographicSize;
 
             _inputService = ServiceLocator.Get<InputService>();
             _inputService.CameraMoveInputChanged += OnCameraMoveInputChanged;
             _inputService.CameraZoomInputChanged += OnCameraZoomInputChanged;
+
+            var mm = FindAnyObjectByType<MinigameManager>();
+            mm.MinigameBegan -= OnMinigameBegan;
+            mm.MinigameBegan += OnMinigameBegan;
+            mm.MinigameEnded -= OnMinigameEnded;
+            mm.MinigameEnded += OnMinigameEnded;
+        }
+
+        private void OnMinigameEnded()
+        {
+            _camera.enabled = true;
+            _audioListener.enabled = true;
+        }
+
+        private void OnMinigameBegan()
+        {
+            _camera.enabled = false;
+            _audioListener.enabled = false;
         }
 
         public void Deinitialize()
@@ -53,6 +76,14 @@ namespace CaveTogether.Game
 
             _inputService.CameraMoveInputChanged -= OnCameraMoveInputChanged;
             _inputService.CameraZoomInputChanged -= OnCameraZoomInputChanged;
+        }
+
+        private void OnDestroy()
+        {
+            var mm = FindAnyObjectByType<MinigameManager>();
+            if (mm == null) return;
+            mm.MinigameBegan -= OnMinigameBegan;
+            mm.MinigameEnded -= OnMinigameEnded;
         }
 
         private void OnCameraZoomInputChanged(float input) => _zoomInput = input;

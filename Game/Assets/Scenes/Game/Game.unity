@@ -543,9 +543,6 @@ MonoBehaviour:
   - {fileID: 1423896436}
   - {fileID: 1522232778}
   - {fileID: 186782591}
-  _turnInfoLabel: {fileID: 1517682763}
-  _currentPlayingPlayerLabel: {fileID: 2080315968}
-  _gameStatusLabel: {fileID: 0}
 --- !u!1 &137033985
 GameObject:
   m_ObjectHideFlags: 0
@@ -1767,6 +1764,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 411720881}
   m_CullTransparentMesh: 1
+--- !u!1 &453975282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 453975284}
+  - component: {fileID: 453975283}
+  m_Layer: 0
+  m_Name: GameSceneHider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &453975283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453975282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70de27341b6fc777a4874434c0ec566, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Game.GameSceneHider
+--- !u!4 &453975284
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453975282}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &559585450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1909,6 +1950,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Minigames.MinigameManager
   ShowTopMostFoldoutHeaderGroup: 1
+  _minigames:
+  - {fileID: 11400000, guid: fbad36f94a11ace3e948135bf5b753d5, type: 2}
 --- !u!1 &568923154
 GameObject:
   m_ObjectHideFlags: 0
@@ -3944,6 +3987,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517682761}
   m_CullTransparentMesh: 1
+--- !u!1 &1521970818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1521970819}
+  - component: {fileID: 1521970820}
+  m_Layer: 0
+  m_Name: MinigameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1521970819
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521970818}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1886265383}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1521970820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1521970818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3be9da08646699bd7b9662d797287351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Minigames.MiniGameState
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1001 &1522232776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5050,6 +5138,7 @@ Transform:
   m_Children:
   - {fileID: 659477577}
   - {fileID: 658433525}
+  - {fileID: 1521970819}
   - {fileID: 369602082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5900,6 +5989,7 @@ SceneRoots:
   - {fileID: 240766443}
   - {fileID: 564183816}
   - {fileID: 559585452}
+  - {fileID: 453975284}
   - {fileID: 1838839443}
   - {fileID: 1582754388}
   - {fileID: 330585546}

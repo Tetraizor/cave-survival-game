@@ -35,7 +35,7 @@ namespace CaveTogether.Game
             _inputService = ServiceLocator.Get<InputService>();
         }
 
-        public void Deinitialize() { }
+        public void Deinitialize() => _map = null;
 
         private void Update()
         {

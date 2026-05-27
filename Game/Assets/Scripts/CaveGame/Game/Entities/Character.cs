@@ -32,6 +32,7 @@ namespace CaveTogether.Game.Entities
 
         public ulong OwnerClientId { get; private set; }
 
+
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
         private CharacterManager _characterManager;
@@ -118,6 +119,7 @@ namespace CaveTogether.Game.Entities
 
         public void UseEnergy(int energy) { Energy = Mathf.Max(Energy - energy, 0); EnergyChanged?.Invoke(Energy); }
         public void GainEnergy(int energy) { Energy = Mathf.Min(Energy + energy, MaxEnergy); EnergyChanged?.Invoke(Energy); }
+
         public void ResetEnergy() { Energy = MaxEnergy; EnergyChanged?.Invoke(Energy); }
 
         public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);

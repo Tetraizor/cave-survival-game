@@ -69,12 +69,12 @@ namespace CaveTogether.Services
 
         private void HandleUnloadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
-            SceneLoadCompleted?.Invoke(sceneName, loadSceneMode);
+            SceneUnloadCompleted?.Invoke(sceneName);
         }
 
         private void HandleLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
-            SceneUnloadCompleted?.Invoke(sceneName);
+            SceneLoadCompleted?.Invoke(sceneName, loadSceneMode);
         }
 
         #endregion
