@@ -8,22 +8,31 @@ using System.Collections;
 
 #if UNITY_EDITOR
 using Unity.Multiplayer.PlayMode;
+using CaveTogether.Game.Turn;
+using CaveTogether.Minigames;
 #endif
 
 namespace CaveTogether.EditorTools
 {
     public class EditorAutoStart : MonoBehaviour
     {
+#if UNITY_EDITOR
+        [SerializeField] private MinigameDefinitionSO _debugMinigame;
+#endif
+
         private void Awake()
         {
 #if UNITY_EDITOR
             var tags = CurrentPlayer.Tags;
 
-            if (tags.Contains("QuickSinglePlayer") || tags.Contains("QuickHost") || tags.Contains("QuickJoin"))
+            if (tags.Contains("QuickSinglePlayer") || tags.Contains("QuickHost") || tags.Contains("QuickJoin")
+                || tags.Contains("QuickMinigame") || tags.Contains("QuickMinigame2"))
             {
                 var bootstrapManager = FindAnyObjectByType<BootstrapManager>();
                 if (bootstrapManager != null)
                     bootstrapManager.enabled = false;
+
+                DontDestroyOnLoad(gameObject);
             }
 #endif
         }
@@ -86,10 +95,111 @@ namespace CaveTogether.EditorTools
                 Debug.Log("<color=cyan>[EditorAutoStart] 'QuickJoin' tag detected. Auto-joining game...</color>");
                 StartCoroutine(DelayedJoin());
             }
+            else if (tags.Contains("QuickMinigame"))
+            {
+                Debug.Log("<color=cyan>[EditorAutoStart] 'QuickMinigame' tag detected. Auto-hosting and skipping to minigame...</color>");
+
+                var dummyPlayerData = new UserConnectionData { Username = "Host" };
+
+                NetworkManager.Singleton.OnServerStarted += () =>
+                {
+                    var config = new GameConfig
+                    {
+                        Difficulty = Difficulty.Normal,
+                        Seed = Random.Range(100_000, 999_999).ToString(),
+                        IsCheatsEnabled = true,
+                        Players = new PlayerConfig[]
+                        {
+                            new() { CharacterId = "caver", Username = "Host", OwnerClientId = 0 }
+                        }
+                    };
+                    ServiceLocator.Get<GameFlowService>().StartGame(config);
+                    StartCoroutine(SkipFirstRound());
+                };
+                ServiceLocator.Get<GameFlowService>().Host("127.0.0.1", 7777, dummyPlayerData);
+            }
+            else if (tags.Contains("QuickMinigame2"))
+            {
+                Debug.Log("<color=cyan>[EditorAutoStart] 'QuickMinigame2' tag detected. Waiting for 1 other player then skipping to minigame...</color>");
+
+                var dummyPlayerData = new UserConnectionData { Username = "Host" };
+
+                NetworkManager.Singleton.OnServerStarted += () =>
+                {
+                    StartCoroutine(WaitForPlayersAndStartMinigame());
+                };
+                ServiceLocator.Get<GameFlowService>().Host("127.0.0.1", 7777, dummyPlayerData);
+            }
 #endif
         }
 
 #if UNITY_EDITOR
+
+        private IEnumerator SkipFirstRound()
+        {
+            TurnManager tm = null;
+            while (tm == null || tm.TurnOrder.Count == 0)
+            {
+                tm = FindAnyObjectByType<TurnManager>();
+                yield return null;
+            }
+
+            if (_debugMinigame != null)
+            {
+                var mm = FindAnyObjectByType<MinigameManager>();
+                var field = typeof(MinigameManager).GetField("_minigames",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                field.SetValue(mm, new MinigameDefinitionSO[] { _debugMinigame });
+            }
+
+            int turnsRemaining = tm.TurnOrder.Count;
+            bool turnReady = tm.CurrentRound > 0;
+            void OnTurnStarted(ulong _) => turnReady = true;
+            tm.TurnStarted += OnTurnStarted;
+
+            while (turnsRemaining > 0)
+            {
+                yield return new WaitUntil(() => turnReady);
+                turnReady = false;
+                turnsRemaining--;
+                tm.AdvanceTurnRpc();
+            }
+
+            tm.TurnStarted -= OnTurnStarted;
+        }
+
+        private IEnumerator WaitForPlayersAndStartMinigame()
+        {
+            var sessionManager = ServiceLocator.Get<SessionManagerService>();
+
+            Debug.Log("<color=yellow>[EditorAutoStart] QuickMinigame2: waiting for 1 other player...</color>");
+
+            while (sessionManager.OccupiedSeatCount < 2)
+                yield return null;
+
+            var seats = sessionManager.Seats.Where(s => s.IsTaken).ToList();
+            var players = new PlayerConfig[seats.Count];
+            for (int i = 0; i < seats.Count; i++)
+            {
+                players[i] = new PlayerConfig
+                {
+                    OwnerClientId = seats[i].ClientID,
+                    CharacterId = "caver",
+                    Username = $"Player #{Random.Range(1_000, 10_000)}"
+                };
+            }
+
+            var config = new GameConfig
+            {
+                Difficulty = Difficulty.Normal,
+                Seed = Random.Range(100_000, 999_999).ToString(),
+                IsCheatsEnabled = true,
+                Players = players,
+            };
+
+            ServiceLocator.Get<GameFlowService>().StartGame(config);
+            StartCoroutine(SkipFirstRound());
+        }
 
         private IEnumerator WaitForPlayersAndStart()
         {

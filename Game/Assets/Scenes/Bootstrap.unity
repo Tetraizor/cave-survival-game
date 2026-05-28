@@ -726,6 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a035493a0c85182ebdeaa130ab18c1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.EditorTools.EditorAutoStart
+  _debugMinigame: {fileID: 11400000, guid: fbad36f94a11ace3e948135bf5b753d5, type: 2}
 --- !u!1 &1644644737
 GameObject:
   m_ObjectHideFlags: 0

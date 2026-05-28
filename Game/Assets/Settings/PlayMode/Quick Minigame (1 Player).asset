@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 15024, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Quick Single Player
+  m_Name: Quick Minigame (1 Player)
   m_EditorClassIdentifier: UnityEditor.MultiplayerModule.dll::Unity.Multiplayer.PlayMode.Editor.OrchestratedScenario
-  m_Description: Hosts a game and starts it instantly
+  m_Description: Hosts a game and starts minigame instantly
   m_EnableEditors: 1
   m_MainEditorInstance:
     Name: Main Editor
@@ -21,7 +21,7 @@ MonoBehaviour:
     - Main Editor|0_run
     - Main Editor|0_deploy
     m_Role: 3
-    m_PlayerTag: QuickSinglePlayer
+    m_PlayerTag: QuickMinigame
     m_InitialScene: {fileID: 102900000, guid: cd55d5460ab2b3f01817ba3422c1cbf8, type: 3}
     PlayerInstanceIndex: 0
   m_EditorInstances: []
