@@ -16,5 +16,18 @@ MonoBehaviour:
   Name: Caver
   MaxHealth: 4
   MaxEnergy: 3
-  HeadGraphic: {fileID: 620667784, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+  SpriteSet:
+    Head: {fileID: 620667784, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    Body: {fileID: 522610590, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    UpperArmF: {fileID: -1636958123, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    LowerArmF: {fileID: 811675559, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    UpperArmB: {fileID: -2146679320, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    LowerArmB: {fileID: 1393176927, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    UpperLegF: {fileID: 1522981083, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    LowerLegF: {fileID: -1341291072, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    UpperLegB: {fileID: -1023402523, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    LowerLegB: {fileID: -1645170392, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    FootF: {fileID: -1229193686, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+    FootB: {fileID: 1577019453, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
+  Portrait: {fileID: -248662701, guid: 527457a46645d2715a031f18a092a918, type: 3}
   PossibleActionTypes: 000102030405

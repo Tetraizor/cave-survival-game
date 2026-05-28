@@ -1,8 +1,26 @@
+using System;
 using CaveTogether.Common.Enums;
 using UnityEngine;
 
 namespace CaveTogether.Game.Entities
 {
+    [Serializable]
+    public struct CharacterDataSpriteSet
+    {
+        public Sprite Head;
+        public Sprite Body;
+        public Sprite UpperArmF;
+        public Sprite LowerArmF;
+        public Sprite UpperArmB;
+        public Sprite LowerArmB;
+        public Sprite UpperLegF;
+        public Sprite LowerLegF;
+        public Sprite UpperLegB;
+        public Sprite LowerLegB;
+        public Sprite FootF;
+        public Sprite FootB;
+    }
+
     [CreateAssetMenu(fileName = "Character", menuName = "Cave Together/Character", order = 1)]
     public class CharacterDataSO : ScriptableObject
     {
@@ -12,7 +30,8 @@ namespace CaveTogether.Game.Entities
         public int MaxHealth = 4;
         public int MaxEnergy = 4;
 
-        public Sprite HeadGraphic;
+        public CharacterDataSpriteSet SpriteSet;
+        public Sprite Portrait;
 
         public ActionType[] PossibleActionTypes = new ActionType[] {
             ActionType.Wait,

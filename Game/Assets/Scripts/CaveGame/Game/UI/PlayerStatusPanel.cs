@@ -21,6 +21,8 @@ namespace CaveTogether.Game.UI
         [SerializeField] private TextMeshProUGUI _nameLabel;
         [SerializeField] private TextMeshProUGUI _descriptionLabel;
 
+        [SerializeField] private Image _portrait;
+
         [SerializeField] private Image[] _heartSprites;
         [SerializeField] private Image[] _energySprites;
 
@@ -68,6 +70,7 @@ namespace CaveTogether.Game.UI
 
             _nameLabel.SetText(data.Username.ToString());
             _descriptionLabel.SetText(data.CharacterId.ToString());
+            _portrait.sprite = _character.CharacterData.Portrait;
 
             _state = PlayerStatusPanelState.Hidden;
             SetShowState(PlayerStatusPanelState.Shown);

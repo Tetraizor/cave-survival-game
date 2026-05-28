@@ -1603,6 +1603,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.UI.PlayerStatusPanel
   _nameLabel: {fileID: 1195945941736807586}
   _descriptionLabel: {fileID: 8655737641886397744}
+  _portrait: {fileID: 1661609215168237282}
   _heartSprites:
   - {fileID: 1670281817182798860}
   - {fileID: 7585029950919740599}

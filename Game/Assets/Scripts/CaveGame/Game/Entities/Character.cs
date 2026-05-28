@@ -17,7 +17,7 @@ namespace CaveTogether.Game.Entities
 
         [SerializeField] private GameObject _selectionOutline;
         [SerializeField] private GameObject _highlight;
-        [SerializeField] private GameObject _renderer;
+        [SerializeField] private CharacterRenderer _renderer;
 
         public Vector2Int GridPosition { get; private set; }
 
@@ -32,16 +32,20 @@ namespace CaveTogether.Game.Entities
 
         public ulong OwnerClientId { get; private set; }
 
-
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
         private CharacterManager _characterManager;
+
+        public CharacterDataSO CharacterData { get; private set; }
 
         public List<ActionType> PossibleActionTypes { get; private set; } = new();
 
         public void Initialize(CharacterDataSO characterData, PlayerConfig playerConfig)
         {
+            CharacterData = characterData;
             _renderer.transform.eulerAngles = new Vector3(45, 45, 0);
+            _renderer.Initialize(characterData);
+
             _selectionOutline.transform.DOScale(_selectionOutline.transform.localScale * 1.1f, 1f).SetLoops(-1, LoopType.Yoyo);
             _highlight.gameObject.SetActive(false);
 
@@ -110,7 +114,7 @@ namespace CaveTogether.Game.Entities
         public void Escape()
         {
             IsEscaped = true;
-            _renderer.SetActive(false);
+            _renderer.gameObject.SetActive(false);
             _selectionOutline.SetActive(false);
         }
 

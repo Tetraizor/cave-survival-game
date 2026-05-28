@@ -184,7 +184,7 @@ namespace CaveTogether.EditorTools
                 players[i] = new PlayerConfig
                 {
                     OwnerClientId = seats[i].ClientID,
-                    CharacterId = "caver",
+                    CharacterId = i == 0 ? "caver" : "medic",
                     Username = $"Player #{Random.Range(1_000, 10_000)}"
                 };
             }
@@ -222,7 +222,7 @@ namespace CaveTogether.EditorTools
                 players[i] = new PlayerConfig
                 {
                     OwnerClientId = seats[i].ClientID,
-                    CharacterId = "caver",
+                    CharacterId = i == 0 ? "caver" : "medic",
                     Username = $"Player #{Random.Range(1_000, 10_000).ToString()}"
                 };
             }
