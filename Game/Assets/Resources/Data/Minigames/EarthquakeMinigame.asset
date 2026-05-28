@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Minigames.MinigameDefinitionSO
   SceneName: EarthquakeMinigame
   DisplayName: Earthquake
+  BuildupMessage: The caves start to rumble...
+  AnnouncementMessage: An earthquake is happening!

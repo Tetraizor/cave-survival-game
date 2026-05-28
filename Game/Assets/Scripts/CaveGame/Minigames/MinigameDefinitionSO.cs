@@ -7,5 +7,7 @@ namespace CaveTogether.Minigames
     {
         public string SceneName;
         public string DisplayName;
+        public string BuildupMessage;
+        public string AnnouncementMessage;
     }
 }

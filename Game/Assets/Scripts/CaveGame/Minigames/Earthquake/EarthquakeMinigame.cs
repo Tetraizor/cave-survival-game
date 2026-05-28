@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using CaveTogether.Services;
 using UnityEngine;
 
 namespace CaveTogether.Minigames.Earthquake
@@ -7,6 +8,7 @@ namespace CaveTogether.Minigames.Earthquake
     public class EarthquakeMinigame : MinigameBase
     {
         private List<ulong> _players;
+        private MinigameResult _result;
 
         public override void Initialize(MinigameContext context)
         {
@@ -16,6 +18,8 @@ namespace CaveTogether.Minigames.Earthquake
 
         private IEnumerator RandomOutcomeAfterDelay()
         {
+            ServiceLocator.Get<TransitionService>().StartTransition(false);
+
             yield return new WaitForSeconds(5);
 
             for (int i = _players.Count - 1; i > 0; i--)
@@ -25,15 +29,22 @@ namespace CaveTogether.Minigames.Earthquake
             }
 
             int count = _players.Count;
-            var result = new MinigameResult
+            _result = new MinigameResult
             {
                 PlayerRanking = _players.ToArray(),
                 HealthDeltas = new int[count],
             };
 
-            if (count > 1) result.HealthDeltas[count - 1] = -1;
+            if (count > 1) _result.HealthDeltas[count - 1] = -1;
 
-            RaiseCompleted(result);
+            ServiceLocator.Get<TransitionService>().StartTransition(true);
+            ServiceLocator.Get<TransitionService>().TransitionCompleted += GameEnd_OnTransitionCompleted;
+        }
+
+        private void GameEnd_OnTransitionCompleted()
+        {
+            ServiceLocator.Get<TransitionService>().TransitionCompleted -= GameEnd_OnTransitionCompleted;
+            RaiseCompleted(_result);
         }
     }
 }

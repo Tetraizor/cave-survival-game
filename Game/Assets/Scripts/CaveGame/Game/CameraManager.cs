@@ -10,6 +10,8 @@ namespace CaveTogether.Game
     [RequireComponent(typeof(AudioListener))]
     public class CameraManager : MonoBehaviour
     {
+        private const float DefaultZoom = 4;
+
         [Header("Movement")]
         [SerializeField] private float _moveSpeed = 100;
         [SerializeField] private float _smoothTime = .15f;
@@ -31,7 +33,6 @@ namespace CaveTogether.Game
 
         private Camera _camera;
         private AudioListener _audioListener;
-        private float _defaultZoom;
         private bool _isFocusing;
 
         private bool _enableMovement;
@@ -44,8 +45,7 @@ namespace CaveTogether.Game
 
             _camera = GetComponent<Camera>();
             _audioListener = GetComponent<AudioListener>();
-            _defaultZoom = _camera.orthographicSize;
-            _targetZoom = _camera.orthographicSize;
+            _targetZoom = DefaultZoom;
 
             _inputService = ServiceLocator.Get<InputService>();
             _inputService.CameraMoveInputChanged += OnCameraMoveInputChanged;
@@ -97,18 +97,22 @@ namespace CaveTogether.Game
             ZoomCamera();
         }
 
-        public void FocusOn(Vector3 target)
+        public void Shake(float duration, float strength = .35f, int vibrato = 20)
+        {
+            transform.DOShakePosition(duration, strength, vibrato);
+        }
+
+        public void FocusOn(Vector3 target, float zoom = DefaultZoom, float duration = .5f)
         {
             float t = (target.y - transform.position.y) / transform.forward.y;
             Vector3 screenCenter = transform.position + transform.forward * t;
             Vector3 destination = transform.position + new Vector3(target.x - screenCenter.x, 0, target.z - screenCenter.z);
 
             _isFocusing = true;
-            _targetZoom = _defaultZoom;
+            _targetZoom = zoom;
             _currentVelocity = Vector3.zero;
-            transform.DOMove(destination, 0.5f)
-                .SetEase(Ease.OutCubic)
-                .OnComplete(() => _isFocusing = false);
+            transform.DOMove(destination, duration).SetEase(Ease.OutCubic).OnComplete(() => _isFocusing = false);
+            DOTween.To(() => _camera.orthographicSize, x => _camera.orthographicSize = x, zoom, duration).SetEase(Ease.OutCubic);
         }
 
         private void MoveCamera()

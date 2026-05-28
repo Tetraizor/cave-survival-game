@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using CaveTogether.Common;
 using CaveTogether.Game;
@@ -20,6 +21,8 @@ namespace CaveTogether.Minigames
         public event Action MinigameEnded;
 
         [SerializeField] private MinigameDefinitionSO[] _minigames;
+        [SerializeField] private float _transitionDuration = 1f;
+        [SerializeField] private float _returnTransitionDuration = 1f;
 
         private TurnManager _turnManager;
         private GameStateManager _gameStateManager;
@@ -29,6 +32,9 @@ namespace CaveTogether.Minigames
 
         private MinigameDefinitionSO _current;
         private MinigameBase _activeMinigame;
+
+        private static readonly WaitForSeconds _waitBuildup = new(2f);
+        private static readonly WaitForSeconds _waitAnnouncement = new(1.5f);
 
         public void Initialize(GameConfig config)
         {
@@ -55,14 +61,35 @@ namespace CaveTogether.Minigames
             if (!IsServer) return;
 
             _current = _minigames[(round - 1) % _minigames.Length];
-            NotifyMinigameStartingRpc(_current.DisplayName);
+            StartCoroutine(MinigameIntroSequence());
+        }
+
+        private IEnumerator MinigameIntroSequence()
+        {
+            PushNotificationRpc(_current.BuildupMessage);
+            yield return _waitBuildup;
+
+            PushNotificationRpc(_current.AnnouncementMessage);
+            ShakeCameraRpc();
+            yield return _waitAnnouncement;
+
+            PlayMinigameTransitionRpc();
+            yield return new WaitForSeconds(_transitionDuration);
+
             _gameStateManager.SwitchStateRpc(GameStateType.MiniGame);
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void NotifyMinigameStartingRpc(FixedString64Bytes name)
+        private void PushNotificationRpc(FixedString128Bytes message)
         {
-            FindAnyObjectByType<GameNotificationUI>().Push($"Minigame: {name}");
+            FindAnyObjectByType<GameNotificationUI>().Push(message.ToString());
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void ShakeCameraRpc()
+        {
+            var cm = FindAnyObjectByType<CameraManager>();
+            if (cm != null) cm.Shake(2);
         }
 
         private void OnNetworkSceneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -115,8 +142,14 @@ namespace CaveTogether.Minigames
             if (sceneName != _current.SceneName) return;
 
             NetworkManager.Singleton.SceneManager.OnUnloadEventCompleted -= OnNetworkSceneUnloaded;
+            StartCoroutine(GameReturnSequence());
+        }
 
+        private IEnumerator GameReturnSequence()
+        {
             NotifyMinigameEndedRpc();
+            PlayGameReturnTransitionRpc();
+            yield return new WaitForSeconds(_returnTransitionDuration);
             _gameStateManager.SwitchStateRpc(GameStateType.Game);
         }
 
@@ -124,6 +157,42 @@ namespace CaveTogether.Minigames
         private void NotifyMinigameEndedRpc()
         {
             MinigameEnded?.Invoke();
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void PlayMinigameTransitionRpc()
+        {
+            var cm = FindAnyObjectByType<CameraManager>();
+            cm.FocusOn(_characterManager.GetClientCharacter().transform.position, 0.1f);
+
+            var tm = ServiceLocator.Get<TransitionService>();
+
+            tm.StartTransition(true);
+            tm.TransitionCompleted += MinigameStart_OnTransitionCompleted;
+        }
+
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void PlayGameReturnTransitionRpc()
+        {
+            var cm = FindAnyObjectByType<CameraManager>();
+            cm.FocusOn(_characterManager.GetClientCharacter().transform.position);
+
+            var tm = ServiceLocator.Get<TransitionService>();
+
+            tm.StartTransition(false);
+            tm.TransitionCompleted += MinigameEnd_OnTransitionCompleted;
+        }
+
+        private void MinigameStart_OnTransitionCompleted()
+        {
+            var tm = ServiceLocator.Get<TransitionService>();
+            tm.TransitionCompleted -= MinigameStart_OnTransitionCompleted;
+        }
+
+        private void MinigameEnd_OnTransitionCompleted()
+        {
+            var tm = ServiceLocator.Get<TransitionService>();
+            tm.TransitionCompleted -= MinigameEnd_OnTransitionCompleted;
         }
     }
 }
