@@ -18,9 +18,9 @@ namespace CaveTogether.Game.Actions
             var characterManager = Object.FindAnyObjectByType<CharacterManager>();
             var target = characterManager.Characters.FirstOrDefault(
                 c => c != character && c.IsDown && c.GridPosition == request.TargetCell);
-            if (target != null) target.Heal(1);
 
-            yield break;
+            if (target != null)
+                yield return character.StartCoroutine(character.PatchRevive(target));
         }
 
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => 2;

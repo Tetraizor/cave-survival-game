@@ -36,6 +36,14 @@ namespace CaveTogether.Game.Entities
         private MapRenderManager _mapRenderManager;
         private CharacterManager _characterManager;
 
+        private static readonly WaitForSeconds _waitPatchRevive = new(4f);
+        private static readonly WaitForSeconds _waitPatchReviveReturn = new(1f);
+
+        private static readonly int _animIsMoving = Animator.StringToHash("IsMoving");
+        private static readonly int _animDown = Animator.StringToHash("Down");
+        private static readonly int _animGetUp = Animator.StringToHash("GetUp");
+        private static readonly int _animPatch = Animator.StringToHash("Patch");
+
         private Animator _animator;
 
         public CharacterDataSO CharacterData { get; private set; }
@@ -87,7 +95,7 @@ namespace CaveTogether.Game.Entities
 
         public IEnumerator MoveToCell(Vector2Int position)
         {
-            _animator.SetBool("IsMoving", true);
+            _animator.SetBool(_animIsMoving, true);
 
             var previousPosition = GridPosition;
             GridPosition = position;
@@ -99,15 +107,16 @@ namespace CaveTogether.Game.Entities
             yield return transform.DOMove(target, 1f).WaitForCompletion();
             _characterManager.RefreshCellPositions(previousPosition);
 
-            _animator.SetBool("IsMoving", false);
+            _animator.SetBool(_animIsMoving, false);
             yield return new WaitForSeconds(.2f);
         }
 
         public void RefreshPosition()
         {
             Vector3 target = _mapRenderManager.GridToWorldPosition(GridPosition) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+            float duration = Vector3.Distance(transform.position, target) / MapRenderManager.CELL_SIZE;
             ApplyDirectionFlip(target);
-            transform.DOMove(target, 0.2f).SetEase(Ease.OutCubic);
+            transform.DOMove(target, duration).SetEase(Ease.OutCubic);
         }
 
         public void LookAt(Vector2Int targetCell)
@@ -135,6 +144,31 @@ namespace CaveTogether.Game.Entities
             _selectionOutline.SetActive(false);
         }
 
+        public IEnumerator PatchRevive(Character target)
+        {
+            _animator.SetBool(_animIsMoving, true);
+            ApplyDirectionFlip(target.transform.position);
+            float approachDuration = Vector3.Distance(transform.position, target.transform.position) / MapRenderManager.CELL_SIZE;
+            yield return transform.DOMove(target.transform.position, approachDuration).WaitForCompletion();
+            _animator.SetBool(_animIsMoving, false);
+
+            _animator.SetTrigger(_animPatch);
+            yield return _waitPatchRevive;
+
+            target.Heal(1);
+
+            yield return _waitPatchReviveReturn;
+
+            Vector3 returnTarget = _mapRenderManager.GridToWorldPosition(GridPosition) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+            float returnDuration = Mathf.Max(Vector3.Distance(transform.position, returnTarget) / MapRenderManager.CELL_SIZE, 0.5f);
+
+            _animator.SetBool(_animIsMoving, true);
+            ApplyDirectionFlip(returnTarget);
+
+            yield return transform.DOMove(returnTarget, returnDuration).WaitForCompletion();
+            _animator.SetBool(_animIsMoving, false);
+        }
+
         public IEnumerator InspectCell(Action onReveal)
         {
             _animator.SetTrigger("Inspect");
@@ -143,8 +177,35 @@ namespace CaveTogether.Game.Entities
             yield return new WaitForSeconds(1.5f);
         }
 
-        public void TakeDamage(int amount) { Health = Mathf.Max(Health - amount, 0); HealthChanged?.Invoke(Health); }
-        public void Heal(int amount) { Health = Mathf.Min(Health + amount, MaxHealth); HealthChanged?.Invoke(Health); }
+        public void TakeDamage(int amount)
+        {
+            Health = Mathf.Max(Health - amount, 0);
+
+            if (Health == 0) _animator.SetTrigger(_animDown);
+
+            HealthChanged?.Invoke(Health);
+        }
+
+        public void Heal(int amount)
+        {
+            bool wasDown = IsDown;
+            Health = Mathf.Min(Health + amount, MaxHealth);
+
+            if (wasDown && !IsDown)
+                StartCoroutine(HealSequence());
+            else
+                HealthChanged?.Invoke(Health);
+        }
+
+        private IEnumerator HealSequence()
+        {
+            _animator.SetTrigger(_animGetUp);
+
+            yield return new WaitForSeconds(2.5f);
+            HealthChanged?.Invoke(Health);
+
+            RefreshPosition();
+        }
 
         public void UseEnergy(int energy) { Energy = Mathf.Max(Energy - energy, 0); EnergyChanged?.Invoke(Energy); }
         public void GainEnergy(int energy) { Energy = Mathf.Min(Energy + energy, MaxEnergy); EnergyChanged?.Invoke(Energy); }
