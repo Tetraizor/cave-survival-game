@@ -36,6 +36,8 @@ namespace CaveTogether.Game.Entities
         private MapRenderManager _mapRenderManager;
         private CharacterManager _characterManager;
 
+        private Animator _animator;
+
         public CharacterDataSO CharacterData { get; private set; }
         public PlayerConfig Config { get; private set; }
 
@@ -48,6 +50,7 @@ namespace CaveTogether.Game.Entities
 
             _renderer.transform.eulerAngles = new Vector3(45, 45, 0);
             _renderer.Initialize(characterData);
+            _animator = _renderer.GetComponent<Animator>();
 
             _selectionOutline.transform.DOScale(_selectionOutline.transform.localScale * 1.1f, 1f).SetLoops(-1, LoopType.Yoyo);
             _highlight.gameObject.SetActive(false);
@@ -84,6 +87,8 @@ namespace CaveTogether.Game.Entities
 
         public IEnumerator MoveToCell(Vector2Int position)
         {
+            _animator.SetBool("IsMoving", true);
+
             var previousPosition = GridPosition;
             GridPosition = position;
 
@@ -91,8 +96,11 @@ namespace CaveTogether.Game.Entities
 
             ApplyDirectionFlip(target);
             _characterManager.RefreshCellPositions(position, exclude: this);
-            yield return transform.DOMove(target, 0.5f).WaitForCompletion();
+            yield return transform.DOMove(target, 1f).WaitForCompletion();
             _characterManager.RefreshCellPositions(previousPosition);
+
+            _animator.SetBool("IsMoving", false);
+            yield return new WaitForSeconds(.2f);
         }
 
         public void RefreshPosition()
