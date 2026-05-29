@@ -17,6 +17,7 @@ namespace CaveTogether.Minigames.Earthquake
         [SerializeField] private SpriteRenderer _playerIdentifierTriangle;
         [SerializeField] private ParticleSystem _walkDustParticles;
 
+        private static readonly int _animIsMoving = Animator.StringToHash("IsMoving");
         private static readonly int _animDown = Animator.StringToHash("Down");
 
         private Animator _animator;
@@ -80,21 +81,23 @@ namespace CaveTogether.Minigames.Earthquake
         {
             if (IsDown) return;
             _animator.SetTrigger(_animDown);
+            _animator.SetBool(_animIsMoving, false);
             IsDown = true;
             GetComponent<Collider2D>().enabled = false;
 
             if (!IsOwner) return;
 
+            _moveDelta = 0;
             _locked.Value = true;
             _isMoving.Value = false;
         }
 
         private void Update()
         {
-            _animator.SetBool("IsMoving", _isMoving.Value);
+            _animator.SetBool(_animIsMoving, _isMoving.Value);
             _renderer.transform.localScale = new Vector3(_direction.Value ? _startSize : -_startSize, _startSize, _startSize);
 
-            if (!IsOwner || _locked.Value) return;
+            if (!IsOwner || _locked.Value || IsDown) return;
 
             float speedAbs = Mathf.Abs(_moveDelta);
             _isMoving.Value = speedAbs > float.Epsilon;

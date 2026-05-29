@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using CaveTogether.Input;
 using CaveTogether.Services;
 using DG.Tweening;
 using Unity.Netcode;
@@ -38,12 +36,13 @@ namespace CaveTogether.Minigames.Earthquake
 
             if (!NetworkManager.Singleton.IsServer) return;
 
-            foreach (var playerId in _playerIds)
+            for (int i = 0; i < _playerIds.Count; i++)
             {
-                var playerGO = Instantiate(_playerPrefab);
+                float startX = (_playerIds.Count - 1) * -0.5f + i;
+                var playerGO = Instantiate(_playerPrefab, new Vector3(startX, 0, 0), Quaternion.identity);
                 SceneManager.MoveGameObjectToScene(playerGO, gameObject.scene);
                 var networkObject = playerGO.GetComponent<NetworkObject>();
-                networkObject.SpawnWithOwnership(playerId);
+                networkObject.SpawnWithOwnership(_playerIds[i]);
 
                 _players.Add(playerGO.GetComponent<EarthquakePlayerController>());
             }
@@ -51,14 +50,14 @@ namespace CaveTogether.Minigames.Earthquake
 
         public void NotifyPlayerCollision(EarthquakePlayerController player)
         {
-            if (IsServer) NotifyPlayerCollisionRpc(player.Character.OwnerClientId);
+            if (IsServer) NotifyPlayerCollisionRpc(player.NetworkObjectId);
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
-        private void NotifyPlayerCollisionRpc(ulong playerId)
+        private void NotifyPlayerCollisionRpc(ulong networkObjectId)
         {
-            var player = FindObjectsByType<EarthquakePlayerController>().ToList().Find(p => p.Character.OwnerClientId == playerId);
-            player.Down();
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out var no))
+                no.GetComponent<EarthquakePlayerController>().Down();
         }
 
         public void NotifyStalagmiteRemoved()
