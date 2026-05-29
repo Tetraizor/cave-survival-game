@@ -15,8 +15,13 @@ namespace CaveTogether.Minigames.Earthquake
         public void Initialize(EarthquakeMinigame minigameController, float delay, float scale = 1f)
         {
             _minigameController = minigameController;
-            _targetScale = scale;
+            StartAnimationRpc(delay, scale);
+        }
 
+        [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
+        private void StartAnimationRpc(float delay, float scale)
+        {
+            _targetScale = scale;
             transform.localScale = Vector3.zero;
             StartCoroutine(DelayedStart(delay));
         }
@@ -29,7 +34,10 @@ namespace CaveTogether.Minigames.Earthquake
             {
                 transform.DOShakePosition(1.0f, .05f, 10).OnComplete(() =>
                 {
-                    transform.DOMoveY(-1, 1).SetEase(Ease.InCubic).SetLink(gameObject);
+                    transform.DOMoveY(-1, 1).SetEase(Ease.InCubic).OnComplete(() =>
+                    {
+                        if (IsServer && IsSpawned) NetworkObject.Despawn();
+                    }).SetLink(gameObject);
                 }).SetLink(gameObject);
             }).SetLink(gameObject);
         }
