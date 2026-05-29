@@ -26,18 +26,23 @@ namespace CaveTogether.Game.UI
         [SerializeField] private float _displayDuration = 2f;
         [SerializeField] private float _stackOffset = 60f;
 
-        private readonly List<RectTransform> _active = new();
+        private readonly List<(RectTransform rt, float targetY)> _active = new();
 
         public void Push(string text)
         {
-            foreach (var rt in _active)
-                rt.DOAnchorPosY(rt.anchoredPosition.y + _stackOffset, 0.3f).SetEase(Ease.OutCubic);
+            float startY = -((RectTransform)transform).rect.height / 6f;
+
+            for (int i = 0; i < _active.Count; i++)
+            {
+                float newTargetY = _active[i].targetY + _stackOffset;
+                _active[i] = (_active[i].rt, newTargetY);
+                _active[i].rt.DOAnchorPosY(newTargetY, 0.3f).SetEase(Ease.OutCubic);
+            }
 
             var go = Instantiate(_notificationPrefab, transform);
             var entryRt = go.GetComponent<RectTransform>();
-            float startY = -((RectTransform)transform).rect.height / 6f;
             entryRt.anchoredPosition = new Vector2(0, startY);
-            _active.Add(entryRt);
+            _active.Add((entryRt, startY));
 
             var tmp = go.GetComponent<TextMeshProUGUI>();
 
@@ -60,7 +65,7 @@ namespace CaveTogether.Game.UI
                     .SetEase(Ease.Linear))
                 .OnComplete(() =>
                 {
-                    _active.Remove(entryRt);
+                    _active.RemoveAll(e => e.rt == entryRt);
                     Destroy(go);
                 });
         }
