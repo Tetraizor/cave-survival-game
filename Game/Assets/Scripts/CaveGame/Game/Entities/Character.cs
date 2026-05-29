@@ -110,6 +110,12 @@ namespace CaveTogether.Game.Entities
             transform.DOMove(target, 0.2f).SetEase(Ease.OutCubic);
         }
 
+        public void LookAt(Vector2Int targetCell)
+        {
+            Vector3 target = _mapRenderManager.GridToWorldPosition(targetCell) + GetWorldPositionOffset();
+            ApplyDirectionFlip(target);
+        }
+
         private void ApplyDirectionFlip(Vector3 target)
         {
             Vector3 delta = target - transform.position;
@@ -127,6 +133,14 @@ namespace CaveTogether.Game.Entities
             IsEscaped = true;
             _renderer.gameObject.SetActive(false);
             _selectionOutline.SetActive(false);
+        }
+
+        public IEnumerator InspectCell(Action onReveal)
+        {
+            _animator.SetTrigger("Inspect");
+            yield return new WaitForSeconds(2f);
+            onReveal?.Invoke();
+            yield return new WaitForSeconds(1.5f);
         }
 
         public void TakeDamage(int amount) { Health = Mathf.Max(Health - amount, 0); HealthChanged?.Invoke(Health); }

@@ -16,8 +16,12 @@ namespace CaveTogether.Game.Actions
 
         public override IEnumerator Execute(MapData map, Character character, ActionRequest request)
         {
-            UnityEngine.Object.FindAnyObjectByType<ExplorationManager>().RevealFromPosition(request.TargetCell);
-            yield break;
+            character.LookAt(request.TargetCell);
+            var explorationManager = UnityEngine.Object.FindAnyObjectByType<ExplorationManager>();
+
+            yield return character.StartCoroutine(
+                character.InspectCell(() => explorationManager.RevealFromPosition(request.TargetCell))
+            );
         }
 
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => 1;
