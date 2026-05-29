@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Game;
 using CaveTogether.Game.Entities;
@@ -50,17 +51,17 @@ namespace CaveTogether.Minigames
         {
             MinigameBegan?.Invoke();
 
-            if (!IsServer) return;
-
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += OnNetworkSceneLoaded;
+
+            if (!IsServer) return;
             _sceneManagerService.LoadScene(_current.SceneName, LoadSceneMode.Additive);
         }
 
         private void OnRoundEnded(int round)
         {
-            if (!IsServer) return;
-
             _current = _minigames[(round - 1) % _minigames.Length];
+
+            if (!IsServer) return;
             StartCoroutine(MinigameIntroSequence());
         }
 
@@ -79,10 +80,12 @@ namespace CaveTogether.Minigames
             _gameStateManager.SwitchStateRpc(GameStateType.MiniGame);
         }
 
+        public void PushNotification(string message) => PushNotificationRpc(message);
+
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
         private void PushNotificationRpc(FixedString128Bytes message)
         {
-            FindAnyObjectByType<GameNotificationUI>().Push(message.ToString());
+            ServiceLocator.Get<GameNotificationUI>().Push(message.ToString());
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]
@@ -95,18 +98,22 @@ namespace CaveTogether.Minigames
         private void OnNetworkSceneLoaded(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
         {
             if (loadSceneMode != LoadSceneMode.Additive || sceneName != _current.SceneName) return;
-
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= OnNetworkSceneLoaded;
 
+            var contestants = _characterManager.Characters.Where(c => !c.IsDown && !c.IsEscaped).Select(c => c.OwnerClientId).ToList();
             _activeMinigame = FindAnyObjectByType<MinigameBase>();
+
             var context = new MinigameContext
             {
                 Config = _config,
-                PlayerOrder = _turnManager.TurnOrder,
                 Round = _turnManager.CurrentRound,
+                Players = contestants
             };
+
             _activeMinigame.Initialize(context);
-            _activeMinigame.Completed += OnMinigameCompleted;
+
+            if (IsServer)
+                _activeMinigame.Completed += OnMinigameCompleted;
         }
 
         private void OnMinigameCompleted(MinigameResult result)

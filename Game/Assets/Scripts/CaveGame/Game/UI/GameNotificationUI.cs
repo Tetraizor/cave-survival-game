@@ -1,12 +1,24 @@
 using System.Collections.Generic;
+using CaveTogether.Services;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
 namespace CaveTogether.Game.UI
 {
-    public class GameNotificationUI : MonoBehaviour
+    public class GameNotificationUI : MonoBehaviour, IService
     {
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+            ServiceLocator.Register<GameNotificationUI>(this);
+        }
+
+        private void OnDestroy()
+        {
+            ServiceLocator.Unregister<GameNotificationUI>();
+        }
+
         [SerializeField] private GameObject _notificationPrefab;
 
         [SerializeField] private float _typewriterSpeed = 20f;

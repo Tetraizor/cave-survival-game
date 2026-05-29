@@ -74,7 +74,7 @@ namespace CaveTogether.Input
     /// }
     /// </code>
     /// </example>
-    public partial class @PlayerControlsInput : IInputActionCollection2, IDisposable
+    public partial class @PlayerControlsInput: IInputActionCollection2, IDisposable
     {
         /// <summary>
         /// Provides access to the underlying asset instance.
@@ -358,6 +358,89 @@ namespace CaveTogether.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""EarthquakeMinigame"",
+            ""id"": ""04822569-2345-4996-a91c-fb40d685d327"",
+            ""actions"": [
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""8b695bdf-c867-4ef7-aa5b-12e1ffdb9fcb"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""698a7d77-2895-42cb-be0e-326bdcafd17b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""600c87be-af81-4a0f-8f08-6a1eb864e9dc"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""b0d74318-7849-4a90-bd72-28e19e58402f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""58c6f969-3b3b-4ef6-830e-a9188c8be80b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""ab50a6cd-52b4-4853-899f-fb3207142b59"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""54db2aa9-e31c-49b8-a859-1b8aa20257ff"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -371,11 +454,15 @@ namespace CaveTogether.Input
             m_Gameplay_PointerPosition = m_Gameplay.FindAction("PointerPosition", throwIfNotFound: true);
             m_Gameplay_PointerDelta = m_Gameplay.FindAction("PointerDelta", throwIfNotFound: true);
             m_Gameplay_GrabCamera = m_Gameplay.FindAction("GrabCamera", throwIfNotFound: true);
+            // EarthquakeMinigame
+            m_EarthquakeMinigame = asset.FindActionMap("EarthquakeMinigame", throwIfNotFound: true);
+            m_EarthquakeMinigame_Move = m_EarthquakeMinigame.FindAction("Move", throwIfNotFound: true);
         }
 
         ~@PlayerControlsInput()
         {
             UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, PlayerControlsInput.Gameplay.Disable() has not been called.");
+            UnityEngine.Debug.Assert(!m_EarthquakeMinigame.enabled, "This will cause a leak and performance issues, PlayerControlsInput.EarthquakeMinigame.Disable() has not been called.");
         }
 
         /// <summary>
@@ -609,6 +696,102 @@ namespace CaveTogether.Input
         /// Provides a new <see cref="GameplayActions" /> instance referencing this action map.
         /// </summary>
         public GameplayActions @Gameplay => new GameplayActions(this);
+
+        // EarthquakeMinigame
+        private readonly InputActionMap m_EarthquakeMinigame;
+        private List<IEarthquakeMinigameActions> m_EarthquakeMinigameActionsCallbackInterfaces = new List<IEarthquakeMinigameActions>();
+        private readonly InputAction m_EarthquakeMinigame_Move;
+        /// <summary>
+        /// Provides access to input actions defined in input action map "EarthquakeMinigame".
+        /// </summary>
+        public struct EarthquakeMinigameActions
+        {
+            private @PlayerControlsInput m_Wrapper;
+
+            /// <summary>
+            /// Construct a new instance of the input action map wrapper class.
+            /// </summary>
+            public EarthquakeMinigameActions(@PlayerControlsInput wrapper) { m_Wrapper = wrapper; }
+            /// <summary>
+            /// Provides access to the underlying input action "EarthquakeMinigame/Move".
+            /// </summary>
+            public InputAction @Move => m_Wrapper.m_EarthquakeMinigame_Move;
+            /// <summary>
+            /// Provides access to the underlying input action map instance.
+            /// </summary>
+            public InputActionMap Get() { return m_Wrapper.m_EarthquakeMinigame; }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+            public void Enable() { Get().Enable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+            public void Disable() { Get().Disable(); }
+            /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+            public bool enabled => Get().enabled;
+            /// <summary>
+            /// Implicitly converts an <see ref="EarthquakeMinigameActions" /> to an <see ref="InputActionMap" /> instance.
+            /// </summary>
+            public static implicit operator InputActionMap(EarthquakeMinigameActions set) { return set.Get(); }
+            /// <summary>
+            /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <param name="instance">Callback instance.</param>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+            /// </remarks>
+            /// <seealso cref="EarthquakeMinigameActions" />
+            public void AddCallbacks(IEarthquakeMinigameActions instance)
+            {
+                if (instance == null || m_Wrapper.m_EarthquakeMinigameActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_EarthquakeMinigameActionsCallbackInterfaces.Add(instance);
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+            }
+
+            /// <summary>
+            /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+            /// </summary>
+            /// <remarks>
+            /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+            /// </remarks>
+            /// <seealso cref="EarthquakeMinigameActions" />
+            private void UnregisterCallbacks(IEarthquakeMinigameActions instance)
+            {
+                @Move.started -= instance.OnMove;
+                @Move.performed -= instance.OnMove;
+                @Move.canceled -= instance.OnMove;
+            }
+
+            /// <summary>
+            /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="EarthquakeMinigameActions.UnregisterCallbacks(IEarthquakeMinigameActions)" />.
+            /// </summary>
+            /// <seealso cref="EarthquakeMinigameActions.UnregisterCallbacks(IEarthquakeMinigameActions)" />
+            public void RemoveCallbacks(IEarthquakeMinigameActions instance)
+            {
+                if (m_Wrapper.m_EarthquakeMinigameActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            /// <summary>
+            /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+            /// </summary>
+            /// <remarks>
+            /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+            /// </remarks>
+            /// <seealso cref="EarthquakeMinigameActions.AddCallbacks(IEarthquakeMinigameActions)" />
+            /// <seealso cref="EarthquakeMinigameActions.RemoveCallbacks(IEarthquakeMinigameActions)" />
+            /// <seealso cref="EarthquakeMinigameActions.UnregisterCallbacks(IEarthquakeMinigameActions)" />
+            public void SetCallbacks(IEarthquakeMinigameActions instance)
+            {
+                foreach (var item in m_Wrapper.m_EarthquakeMinigameActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_EarthquakeMinigameActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        /// <summary>
+        /// Provides a new <see cref="EarthquakeMinigameActions" /> instance referencing this action map.
+        /// </summary>
+        public EarthquakeMinigameActions @EarthquakeMinigame => new EarthquakeMinigameActions(this);
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Gameplay" which allows adding and removing callbacks.
         /// </summary>
@@ -665,6 +848,21 @@ namespace CaveTogether.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnGrabCamera(InputAction.CallbackContext context);
+        }
+        /// <summary>
+        /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "EarthquakeMinigame" which allows adding and removing callbacks.
+        /// </summary>
+        /// <seealso cref="EarthquakeMinigameActions.AddCallbacks(IEarthquakeMinigameActions)" />
+        /// <seealso cref="EarthquakeMinigameActions.RemoveCallbacks(IEarthquakeMinigameActions)" />
+        public interface IEarthquakeMinigameActions
+        {
+            /// <summary>
+            /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMove(InputAction.CallbackContext context);
         }
     }
 }

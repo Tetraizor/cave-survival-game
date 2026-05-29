@@ -5,8 +5,8 @@ namespace CaveTogether.Minigames
 {
     public struct MinigameContext
     {
-        public GameConfig Config;
-        public List<ulong> PlayerOrder;
         public int Round;
+        public GameConfig Config;
+        public List<ulong> Players;
     }
 }

@@ -1,9 +1,10 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace CaveTogether.Minigames
 {
-    public abstract class MinigameBase : MonoBehaviour
+    public abstract class MinigameBase : NetworkBehaviour
     {
         public abstract void Initialize(MinigameContext context);
         public event Action<MinigameResult> Completed;

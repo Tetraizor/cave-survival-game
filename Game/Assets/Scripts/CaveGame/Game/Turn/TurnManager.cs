@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Game.UI;
+using CaveTogether.Services;
 using Unity.Netcode;
 
 namespace CaveTogether.Game.Turn
@@ -28,7 +29,7 @@ namespace CaveTogether.Game.Turn
             foreach (var p in config.Players)
                 _playerNames[p.OwnerClientId] = p.Username.ToString();
 
-            _notifications = FindAnyObjectByType<GameNotificationUI>();
+            _notifications = ServiceLocator.Get<GameNotificationUI>();
         }
 
         [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Server)]

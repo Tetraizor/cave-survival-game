@@ -37,12 +37,15 @@ namespace CaveTogether.Game.Entities
         private CharacterManager _characterManager;
 
         public CharacterDataSO CharacterData { get; private set; }
+        public PlayerConfig Config { get; private set; }
 
         public List<ActionType> PossibleActionTypes { get; private set; } = new();
 
         public void Initialize(CharacterDataSO characterData, PlayerConfig playerConfig)
         {
             CharacterData = characterData;
+            Config = playerConfig;
+
             _renderer.transform.eulerAngles = new Vector3(45, 45, 0);
             _renderer.Initialize(characterData);
 
