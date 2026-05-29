@@ -39,9 +39,9 @@ namespace CaveTogether.EditorTools
 
         private IEnumerator Start()
         {
-#if UNITY_EDITOR
             yield return null;
 
+#if UNITY_EDITOR
             var tags = CurrentPlayer.Tags;
 
             if (tags.Contains("QuickSinglePlayer"))

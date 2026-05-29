@@ -104,7 +104,7 @@ namespace CaveTogether.Game.Entities
 
             ApplyDirectionFlip(target);
             _characterManager.RefreshCellPositions(position, exclude: this);
-            yield return transform.DOMove(target, 1f).WaitForCompletion();
+            yield return transform.DOMove(target, 1f).SetEase(Ease.InOutQuad).WaitForCompletion();
             _characterManager.RefreshCellPositions(previousPosition);
 
             _animator.SetBool(_animIsMoving, false);
