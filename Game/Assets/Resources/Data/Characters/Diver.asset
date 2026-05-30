@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ea15f5635f154e996a91e860c71a32, type: 3}
+  m_Name: Diver
+  m_EditorClassIdentifier: Assembly-CSharp::CaveGame.Game.Entities.CharacterDataSO
+  TypeId: diver
+  Name: Diver
+  MaxHealth: 4
+  MaxEnergy: 3
+  SpriteSet:
+    Head: {fileID: 620667784, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    Body: {fileID: 522610590, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    UpperArmF: {fileID: -1636958123, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    LowerArmF: {fileID: 811675559, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    UpperArmB: {fileID: -2146679320, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    LowerArmB: {fileID: 1393176927, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    UpperLegF: {fileID: 1522981083, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    LowerLegF: {fileID: -1341291072, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    UpperLegB: {fileID: -1023402523, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    LowerLegB: {fileID: -1645170392, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    FootF: {fileID: -1229193686, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+    FootB: {fileID: 1577019453, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
+  Portrait: {fileID: -248662701, guid: 527457a46645d2715a031f18a092a918, type: 3}
+  PossibleActionTypes: 000102030405

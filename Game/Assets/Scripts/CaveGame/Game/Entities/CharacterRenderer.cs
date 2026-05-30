@@ -17,8 +17,13 @@ namespace CaveTogether.Game.Entities
         [SerializeField] public SpriteRenderer _footF;
         [SerializeField] public SpriteRenderer _footB;
 
+        private string _characterTypeId;
+
         public void Initialize(CharacterDataSO characterData)
         {
+            if (_characterTypeId != null && _characterTypeId.Equals(characterData.TypeId)) return;
+            _characterTypeId = characterData.TypeId;
+
             _head.sprite = characterData.SpriteSet.Head;
             _body.sprite = characterData.SpriteSet.Body;
             _upperArmF.sprite = characterData.SpriteSet.UpperArmF;

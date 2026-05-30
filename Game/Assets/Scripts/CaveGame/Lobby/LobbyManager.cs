@@ -3,11 +3,15 @@ using System.Collections;
 using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Common.Enums;
+using CaveTogether.Game.Entities;
 using CaveTogether.Services;
 using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 namespace CaveTogether.Lobby
 {
@@ -17,6 +21,7 @@ namespace CaveTogether.Lobby
         {
             public ulong ClientID;
             public bool IsReady;
+            public FixedString32Bytes CharacterTypeId;
 
             public bool IsTaken => ClientID != ulong.MaxValue;
 
@@ -24,6 +29,7 @@ namespace CaveTogether.Lobby
             {
                 ClientID = clientId;
                 IsReady = false;
+                CharacterTypeId = "caver";
             }
 
             public bool Equals(LobbySeat other)
@@ -35,6 +41,7 @@ namespace CaveTogether.Lobby
             {
                 serializer.SerializeValue(ref ClientID);
                 serializer.SerializeValue(ref IsReady);
+                serializer.SerializeValue(ref CharacterTypeId);
             }
         }
 
@@ -42,10 +49,17 @@ namespace CaveTogether.Lobby
 
         public event Action LobbySeatsSynchronized;
 
-        [SerializeField] private TextMeshProUGUI _clientIdsLabel;
-        [SerializeField] private TextMeshProUGUI _countdownLabel;
+        [SerializeField] private Button _readyButton;
+        [SerializeField] private TextMeshProUGUI _readyButtonLabel;
+
         [SerializeField] private Button _leaveGameButton;
         [SerializeField] private Button _forceStartGameButton;
+        [SerializeField] private TextMeshProUGUI _countdownLabel;
+
+        [SerializeField] private TMP_InputField _seedField;
+        [SerializeField] private TMP_Dropdown _difficultyDropdown;
+
+        [SerializeField] public CharacterDataSO[] CharacterData;
 
         private SessionManagerService _sessionManager;
 
@@ -71,11 +85,20 @@ namespace CaveTogether.Lobby
             _sessionManager.RequestSyncSeatsServerRpc();
 
             _leaveGameButton.onClick.AddListener(OnLeaveGameButtonPressed);
+            _readyButton.onClick.AddListener(OnReadyButtonPressed);
 
             if (NetworkManager.Singleton.IsServer)
+            {
                 _forceStartGameButton.onClick.AddListener(OnForceStartGameButtonPressed);
+            }
             else
+            {
                 _forceStartGameButton.gameObject.SetActive(false);
+                _seedField.gameObject.SetActive(false);
+                _difficultyDropdown.gameObject.SetActive(false);
+            }
+
+            ServiceLocator.Get<TransitionService>().StartTransition(false);
         }
 
         public override void OnDestroy()
@@ -93,11 +116,15 @@ namespace CaveTogether.Lobby
             ServiceLocator.Get<GameFlowService>().Leave();
         }
 
-        private void OnForceStartGameButtonPressed()
+        private void OnReadyButtonPressed()
         {
-            if (IsServer) ServiceLocator.Get<SceneManagerService>().LoadScene(Constants.SceneNames.GAME_SCENE_NAME);
+            SetReady(!IsClientReady);
         }
 
+        private void OnForceStartGameButtonPressed()
+        {
+            if (IsServer) StartGame();
+        }
 
         public ref LobbySeat GetLobbySeatRef(ulong clientId)
         {
@@ -127,6 +154,22 @@ namespace CaveTogether.Lobby
             SyncLobbySeatsRpc(LobbySeats);
         }
 
+        public void SetCharacter(string characterTypeId)
+        {
+            SyncCharacterStateToServerRpc(characterTypeId);
+        }
+
+        [Rpc(SendTo.Server)]
+        public void SyncCharacterStateToServerRpc(FixedString32Bytes characterTypeId, RpcParams rpcParams = default)
+        {
+            ulong senderId = rpcParams.Receive.SenderClientId;
+            ref var clientSeat = ref GetLobbySeatRef(senderId);
+
+            clientSeat.CharacterTypeId = characterTypeId;
+
+            SyncLobbySeatsRpc(LobbySeats);
+        }
+
         #endregion
 
         #region Lobby Seat State
@@ -140,30 +183,16 @@ namespace CaveTogether.Lobby
 
         private void OnSeatsSynchronized()
         {
-            string clientIdText = "";
             for (int i = 0; i < SessionManagerService.MAX_PLAYERS; i++)
-            {
-                var seat = _sessionManager.Seats[i];
-                LobbySeats[i].ClientID = seat.ClientID;
-
-                if (seat.IsTaken)
-                {
-                    clientIdText +=
-                    _sessionManager.Seats[i].ClientID
-                    + $" - {seat.ConnectionData.Username} "
-                    + (seat.ClientID == _sessionManager.ServerId ? "(Server) " : "")
-                    + (seat.ClientID == _sessionManager.LocalClientId ? "(This Client) " : "")
-                    + "\n";
-                }
-            }
-
-            _clientIdsLabel.SetText(clientIdText);
+                LobbySeats[i].ClientID = _sessionManager.Seats[i].ClientID;
 
             LobbySeatsSynchronized?.Invoke();
         }
 
         private void OnLobbySeatsSynchronized()
         {
+            _readyButtonLabel.SetText(IsClientReady ? "Ready" : "Not Ready");
+
             // Check for total readiness
             if (_sessionManager.IsServer && LobbySeats.Any(ls => ls.IsTaken))
             {
@@ -209,32 +238,55 @@ namespace CaveTogether.Lobby
 
             if (IsServer)
             {
-                // TODO: Get remaining data from the lobby UI instead of hardcoding here
-
-                var validSeats = _sessionManager.Seats.Where(ls => ls.IsTaken).ToList();
-                var players = new PlayerConfig[validSeats.Count];
-
-                for (int i = 0; i < validSeats.Count; i++)
-                {
-                    var seat = validSeats[i];
-
-                    players[i] = new PlayerConfig
-                    {
-                        OwnerClientId = seat.ClientID,
-                        Username = seat.ConnectionData.Username,
-                        CharacterId = "caver",
-                    };
-                }
-
-                var config = new GameConfig
-                {
-                    Difficulty = Difficulty.Normal,
-                    Seed = UnityEngine.Random.Range(100_000, 999_999).ToString(),
-                    Players = players
-                };
-
-                ServiceLocator.Get<GameFlowService>().StartGame(config);
+                StartGame();
             }
+        }
+
+        private void StartGame()
+        {
+            FadeOutClientsRpc();
+
+            var ts = ServiceLocator.Get<TransitionService>();
+            ts.StartTransition(true);
+            ts.TransitionCompleted += CompleteTransition;
+        }
+
+        [Rpc(SendTo.NotServer, InvokePermission = RpcInvokePermission.Server)]
+        private void FadeOutClientsRpc()
+        {
+            ServiceLocator.Get<TransitionService>().StartTransition(true);
+        }
+
+        private void CompleteTransition()
+        {
+            var ts = ServiceLocator.Get<TransitionService>();
+            ts.TransitionCompleted -= CompleteTransition;
+
+            var validSeats = _sessionManager.Seats.Where(ls => ls.IsTaken).ToList();
+            var players = new PlayerConfig[validSeats.Count];
+
+            for (int i = 0; i < validSeats.Count; i++)
+            {
+                var seat = validSeats[i];
+                var lobbySeat = LobbySeats.ToList().Find(ls => ls.ClientID == seat.ClientID);
+
+                players[i] = new PlayerConfig
+                {
+                    OwnerClientId = seat.ClientID,
+                    Username = seat.ConnectionData.Username,
+                    CharacterId = lobbySeat.CharacterTypeId,
+                };
+            }
+
+            var config = new GameConfig
+            {
+                Difficulty = (Difficulty)_difficultyDropdown.value,
+                Seed = _seedField.text.IsNullOrEmpty() ? UnityEngine.Random.Range(100_000, 999_999).ToString() : _seedField.text,
+                Players = players,
+                IsCheatsEnabled = true,
+            };
+
+            ServiceLocator.Get<GameFlowService>().StartGame(config);
         }
 
         #endregion

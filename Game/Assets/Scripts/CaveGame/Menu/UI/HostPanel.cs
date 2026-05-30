@@ -67,6 +67,14 @@ namespace CaveTogether.Menu.UI
         private void OnServerStarted()
         {
             NetworkManager.Singleton.OnServerStarted -= OnServerStarted;
+
+            ServiceLocator.Get<TransitionService>().StartTransition(true);
+            ServiceLocator.Get<TransitionService>().TransitionCompleted += ChangeSceneSequence;
+        }
+
+        private void ChangeSceneSequence()
+        {
+            ServiceLocator.Get<TransitionService>().TransitionCompleted -= ChangeSceneSequence;
             ServiceLocator.Get<GameFlowService>().StartLobby();
         }
     }

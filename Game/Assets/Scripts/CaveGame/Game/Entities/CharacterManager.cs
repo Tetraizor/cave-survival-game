@@ -17,7 +17,7 @@ namespace CaveTogether.Game.Entities
         public readonly List<Character> Characters = new();
         public readonly Dictionary<ulong, Character> ClientIdCharacterLookup = new();
 
-        private List<CharacterDataSO> _characterData = new();
+        public List<CharacterDataSO> CharacterData { get; private set; } = new();
 
         private static readonly Vector3[][] CellOffsets =
         {
@@ -45,7 +45,7 @@ namespace CaveTogether.Game.Entities
 
         public void Initialize(GameConfig config)
         {
-            _characterData = Resources.LoadAll<CharacterDataSO>(CHARACTER_DATA_PATH).ToList();
+            CharacterData = Resources.LoadAll<CharacterDataSO>(CHARACTER_DATA_PATH).ToList();
             SpawnCharacters(config);
         }
 
@@ -62,7 +62,7 @@ namespace CaveTogether.Game.Entities
             {
                 var characterGameObject = Instantiate(CharacterPrefab);
                 var character = characterGameObject.GetComponent<Character>();
-                var characterData = _characterData.Find(cd => cd.TypeId.Equals(player.CharacterId.ToString()));
+                var characterData = CharacterData.Find(cd => cd.TypeId.Equals(player.CharacterId.ToString()));
 
                 character.Initialize(characterData, player);
 

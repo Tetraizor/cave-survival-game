@@ -19,6 +19,9 @@ namespace CaveTogether.Lobby
 
         [SerializeField] private Button _readyButton;
 
+        [SerializeField] private Button _previousCharacterButton;
+        [SerializeField] private Button _nextCharacterButton;
+
         [SerializeField] private int _correspondingSeatSlot = 0;
 
         private LobbyManager _lobbyManager;

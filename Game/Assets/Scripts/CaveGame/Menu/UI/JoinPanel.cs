@@ -47,19 +47,30 @@ namespace CaveTogether.Menu.UI
             return isValid;
         }
 
+        private string _pendingAddress;
+        private ushort _pendingPort;
+        private UserConnectionData _pendingConnectionData;
+
         private void AttemptJoin()
         {
             if (!ValidateInput(out string username, out string address, out ushort port)) return;
 
-            var connectionData = new UserConnectionData
-            {
-                Username = username
-            };
+            _pendingAddress = address;
+            _pendingPort = port;
+            _pendingConnectionData = new UserConnectionData { Username = username };
 
-            ServiceLocator.Get<GameFlowService>().Join(address, port, connectionData);
+            var ts = ServiceLocator.Get<TransitionService>();
+            ts.TransitionCompleted += ChangeSceneSequence;
+            ts.StartTransition(true);
 
             // For making sure if a connection happened, button is disabled
             ValidateInput(out _, out _, out _);
+        }
+
+        private void ChangeSceneSequence()
+        {
+            ServiceLocator.Get<TransitionService>().TransitionCompleted -= ChangeSceneSequence;
+            ServiceLocator.Get<GameFlowService>().Join(_pendingAddress, _pendingPort, _pendingConnectionData);
         }
     }
 }
