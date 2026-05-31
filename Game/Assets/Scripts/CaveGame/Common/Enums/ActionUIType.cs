@@ -4,5 +4,6 @@ namespace CaveTogether.Game.Actions
     {
         ContextualCell,
         ActionBarGlobal,
+        Inventory,
     }
 }

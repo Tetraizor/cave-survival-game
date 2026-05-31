@@ -30,4 +30,5 @@ MonoBehaviour:
     FootF: {fileID: -1229193686, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
     FootB: {fileID: 1577019453, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
   Portrait: {fileID: -248662701, guid: 527457a46645d2715a031f18a092a918, type: 3}
-  PossibleActionTypes: 000102030405
+  StartingItemTypes: 
+  PossibleActionTypes: 0001020304050607

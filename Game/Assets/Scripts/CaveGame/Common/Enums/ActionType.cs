@@ -9,5 +9,6 @@ namespace CaveTogether.Common.Enums
         Revive,
         DebugDown,
         Escape,
+        UseItem,
     }
 }

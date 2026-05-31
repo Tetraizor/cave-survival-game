@@ -122,6 +122,7 @@ namespace CaveTogether.Game.Actions
                 ActionType.Revive => new ReviveAction(),
                 ActionType.DebugDown => new DebugDownAction(),
                 ActionType.Escape => new EscapeAction(),
+                ActionType.UseItem => new UseItemAction(),
                 _ => null
             };
         }

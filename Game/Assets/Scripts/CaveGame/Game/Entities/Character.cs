@@ -9,6 +9,7 @@ using CaveTogether.Game;
 using CaveTogether.Generation;
 using DG.Tweening;
 using UnityEngine;
+using CaveTogether.Items;
 
 namespace CaveTogether.Game.Entities
 {
@@ -33,6 +34,8 @@ namespace CaveTogether.Game.Entities
         public int MaxEnergy { get; private set; }
 
         public ulong OwnerClientId { get; private set; }
+
+        public Inventory Inventory { get; private set; }
 
         private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
@@ -80,6 +83,9 @@ namespace CaveTogether.Game.Entities
 
             Energy = characterData.MaxEnergy;
             MaxEnergy = characterData.MaxEnergy;
+
+            Inventory = new Inventory();
+            foreach (var startingItemType in characterData.StartingItemTypes) Inventory.AddItem(startingItemType);
 
             PossibleActionTypes.AddRange(characterData.PossibleActionTypes);
             PossibleActionTypes.Add(ActionType.Escape);

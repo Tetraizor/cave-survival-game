@@ -18,6 +18,7 @@ namespace CaveTogether.Game.Actions
         public string Title;
         public int EnergyCost;
         public Vector2Int Position;
+        public ActionRequest Request;
     }
 
     public class MapActionManager : MonoBehaviour
@@ -136,32 +137,12 @@ namespace CaveTogether.Game.Actions
 
             var possibleActionTypes = _clientCharacter.PossibleActionTypes;
             var possibleActions = possibleActionTypes
-                .Select(at => _actionManager.GetActionLogic(at))
-                .Where(a => a.UIType == ActionUIType.ContextualCell);
-
-            var actionRequest = new ActionRequest();
+                .Select(at => _actionManager.GetActionLogic(at));
 
             List<CellActionEntry> actions = new();
 
             foreach (var action in possibleActions)
-            {
-                actionRequest.TargetCell = new Vector2Int(x, y);
-                actionRequest.Type = action.Type;
-
-                int energyCost = action.GetEnergyCost(_mapManager.Map, _clientCharacter, actionRequest);
-
-                if (action.IsValid(_mapManager.Map, _clientCharacter, actionRequest)
-                    && energyCost <= _clientCharacter.Energy)
-                {
-                    actions.Add(new CellActionEntry
-                    {
-                        EnergyCost = energyCost,
-                        Position = new Vector2Int(x, y),
-                        Title = action.DisplayName,
-                        Type = action.Type
-                    });
-                }
-            }
+                actions.AddRange(action.GetEntries(_mapManager.Map, _clientCharacter, x, y));
 
             return actions;
         }

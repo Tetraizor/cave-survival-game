@@ -25,7 +25,7 @@ namespace CaveTogether.Game.Actions
             _actionEnergyCostLabel.SetText(entry.EnergyCost.ToString());
             _actionIconImage.sprite = icon;
 
-            _request = new ActionRequest { TargetCell = entry.Position, Type = entry.Type };
+            _request = entry.Request ?? new ActionRequest { TargetCell = entry.Position, Type = entry.Type };
         }
 
         private void OnActionRowButtonClicked()

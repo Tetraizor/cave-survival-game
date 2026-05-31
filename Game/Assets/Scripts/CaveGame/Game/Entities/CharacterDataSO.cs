@@ -1,5 +1,6 @@
 using System;
 using CaveTogether.Common.Enums;
+using CaveTogether.Items;
 using UnityEngine;
 
 namespace CaveTogether.Game.Entities
@@ -33,11 +34,14 @@ namespace CaveTogether.Game.Entities
         public CharacterDataSpriteSet SpriteSet;
         public Sprite Portrait;
 
+        public ItemType[] StartingItemTypes = new ItemType[0];
+
         public ActionType[] PossibleActionTypes = new ActionType[] {
             ActionType.Wait,
             ActionType.Walk,
             ActionType.EndTurn,
             ActionType.Inspect,
+            ActionType.UseItem,
         };
     }
 }

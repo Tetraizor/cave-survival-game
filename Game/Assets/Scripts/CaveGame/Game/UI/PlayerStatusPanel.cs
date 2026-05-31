@@ -1,5 +1,8 @@
+using System;
+using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Game.Entities;
+using CaveTogether.Items;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -25,6 +28,8 @@ namespace CaveTogether.Game.UI
 
         [SerializeField] private Image[] _heartSprites;
         [SerializeField] private Image[] _energySprites;
+
+        [SerializeField] private Image[] _itemSprites;
 
         private ulong _correspondingPlayerId;
         private Character _character;
@@ -67,6 +72,7 @@ namespace CaveTogether.Game.UI
             _character = FindAnyObjectByType<CharacterManager>().GetCharacter(_correspondingPlayerId);
             _character.HealthChanged += OnHealthChanged;
             _character.EnergyChanged += OnEnergyChanged;
+            _character.Inventory.InventoryChanged += OnInventoryChanged;
 
             _nameLabel.SetText(data.Username.ToString());
             _descriptionLabel.SetText(data.CharacterId.ToString());
@@ -83,6 +89,8 @@ namespace CaveTogether.Game.UI
 
             OnEnergyChanged(_character.Energy, _character.Energy);
             OnHealthChanged(_character.Energy, _character.Health);
+
+            OnInventoryChanged();
         }
 
         private void OnEnergyChanged(int previousEnergy, int newEnergy)
@@ -137,6 +145,29 @@ namespace CaveTogether.Game.UI
             transform.DOScale(Vector3.one * 1.1f, .1f);
 
             _character.SetHighlight(true);
+        }
+
+        private void OnInventoryChanged()
+        {
+            var previousSprites = _itemSprites.Select(s => s.sprite).ToList();
+            var itemDb = FindAnyObjectByType<ItemDatabaseService>();
+
+
+            for (int i = 0; i < _itemSprites.Length; i++)
+            {
+                var itemSlot = _itemSprites[i];
+                var itemData = itemDb.GetSO(_character.Inventory.GetItemType(i));
+                var newSprite = itemData != null ? itemData.Icon : null;
+
+                if (previousSprites[i] != newSprite)
+                {
+                    itemSlot.sprite = newSprite;
+                    itemSlot.transform.parent.GetComponent<RectTransform>().DOKill();
+                    itemSlot.transform.parent.GetComponent<RectTransform>().DOPunchScale(new Vector3(1.2f, 1.2f, 1.2f), .2f);
+                }
+
+                itemSlot.color = new Color(1, 1, 1, newSprite == null ? 0 : 1);
+            }
         }
     }
 }
