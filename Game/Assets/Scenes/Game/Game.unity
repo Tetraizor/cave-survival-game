@@ -2169,6 +2169,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &674078378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 674078379}
+  - component: {fileID: 674078380}
+  m_Layer: 0
+  m_Name: CaveDecorator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &674078379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674078378}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1838839443}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &674078380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674078378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c3d567df486a2f4da4e8dab56fc4fb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Generation.Decorations.CaveDecorator
+  _stalagmitePrefab: {fileID: 3207189663484832779, guid: 89a1b9d46aefa0127bfecf308a69917d, type: 3}
+  _sprites:
+  - {fileID: 772583496, guid: cf8bc8333dd703a33ac649bb70d54e41, type: 3}
+  - {fileID: 1071314152, guid: cf8bc8333dd703a33ac649bb70d54e41, type: 3}
+  - {fileID: 1257281851, guid: cf8bc8333dd703a33ac649bb70d54e41, type: 3}
+  - {fileID: 128000771, guid: cf8bc8333dd703a33ac649bb70d54e41, type: 3}
 --- !u!1 &687750255
 GameObject:
   m_ObjectHideFlags: 0
@@ -4938,6 +4988,7 @@ Transform:
   m_Children:
   - {fileID: 1291101219}
   - {fileID: 1190247447}
+  - {fileID: 674078379}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1864006194
