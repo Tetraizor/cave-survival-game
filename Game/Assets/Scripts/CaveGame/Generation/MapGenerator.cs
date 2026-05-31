@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using CaveTogether.Game.CellEffects;
 using CaveTogether.Generation.Layers;
 
 namespace CaveTogether.Generation
@@ -20,10 +22,20 @@ namespace CaveTogether.Generation
             MapGenerationPipeline.Add(new BaseGenerationLayer());
             MapGenerationPipeline.Add(new SpawnGenerationLayer());
             MapGenerationPipeline.Add(new ExitGenerationLayer());
+            MapGenerationPipeline.Add(new VineGenerationLayer());
 
             Seed = seed;
             Map = map;
         }
+
+        public T GetLayer<T>() where T : MapGenerationLayerBase =>
+            MapGenerationPipeline.OfType<T>().FirstOrDefault();
+
+        public IEnumerable<ICellCostModifier> GetCostModifiers() =>
+            MapGenerationPipeline.OfType<ICellCostModifier>();
+
+        public IEnumerable<ICellEffectProvider> GetEffectProviders() =>
+            MapGenerationPipeline.OfType<ICellEffectProvider>();
 
         public void GenerateMap()
         {

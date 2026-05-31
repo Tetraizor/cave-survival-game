@@ -272,6 +272,72 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 0
+        width: 7
+        height: 34
+      alignment: 9
+      pivot: {x: 0.42857146, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4d5929b2bf4491e0ac3e6983d95f927
+      internalID: -593474976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_9
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 9
+        width: 5
+        height: 25
+      alignment: 9
+      pivot: {x: 0.6, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61c6c68447c3d1fc5a9aef1a8734786c
+      internalID: -317981469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_10
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 16
+        width: 5
+        height: 18
+      alignment: 9
+      pivot: {x: 0.4, y: 1}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26b80adee34f87bc5bfdf9f9d73dff36
+      internalID: -873373264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -290,12 +356,15 @@ TextureImporter:
     nameFileIdTable:
       cave_decoration_pack_0: -1330929700
       cave_decoration_pack_1: 87074313
+      cave_decoration_pack_10: -873373264
       cave_decoration_pack_2: 680340409
       cave_decoration_pack_3: -743086700
       cave_decoration_pack_4: 1069226576
       cave_decoration_pack_5: 1617453354
       cave_decoration_pack_6: 296934249
       cave_decoration_pack_7: 251512849
+      cave_decoration_pack_8: -593474976
+      cave_decoration_pack_9: -317981469
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

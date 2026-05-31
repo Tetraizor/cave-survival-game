@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using CaveTogether.Common;
 using CaveTogether.Common.Enums;
+using CaveTogether.Game.CellEffects;
 using CaveTogether.Game.Turn;
+using CaveTogether.Game;
 using CaveTogether.Generation;
 using DG.Tweening;
 using UnityEngine;
@@ -38,11 +40,13 @@ namespace CaveTogether.Game.Entities
 
         private static readonly WaitForSeconds _waitPatchRevive = new(4f);
         private static readonly WaitForSeconds _waitPatchReviveReturn = new(1f);
+        private static readonly WaitForSeconds _waitHurt = new(0.5f);
 
         private static readonly int _animIsMoving = Animator.StringToHash("IsMoving");
         private static readonly int _animDown = Animator.StringToHash("Down");
         private static readonly int _animGetUp = Animator.StringToHash("GetUp");
         private static readonly int _animPatch = Animator.StringToHash("Patch");
+        private static readonly int _animHurt = Animator.StringToHash("Hurt");
 
         private Animator _animator;
 
@@ -177,6 +181,13 @@ namespace CaveTogether.Game.Entities
             yield return new WaitForSeconds(1.5f);
         }
 
+        public IEnumerator TakeDamageSequence(int amount)
+        {
+            _animator.SetTrigger(_animHurt);
+            yield return _waitHurt;
+            TakeDamage(amount);
+        }
+
         public void TakeDamage(int amount)
         {
             Health = Mathf.Max(Health - amount, 0);
@@ -229,6 +240,11 @@ namespace CaveTogether.Game.Entities
         private void OnTurnStarted(ulong clientId)
         {
             _selectionOutline.SetActive(clientId == OwnerClientId);
+            if (clientId != OwnerClientId) return;
+
+            var effectManager = FindAnyObjectByType<CellEffectManager>();
+            if (effectManager != null)
+                StartCoroutine(effectManager.TriggerEffects(CellEffectTrigger.OnTurnStart, GridPosition, this));
         }
     }
 }
