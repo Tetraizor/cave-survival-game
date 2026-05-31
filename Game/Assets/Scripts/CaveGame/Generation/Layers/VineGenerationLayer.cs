@@ -17,7 +17,7 @@ namespace CaveTogether.Generation.Layers
         public IEnumerable<CellEffect> GetEffectsForCell(Vector2Int pos)
         {
             if (_vineCells.Contains(pos))
-                yield return new CellEffect(CellEffectTrigger.OnEnter, new DamageEffect(1));
+                yield return new CellEffect(CellEffectTrigger.OnEnter, new PoisonDamageEffect(1));
         }
 
         public override void Process(MapData mapData, System.Random random)

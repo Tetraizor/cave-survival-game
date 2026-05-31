@@ -23,8 +23,19 @@ namespace CaveTogether.Game.Actions
         public override bool IsValid(MapData map, Character character, ActionRequest request)
         {
             if (request.TargetCell != character.GridPosition) return false;
+
             var layer = Object.FindAnyObjectByType<MapManager>()?.Generator.GetLayer<LootGenerationLayer>();
-            return layer != null && layer.LootCells.ContainsKey(request.TargetCell);
+            if (layer == null || !layer.LootCells.TryGetValue(request.TargetCell, out var itemType)) return false;
+
+            var item = ServiceLocator.Get<ItemDatabaseService>().CreateItem(itemType);
+            return CanPickup(character, itemType, item);
+        }
+
+        private static bool CanPickup(Character character, ItemType itemType, ItemBase item)
+        {
+            if (character.Inventory.IsFull) return false;
+            if (item != null && !item.IsConsumable && character.Inventory.HasItemOfType(itemType)) return false;
+            return true;
         }
 
         public override IEnumerator Execute(MapData map, Character character, ActionRequest request)
@@ -48,6 +59,7 @@ namespace CaveTogether.Game.Actions
             if (layer == null || !layer.LootCells.TryGetValue(pos, out var itemType)) yield break;
 
             var item = ServiceLocator.Get<ItemDatabaseService>().CreateItem(itemType);
+            if (!CanPickup(character, itemType, item)) yield break;
             string title = item != null ? $"Pick Up ({item.DisplayName})" : "Pick Up";
 
             yield return new CellActionEntry

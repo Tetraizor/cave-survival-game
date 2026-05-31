@@ -19,7 +19,7 @@ namespace CaveTogether.Game.Actions
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request)
         {
             var inventory = character.Inventory;
-            if (inventory == null || !inventory.HasItem(request.ItemSlot)) return 1;
+            if (inventory == null || !inventory.HasAnyItem(request.ItemSlot)) return 1;
 
             var item = ServiceLocator.Get<ItemDatabaseService>().CreateItem(inventory.GetItemType(request.ItemSlot));
             if (item == null) return 1;
@@ -33,7 +33,7 @@ namespace CaveTogether.Game.Actions
         public override bool IsValid(MapData map, Character character, ActionRequest request)
         {
             var inventory = character.Inventory;
-            if (inventory == null || !inventory.HasItem(request.ItemSlot)) return false;
+            if (inventory == null || !inventory.HasAnyItem(request.ItemSlot)) return false;
 
             var item = ServiceLocator.Get<ItemDatabaseService>().CreateItem(inventory.GetItemType(request.ItemSlot));
             if (item == null) return false;
@@ -66,7 +66,7 @@ namespace CaveTogether.Game.Actions
 
             for (byte slot = 0; slot < Inventory.Size; slot++)
             {
-                if (!character.Inventory.HasItem(slot)) continue;
+                if (!character.Inventory.HasAnyItem(slot)) continue;
                 var item = db.CreateItem(character.Inventory.GetItemType(slot));
                 if (item == null) continue;
 

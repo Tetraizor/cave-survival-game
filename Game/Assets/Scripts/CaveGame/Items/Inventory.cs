@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace CaveTogether.Items
@@ -11,8 +12,10 @@ namespace CaveTogether.Items
 
         private readonly ItemInstance[] _slots = new ItemInstance[Size];
 
-        public bool HasItem(int slot) => !_slots[slot].IsEmpty;
+        public bool HasAnyItem(int slot) => !_slots[slot].IsEmpty;
         public ItemType GetItemType(int slot) => _slots[slot].Type;
+        public bool IsFull => _slots.All(s => !s.IsEmpty);
+        public bool HasItemOfType(ItemType itemType) => _slots.Any(s => s.Type == itemType && !s.IsEmpty);
 
         public bool AddItem(ItemType type)
         {

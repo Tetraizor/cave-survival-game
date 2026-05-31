@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 320e436381d199355bbdd1a0917ab4e2, type: 3}
-  m_Name: LootTable
-  m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Generation.Layers.LootTable
-  Entries:
-  - Item: 2
-    Chance: 0.3
+  m_Script: {fileID: 11500000, guid: 3901071bb2e7dc69bb0ac17e1366e16f, type: 3}
+  m_Name: Antidote
+  m_EditorClassIdentifier: Assembly-CSharp::CaveTogether.Items.ItemSO
+  Icon: {fileID: 2103896878, guid: bd959b21e1f0e6e6b832f3714387a140, type: 3}
+  Type: 2
