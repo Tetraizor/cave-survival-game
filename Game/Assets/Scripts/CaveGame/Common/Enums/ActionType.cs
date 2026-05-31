@@ -10,5 +10,6 @@ namespace CaveTogether.Common.Enums
         DebugDown,
         Escape,
         UseItem,
+        Pickup,
     }
 }

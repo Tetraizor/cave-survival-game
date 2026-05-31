@@ -123,6 +123,7 @@ namespace CaveTogether.Game.Actions
                 ActionType.DebugDown => new DebugDownAction(),
                 ActionType.Escape => new EscapeAction(),
                 ActionType.UseItem => new UseItemAction(),
+                ActionType.Pickup => new PickupAction(),
                 _ => null
             };
         }

@@ -42,6 +42,7 @@ namespace CaveTogether.Game.Entities
             ActionType.EndTurn,
             ActionType.Inspect,
             ActionType.UseItem,
+            ActionType.Pickup,
         };
     }
 }

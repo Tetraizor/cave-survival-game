@@ -23,6 +23,7 @@ namespace CaveTogether.Generation
             MapGenerationPipeline.Add(new SpawnGenerationLayer());
             MapGenerationPipeline.Add(new ExitGenerationLayer());
             MapGenerationPipeline.Add(new VineGenerationLayer());
+            MapGenerationPipeline.Add(new LootGenerationLayer());
 
             Seed = seed;
             Map = map;
