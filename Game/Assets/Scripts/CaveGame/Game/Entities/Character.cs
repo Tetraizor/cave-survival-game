@@ -14,8 +14,8 @@ namespace CaveTogether.Game.Entities
 {
     public class Character : MonoBehaviour
     {
-        public Action<int> HealthChanged;
-        public Action<int> EnergyChanged;
+        public Action<int, int> HealthChanged;
+        public Action<int, int> EnergyChanged;
 
         [SerializeField] private GameObject _selectionOutline;
         [SerializeField] private GameObject _highlight;
@@ -40,7 +40,7 @@ namespace CaveTogether.Game.Entities
 
         private static readonly WaitForSeconds _waitPatchRevive = new(4f);
         private static readonly WaitForSeconds _waitPatchReviveReturn = new(1f);
-        private static readonly WaitForSeconds _waitHurt = new(0.5f);
+        private static readonly WaitForSeconds _waitHurt = new(0.1f);
 
         private static readonly int _animIsMoving = Animator.StringToHash("IsMoving");
         private static readonly int _animDown = Animator.StringToHash("Down");
@@ -190,38 +190,57 @@ namespace CaveTogether.Game.Entities
 
         public void TakeDamage(int amount)
         {
+            int previousHealth = Health;
             Health = Mathf.Max(Health - amount, 0);
 
             if (Health == 0) _animator.SetTrigger(_animDown);
 
-            HealthChanged?.Invoke(Health);
+            HealthChanged?.Invoke(previousHealth, Health);
         }
 
         public void Heal(int amount)
         {
             bool wasDown = IsDown;
+            int previousHealth = Health;
             Health = Mathf.Min(Health + amount, MaxHealth);
 
             if (wasDown && !IsDown)
                 StartCoroutine(HealSequence());
             else
-                HealthChanged?.Invoke(Health);
+                HealthChanged?.Invoke(previousHealth, Health);
         }
 
         private IEnumerator HealSequence()
         {
+            int previousHealth = Health;
             _animator.SetTrigger(_animGetUp);
 
             yield return new WaitForSeconds(2.5f);
-            HealthChanged?.Invoke(Health);
+            HealthChanged?.Invoke(previousHealth, Health);
 
             RefreshPosition();
         }
 
-        public void UseEnergy(int energy) { Energy = Mathf.Max(Energy - energy, 0); EnergyChanged?.Invoke(Energy); }
-        public void GainEnergy(int energy) { Energy = Mathf.Min(Energy + energy, MaxEnergy); EnergyChanged?.Invoke(Energy); }
+        public void UseEnergy(int energy)
+        {
+            int previousEnergy = Energy;
+            Energy = Mathf.Max(Energy - energy, 0);
+            EnergyChanged?.Invoke(previousEnergy, Energy);
+        }
 
-        public void ResetEnergy() { Energy = MaxEnergy; EnergyChanged?.Invoke(Energy); }
+        public void GainEnergy(int energy)
+        {
+            int previousEnergy = Energy;
+            Energy = Mathf.Min(Energy + energy, MaxEnergy);
+            EnergyChanged?.Invoke(previousEnergy, Energy);
+        }
+
+        public void ResetEnergy()
+        {
+            int previousEnergy = Energy;
+            Energy = MaxEnergy;
+            EnergyChanged?.Invoke(previousEnergy, Energy);
+        }
 
         public bool CanDoAction(ActionType type) => PossibleActionTypes.Contains(type);
 

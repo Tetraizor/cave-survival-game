@@ -15,7 +15,7 @@ MonoBehaviour:
   TypeId: diver
   Name: Diver
   MaxHealth: 4
-  MaxEnergy: 3
+  MaxEnergy: 4
   SpriteSet:
     Head: {fileID: 620667784, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}
     Body: {fileID: 522610590, guid: c85b35ef4be8e3c7bb92b475925af4a9, type: 3}

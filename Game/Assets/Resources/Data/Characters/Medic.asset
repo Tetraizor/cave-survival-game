@@ -15,7 +15,7 @@ MonoBehaviour:
   TypeId: medic
   Name: Medic
   MaxHealth: 4
-  MaxEnergy: 3
+  MaxEnergy: 4
   SpriteSet:
     Head: {fileID: 620667784, guid: 90b473bc8bfa18a7caa3ef8f47549f79, type: 3}
     Body: {fileID: 522610590, guid: 90b473bc8bfa18a7caa3ef8f47549f79, type: 3}

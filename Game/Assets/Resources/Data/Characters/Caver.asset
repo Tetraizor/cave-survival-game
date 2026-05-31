@@ -15,7 +15,7 @@ MonoBehaviour:
   TypeId: caver
   Name: Caver
   MaxHealth: 4
-  MaxEnergy: 3
+  MaxEnergy: 4
   SpriteSet:
     Head: {fileID: 620667784, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}
     Body: {fileID: 522610590, guid: 17fbf3f21b8a21a9e942c23263bfa504, type: 3}

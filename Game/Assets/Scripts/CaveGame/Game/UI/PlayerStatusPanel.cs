@@ -81,11 +81,11 @@ namespace CaveTogether.Game.UI
             for (int i = 0; i < _heartSprites.Length; i++)
                 _heartSprites[i].transform.parent.gameObject.SetActive(i < _character.MaxHealth);
 
-            OnEnergyChanged(_character.Energy);
-            OnHealthChanged(_character.Health);
+            OnEnergyChanged(_character.Energy, _character.Energy);
+            OnHealthChanged(_character.Energy, _character.Health);
         }
 
-        private void OnEnergyChanged(int newEnergy)
+        private void OnEnergyChanged(int previousEnergy, int newEnergy)
         {
             for (int i = 0; i < _energySprites.Length; i++)
             {
@@ -98,8 +98,15 @@ namespace CaveTogether.Game.UI
             }
         }
 
-        private void OnHealthChanged(int newHealth)
+        private void OnHealthChanged(int previousHealth, int newHealth)
         {
+            if (previousHealth > newHealth)
+            {
+                transform.GetComponent<RectTransform>().DOKill();
+                transform.GetComponent<RectTransform>().DOShakeAnchorPos(.6f, 8f, 10);
+                FindAnyObjectByType<CameraManager>().Shake(.4f, .2f);
+            }
+
             for (int i = 0; i < _heartSprites.Length; i++)
             {
                 bool active = i < newHealth;

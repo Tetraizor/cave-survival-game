@@ -15,7 +15,7 @@ MonoBehaviour:
   TypeId: scout
   Name: Scout
   MaxHealth: 4
-  MaxEnergy: 3
+  MaxEnergy: 4
   SpriteSet:
     Head: {fileID: 620667784, guid: ae6969f3ef3541d3bb6768285d00a7e9, type: 3}
     Body: {fileID: 522610590, guid: ae6969f3ef3541d3bb6768285d00a7e9, type: 3}
