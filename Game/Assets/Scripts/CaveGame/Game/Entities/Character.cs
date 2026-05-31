@@ -37,18 +37,14 @@ namespace CaveTogether.Game.Entities
 
         public Inventory Inventory { get; private set; }
 
-        private MapManager _mapManager;
         private MapRenderManager _mapRenderManager;
         private CharacterManager _characterManager;
 
-        private static readonly WaitForSeconds _waitPatchRevive = new(4f);
-        private static readonly WaitForSeconds _waitPatchReviveReturn = new(1f);
         private static readonly WaitForSeconds _waitHurt = new(0.1f);
 
         private static readonly int _animIsMoving = Animator.StringToHash("IsMoving");
         private static readonly int _animDown = Animator.StringToHash("Down");
         private static readonly int _animGetUp = Animator.StringToHash("GetUp");
-        private static readonly int _animPatch = Animator.StringToHash("Patch");
         private static readonly int _animHurt = Animator.StringToHash("Hurt");
 
         private Animator _animator;
@@ -70,7 +66,6 @@ namespace CaveTogether.Game.Entities
             _selectionOutline.transform.DOScale(_selectionOutline.transform.localScale * 1.1f, 1f).SetLoops(-1, LoopType.Yoyo);
             _highlight.gameObject.SetActive(false);
 
-            _mapManager = FindAnyObjectByType<MapManager>();
             _mapRenderManager = FindAnyObjectByType<MapRenderManager>();
             _characterManager = FindAnyObjectByType<CharacterManager>();
 
@@ -88,7 +83,6 @@ namespace CaveTogether.Game.Entities
             foreach (var startingItemType in characterData.StartingItemTypes) Inventory.AddItem(startingItemType);
 
             PossibleActionTypes.AddRange(characterData.PossibleActionTypes);
-            PossibleActionTypes.Add(ActionType.Escape);
 
             // Player config assignments
             OwnerClientId = playerConfig.OwnerClientId;
@@ -154,29 +148,28 @@ namespace CaveTogether.Game.Entities
             _selectionOutline.SetActive(false);
         }
 
-        public IEnumerator PatchRevive(Character target)
+        public IEnumerator WalkTo(Vector3 worldPosition)
         {
             _animator.SetBool(_animIsMoving, true);
-            ApplyDirectionFlip(target.transform.position);
-            float approachDuration = Vector3.Distance(transform.position, target.transform.position) / MapRenderManager.CELL_SIZE;
-            yield return transform.DOMove(target.transform.position, approachDuration).WaitForCompletion();
+            ApplyDirectionFlip(worldPosition);
+            float duration = Mathf.Max(Vector3.Distance(transform.position, worldPosition) / MapRenderManager.CELL_SIZE, 0.05f);
+            yield return transform.DOMove(worldPosition, duration).WaitForCompletion();
             _animator.SetBool(_animIsMoving, false);
+        }
 
-            _animator.SetTrigger(_animPatch);
-            yield return _waitPatchRevive;
-
-            target.Heal(1);
-
-            yield return _waitPatchReviveReturn;
-
-            Vector3 returnTarget = _mapRenderManager.GridToWorldPosition(GridPosition) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
-            float returnDuration = Mathf.Max(Vector3.Distance(transform.position, returnTarget) / MapRenderManager.CELL_SIZE, 0.5f);
-
+        public IEnumerator WalkToGridPosition()
+        {
+            Vector3 target = _mapRenderManager.GridToWorldPosition(GridPosition) + GetWorldPositionOffset() + _characterManager.GetCellOffset(this);
+            float duration = Mathf.Max(Vector3.Distance(transform.position, target) / MapRenderManager.CELL_SIZE, 0.5f);
             _animator.SetBool(_animIsMoving, true);
-            ApplyDirectionFlip(returnTarget);
-
-            yield return transform.DOMove(returnTarget, returnDuration).WaitForCompletion();
+            ApplyDirectionFlip(target);
+            yield return transform.DOMove(target, duration).WaitForCompletion();
             _animator.SetBool(_animIsMoving, false);
+        }
+
+        public void PlayAnimationTrigger(string triggerName)
+        {
+            _animator.SetTrigger(triggerName);
         }
 
         public IEnumerator InspectCell(Action onReveal)

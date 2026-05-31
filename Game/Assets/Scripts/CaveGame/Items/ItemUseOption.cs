@@ -4,5 +4,6 @@ namespace CaveTogether.Items
     {
         public string DisplayName;
         public bool IsAvailable;
+        public int EnergyCost = 1;
     }
 }

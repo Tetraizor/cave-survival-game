@@ -3043,6 +3043,10 @@ MonoBehaviour:
       Value: {fileID: -1641880747, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
     - Key: 3
       Value: {fileID: 141801089, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
+    - Key: 6
+      Value: {fileID: 1879772273, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
+    - Key: 7
+      Value: {fileID: -235607283, guid: 1c54a9e225cc02aa08fe93dddd7cba93, type: 3}
 --- !u!1 &925652422
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,7 +16,19 @@ namespace CaveTogether.Game.Actions
         public override ActionUIType UIType => ActionUIType.ContextualCell;
         public override string DisplayName => "Use Item";
 
-        public override int GetEnergyCost(MapData map, Character character, ActionRequest request) => 1;
+        public override int GetEnergyCost(MapData map, Character character, ActionRequest request)
+        {
+            var inventory = character.Inventory;
+            if (inventory == null || !inventory.HasItem(request.ItemSlot)) return 1;
+
+            var item = ServiceLocator.Get<ItemDatabaseService>().CreateItem(inventory.GetItemType(request.ItemSlot));
+            if (item == null) return 1;
+
+            var cm = Object.FindAnyObjectByType<CharacterManager>();
+            var options = item.GetUseOptions(character, cm).ToList();
+
+            return request.ItemActionIndex < options.Count ? options[request.ItemActionIndex].EnergyCost : 1;
+        }
 
         public override bool IsValid(MapData map, Character character, ActionRequest request)
         {
@@ -40,7 +52,8 @@ namespace CaveTogether.Game.Actions
             yield return character.StartCoroutine(
                 item.Use(request.ItemActionIndex, character, cm, request.TargetCharacterId));
 
-            inventory.RemoveItem(request.ItemSlot);
+            if (item.IsConsumable)
+                inventory.RemoveItem(request.ItemSlot);
         }
 
         public override IEnumerable<CellActionEntry> GetEntries(MapData map, Character character, int x, int y)
@@ -60,7 +73,7 @@ namespace CaveTogether.Game.Actions
                 byte optionIdx = 0;
                 foreach (var option in item.GetUseOptions(character, cm))
                 {
-                    if (option.IsAvailable)
+                    if (option.IsAvailable && option.EnergyCost <= character.Energy)
                     {
                         var request = new ActionRequest
                         {
@@ -73,7 +86,7 @@ namespace CaveTogether.Game.Actions
                         {
                             Type = ActionType.UseItem,
                             Title = option.DisplayName,
-                            EnergyCost = 1,
+                            EnergyCost = option.EnergyCost,
                             Position = cell,
                             Request = request
                         };

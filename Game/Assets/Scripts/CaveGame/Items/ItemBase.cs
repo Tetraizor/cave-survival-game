@@ -8,6 +8,7 @@ namespace CaveTogether.Items
     {
         public abstract ItemType Id { get; }
         public abstract string DisplayName { get; }
+        public virtual bool IsConsumable => true;
 
         public abstract IEnumerable<ItemUseOption> GetUseOptions(Character user, CharacterManager cm);
 
