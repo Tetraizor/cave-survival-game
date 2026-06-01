@@ -42,6 +42,9 @@ namespace CaveTogether.Generation
         public IEnumerable<IRoundEventProvider> GetRoundEventProviders() =>
             MapGenerationPipeline.OfType<IRoundEventProvider>();
 
+        public IEnumerable<ICellWalkOptionsProvider> GetWalkOptionProviders() =>
+            MapGenerationPipeline.OfType<ICellWalkOptionsProvider>();
+
         public void GenerateMap()
         {
             var generationEnumerator = MapGenerationPipeline.GetEnumerator();

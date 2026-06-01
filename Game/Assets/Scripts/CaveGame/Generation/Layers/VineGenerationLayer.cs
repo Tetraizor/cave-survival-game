@@ -1,11 +1,13 @@
+using System.Collections;
 using System.Collections.Generic;
-using CaveTogether.Game.CellEffects;
+using CaveTogether.Game.Entities;
 using CaveTogether.Generation.Features;
+using CaveTogether.Items;
 using UnityEngine;
 
 namespace CaveTogether.Generation.Layers
 {
-    public class VineGenerationLayer : MapGenerationLayerBase, ICellEffectProvider
+    public class VineGenerationLayer : MapGenerationLayerBase, ICellWalkOptionsProvider
     {
         private readonly HashSet<Vector2Int> _vineCells = new();
         private readonly double _chance;
@@ -14,11 +16,36 @@ namespace CaveTogether.Generation.Layers
 
         public VineGenerationLayer(double chance = 0.15) => _chance = chance;
 
-        public IEnumerable<CellEffect> GetEffectsForCell(Vector2Int pos)
+        public IEnumerable<WalkCellOption> GetWalkOptions(Vector2Int pos)
         {
-            if (_vineCells.Contains(pos))
-                yield return new CellEffect(CellEffectTrigger.OnEnter, new PoisonDamageEffect(1));
+            if (!_vineCells.Contains(pos)) yield break;
+
+            yield return new WalkCellOption
+            {
+                Title = "Walk here",
+                ExtraEnergyCost = 0,
+                OnEnter = character => RiskyWalk(character, pos)
+            };
+
+            yield return new WalkCellOption
+            {
+                Title = "Walk carefully",
+                ExtraEnergyCost = 1,
+                OnEnter = _ => CarefulWalk()
+            };
         }
+
+        private static IEnumerator RiskyWalk(Character character, Vector2Int pos)
+        {
+            if (!character.Inventory.HasItemOfType(ItemType.Antidote))
+            {
+                int seed = (int)character.OwnerClientId * 397 ^ pos.x * 31 ^ pos.y * 97 ^ character.Energy;
+                if (new System.Random(seed).Next(0, 2) == 0)
+                    yield return character.StartCoroutine(character.TakeDamageSequence(1));
+            }
+        }
+
+        private static IEnumerator CarefulWalk() { yield break; }
 
         public override void Process(MapData mapData, System.Random random)
         {
