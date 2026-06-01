@@ -28,6 +28,10 @@ namespace CaveTogether.Game.Actions
 
         public void Initialize(List<CellActionEntry> cellActionEntries, Vector3 anchorWorldPos)
         {
+            var canvas = GetComponent<Canvas>();
+            canvas.sortingLayerID = SortingLayer.NameToID("UI");
+            canvas.sortingOrder = 1;
+
             _anchorWorldPos = anchorWorldPos;
             _camera = Camera.main;
             transform.rotation = _camera.transform.rotation;
