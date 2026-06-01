@@ -8,6 +8,7 @@ namespace CaveTogether.Game.RoundEvents
         public abstract string BuildupMessage();
         public abstract string AnnouncementMessage();
 
+        public virtual int Weight => 1;
         public virtual bool CanHappen() => true;
 
         public virtual IEnumerator OnRoundPassed(CharacterManager characterManager) { yield break; }

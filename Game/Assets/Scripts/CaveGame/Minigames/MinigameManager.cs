@@ -76,21 +76,41 @@ namespace CaveTogether.Minigames
                 StartCoroutine(evt.OnRoundPassed(_characterManager));
 
             var eligibleEvents = _roundEvents.FindAll(e => e.CanHappen());
-            int total = _minigames.Length + eligibleEvents.Count;
-            if (total == 0) return;
 
-            int index = new System.Random(round).Next(0, total);
+            int totalWeight = 0;
+            foreach (var m in _minigames) totalWeight += m.Weight;
+            foreach (var e in eligibleEvents) totalWeight += e.Weight;
+            if (totalWeight == 0) return;
 
-            if (index < _minigames.Length)
+            int roll = new System.Random(round).Next(0, totalWeight);
+
+            MinigameDefinitionSO pickedMinigame = null;
+            RoundEventBase pickedEvent = null;
+
+            foreach (var m in _minigames)
             {
-                _current = _minigames[index];
+                roll -= m.Weight;
+                if (roll < 0) { pickedMinigame = m; break; }
+            }
+            if (pickedMinigame == null)
+            {
+                foreach (var e in eligibleEvents)
+                {
+                    roll -= e.Weight;
+                    if (roll < 0) { pickedEvent = e; break; }
+                }
+            }
+
+            if (pickedMinigame != null)
+            {
+                _current = pickedMinigame;
                 _currentEvent = null;
                 if (!IsServer) return;
                 StartCoroutine(MinigameIntroSequence());
             }
-            else
+            else if (pickedEvent != null)
             {
-                _currentEvent = eligibleEvents[index - _minigames.Length];
+                _currentEvent = pickedEvent;
                 _current = null;
                 if (!IsServer) return;
                 StartCoroutine(RoundEventSequence());

@@ -6,13 +6,15 @@ namespace CaveTogether.Game.RoundEvents
 {
     public class NothingEvent : RoundEventBase
     {
+        public override int Weight => 3;
+
         public override string AnnouncementMessage() => "The cave holds its breath.";
 
         public override string BuildupMessage() => "Something stirs in the dark...";
 
         public override IEnumerator Execute(int round, CharacterManager characterManager)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
         }
     }
 }

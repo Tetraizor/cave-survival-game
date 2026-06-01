@@ -15,6 +15,7 @@ namespace CaveTogether.Game.RoundEvents
         private readonly HashSet<Vector2Int> _activeGasCells = new();
 
         private int _radius = -1; // -1 = inactive
+        private int _cooldownRounds = 0;
 
         private static readonly Vector2Int[] Directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         private static readonly WaitForSeconds WaitBetweenVents = new(1.5f);
@@ -30,17 +31,23 @@ namespace CaveTogether.Game.RoundEvents
             _mapData = mapData;
         }
 
-        public override bool CanHappen() => _radius < 0;
+        public override int Weight => 2;
+        public override bool CanHappen() => _radius < 0 && _cooldownRounds == 0;
 
         public override IEnumerator OnRoundPassed(CharacterManager characterManager)
         {
-            if (_radius < 0) yield break;
+            if (_radius < 0)
+            {
+                if (_cooldownRounds > 0) _cooldownRounds--;
+                yield break;
+            }
 
             _radius++;
 
-            if (_radius > 3)
+            if (_radius > 2)
             {
                 _radius = -1;
+                _cooldownRounds = 1;
                 _activeGasCells.Clear();
                 GasCellsChanged?.Invoke();
                 yield break;

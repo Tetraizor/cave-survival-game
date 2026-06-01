@@ -9,5 +9,6 @@ namespace CaveTogether.Minigames
         public string DisplayName;
         public string BuildupMessage;
         public string AnnouncementMessage;
+        public int Weight = 1;
     }
 }
