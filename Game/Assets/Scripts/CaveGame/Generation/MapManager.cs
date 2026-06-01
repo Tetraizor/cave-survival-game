@@ -4,8 +4,8 @@ namespace CaveTogether.Generation
 {
     public class MapManager : MonoBehaviour
     {
-        public const int MAP_WIDTH = 24;
-        public const int MAP_HEIGHT = 24;
+        public const int MAP_WIDTH = 20;
+        public const int MAP_HEIGHT = 20;
 
         public MapData Map { get; private set; } = new MapData(MAP_WIDTH, MAP_HEIGHT);
 

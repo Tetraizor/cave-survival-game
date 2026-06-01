@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CaveTogether.Common.Enums;
 using CaveTogether.Game.Movement;
 using CaveTogether.Generation.Features;
 using UnityEngine;
@@ -27,7 +28,9 @@ namespace CaveTogether.Generation.Layers
             }
 
             distanceByPositionList.Sort((p1, p2) => p1.Item2 - p2.Item2);
-            var exitPosition = distanceByPositionList[random.Next(0, (int)(distanceByPositionList.Count * .1f))].Item1;
+            int startIndex = (int)(distanceByPositionList.Count * 0.7f);
+            int endIndex = (int)(distanceByPositionList.Count * 0.9f);
+            var exitPosition = distanceByPositionList[random.Next(startIndex, endIndex)].Item1;
 
             var exitFeature = new ExitFeature(exitPosition);
 

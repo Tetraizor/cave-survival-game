@@ -12,7 +12,7 @@ namespace CaveTogether.Generation.Layers
 
         public IReadOnlyCollection<Vector2Int> VineCells => _vineCells;
 
-        public VineGenerationLayer(double chance = 0.2) => _chance = chance;
+        public VineGenerationLayer(double chance = 0.15) => _chance = chance;
 
         public IEnumerable<CellEffect> GetEffectsForCell(Vector2Int pos)
         {

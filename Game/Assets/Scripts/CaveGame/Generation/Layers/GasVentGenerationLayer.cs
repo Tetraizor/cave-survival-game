@@ -7,7 +7,7 @@ namespace CaveTogether.Generation.Layers
 {
     public class GasVentGenerationLayer : MapGenerationLayerBase, IRoundEventProvider
     {
-        private const int VentCount = 6;
+        private const int VentCount = 3;
         private readonly HashSet<Vector2Int> _ventCells = new();
         private MapData _mapData;
         private GasSpreadEvent _event;
