@@ -23,6 +23,7 @@ namespace CaveTogether.Generation
             MapGenerationPipeline.Add(new SpawnGenerationLayer());
             MapGenerationPipeline.Add(new ExitGenerationLayer());
             MapGenerationPipeline.Add(new VineGenerationLayer());
+            MapGenerationPipeline.Add(new GasVentGenerationLayer());
             MapGenerationPipeline.Add(new LootGenerationLayer());
 
             Seed = seed;
@@ -37,6 +38,9 @@ namespace CaveTogether.Generation
 
         public IEnumerable<ICellEffectProvider> GetEffectProviders() =>
             MapGenerationPipeline.OfType<ICellEffectProvider>();
+
+        public IEnumerable<IRoundEventProvider> GetRoundEventProviders() =>
+            MapGenerationPipeline.OfType<IRoundEventProvider>();
 
         public void GenerateMap()
         {

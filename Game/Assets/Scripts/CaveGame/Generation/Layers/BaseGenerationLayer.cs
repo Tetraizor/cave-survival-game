@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CaveTogether.Common.Enums;
+using CaveTogether.Game.RoundEvents;
 using CaveTogether.Utils;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace CaveTogether.Generation.Layers
         public Direction RotatedDirections;
     }
 
-    public class BaseGenerationLayer : MapGenerationLayerBase
+    public class BaseGenerationLayer : MapGenerationLayerBase, IRoundEventProvider
     {
         private static string _baseCellScriptablePath = "Data/Generation/CellBase";
         private MapData _mapData;
@@ -241,6 +242,11 @@ namespace CaveTogether.Generation.Layers
             if (IsOutOfBounds(position)) return false;
             ref CellData cellRef = ref _mapData.GetCellRef(position);
             return cellRef.IsEmpty;
+        }
+
+        public IEnumerable<RoundEventBase> GetRoundEvents()
+        {
+            yield return new NothingEvent();
         }
     }
 }

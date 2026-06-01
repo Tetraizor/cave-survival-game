@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using CaveTogether.Common;
 using CaveTogether.Game;
+using CaveTogether.Game.RoundEvents;
+using CaveTogether.Generation;
 using CaveTogether.Game.Entities;
 using CaveTogether.Game.States;
 using CaveTogether.Game.Turn;
@@ -33,6 +35,8 @@ namespace CaveTogether.Minigames
 
         private MinigameDefinitionSO _current;
         private MinigameBase _activeMinigame;
+        private List<RoundEventBase> _roundEvents = new();
+        private RoundEventBase _currentEvent;
 
         private static readonly WaitForSeconds _waitBuildup = new(2f);
         private static readonly WaitForSeconds _waitAnnouncement = new(1.5f);
@@ -44,7 +48,16 @@ namespace CaveTogether.Minigames
             _gameStateManager = FindAnyObjectByType<GameStateManager>();
             _characterManager = FindAnyObjectByType<CharacterManager>();
             _sceneManagerService = ServiceLocator.Get<SceneManagerService>();
+
             _turnManager.RoundEnded += OnRoundEnded;
+
+            var mapManager = FindAnyObjectByType<MapManager>();
+            if (mapManager != null)
+                foreach (var provider in mapManager.Generator.GetRoundEventProviders())
+                    _roundEvents.AddRange(provider.GetRoundEvents());
+
+            Debug.Log($"Registered {_roundEvents.Count} round events.");
+            Debug.Log($"Registered {_minigames.Length} minigames.");
         }
 
         public void OnMiniGameStateEntered()
@@ -59,10 +72,50 @@ namespace CaveTogether.Minigames
 
         private void OnRoundEnded(int round)
         {
-            _current = _minigames[(round - 1) % _minigames.Length];
+            foreach (var evt in _roundEvents)
+                StartCoroutine(evt.OnRoundPassed(_characterManager));
 
-            if (!IsServer) return;
-            StartCoroutine(MinigameIntroSequence());
+            var eligibleEvents = _roundEvents.FindAll(e => e.CanHappen());
+            int total = _minigames.Length + eligibleEvents.Count;
+            if (total == 0) return;
+
+            int index = new System.Random(round).Next(0, total);
+
+            if (index < _minigames.Length)
+            {
+                _current = _minigames[index];
+                _currentEvent = null;
+                if (!IsServer) return;
+                StartCoroutine(MinigameIntroSequence());
+            }
+            else
+            {
+                _currentEvent = eligibleEvents[index - _minigames.Length];
+                _current = null;
+                if (!IsServer) return;
+                StartCoroutine(RoundEventSequence());
+            }
+        }
+
+        private IEnumerator RoundEventSequence()
+        {
+            PushNotificationRpc(_currentEvent.BuildupMessage());
+            yield return _waitBuildup;
+
+            PushNotificationRpc(_currentEvent.AnnouncementMessage());
+
+            int index = _roundEvents.IndexOf(_currentEvent);
+            TriggerRoundEventOnClientsRpc(index, _turnManager.CurrentRound);
+
+            yield return StartCoroutine(_currentEvent.Execute(_turnManager.CurrentRound, _characterManager));
+
+            _gameStateManager.SwitchStateRpc(GameStateType.Game);
+        }
+
+        [Rpc(SendTo.NotServer, InvokePermission = RpcInvokePermission.Server)]
+        private void TriggerRoundEventOnClientsRpc(int eventIndex, int round)
+        {
+            StartCoroutine(_roundEvents[eventIndex].Execute(round, _characterManager));
         }
 
         private IEnumerator MinigameIntroSequence()
