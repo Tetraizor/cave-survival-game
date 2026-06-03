@@ -454,11 +454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1109305508630119667, guid: 7fa6bcdb5d4f9baa088978f79b06a149, type: 3}
       propertyPath: m_ConstrainProportionsScale
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4033493319022942278, guid: 7fa6bcdb5d4f9baa088978f79b06a149, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4251134614427433462, guid: 7fa6bcdb5d4f9baa088978f79b06a149, type: 3}
+      propertyPath: m_SortingOrder
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6858269397747857704, guid: 7fa6bcdb5d4f9baa088978f79b06a149, type: 3}
       propertyPath: m_Name

@@ -13,10 +13,13 @@ namespace CaveTogether.Game.Actions
         public override ActionUIType UIType => ActionUIType.ContextualCell;
         public override string DisplayName => "Escape";
 
+        private static readonly WaitForSeconds EscapeWait = new(8f);
+
         public override IEnumerator Execute(MapData map, Character character, ActionRequest request)
         {
+            character.PlayAnimationTrigger("Escape");
+            yield return EscapeWait;
             character.Escape();
-            yield break;
         }
 
         public override int GetEnergyCost(MapData map, Character character, ActionRequest request)
