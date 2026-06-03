@@ -457,7 +457,7 @@ TextureImporter:
         width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -466,6 +466,248 @@ TextureImporter:
       bones: []
       spriteID: 8f6fe4edba9c8751a8606e35f49ea59f
       internalID: 1841772086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_17
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 48
+        width: 34
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 507a85c86862d115db3aff06d1463534
+      internalID: -1410233741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_18
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 87
+        width: 6
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f952a33ddb93f9d87bfe087824a19125
+      internalID: -1098711889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_19
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 87
+        width: 5
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34bdd005e225b242b88f254a90d230e3
+      internalID: 1784785455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_20
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 87
+        width: 4
+        height: 3
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dec126dc31ff1127b2a30746959169b
+      internalID: 1526320944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_21
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 87
+        width: 3
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 903bee1691836afb08128e5ee05d0905
+      internalID: 705563970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_22
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 87
+        width: 3
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee252f4499cca1acbb41e5e6b9480b8b
+      internalID: 1077568131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_23
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 87
+        width: 1
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7b9b0242931b49dcbaf93cb9238e001
+      internalID: -1036469605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_24
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 87
+        width: 9
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2a20ce06ef769f82be9f0cf11d5c789
+      internalID: -1107141306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_25
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 87
+        width: 9
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36d82e79639b7bbacbe5bcb218a15215
+      internalID: -104696628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_26
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 80
+        width: 6
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35c0f22d9216744c3adfc05b118048cc
+      internalID: -1344069904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cave_decoration_pack_27
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 80
+        width: 7
+        height: 6
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 648c3666a83a2d996b0b5eb4b9dfdc7a
+      internalID: -1457829119
       vertices: []
       indices: 
       edges: []
@@ -495,7 +737,18 @@ TextureImporter:
       cave_decoration_pack_14: 128000771
       cave_decoration_pack_15: -85934270
       cave_decoration_pack_16: 1841772086
+      cave_decoration_pack_17: -1410233741
+      cave_decoration_pack_18: -1098711889
+      cave_decoration_pack_19: 1784785455
       cave_decoration_pack_2: 680340409
+      cave_decoration_pack_20: 1526320944
+      cave_decoration_pack_21: 705563970
+      cave_decoration_pack_22: 1077568131
+      cave_decoration_pack_23: -1036469605
+      cave_decoration_pack_24: -1107141306
+      cave_decoration_pack_25: -104696628
+      cave_decoration_pack_26: -1344069904
+      cave_decoration_pack_27: -1457829119
       cave_decoration_pack_3: -743086700
       cave_decoration_pack_4: 1069226576
       cave_decoration_pack_5: 1617453354
